@@ -1,7 +1,5 @@
 'use strict';
 
-const bcrypt = require('bcrypt-nodejs');
-
 module.exports = function(mongoose) {
   const Schema = mongoose.Schema;
   const Types = Schema.Types;
