@@ -24,7 +24,8 @@ module.exports = function(mongoose) {
     image: {
       type: Types.String,
       trim: true
-    }
+    },
+    options: [Types.String]
   }, {
       timestamps: true
   });

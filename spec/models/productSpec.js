@@ -33,6 +33,8 @@ describe('Product', () => {
       let product = new Product({ name: "Sweet Mining T",
                                   description: "Get fired from your job for looking too cool",
                                   price: 0.01 });
+      // Believe it or not, the `undefined` values actually work to
+      // verify schema membership
       const expected = {
         name: "Sweet Mining T",
         description: "Get fired from your job for looking too cool",
@@ -43,6 +45,8 @@ describe('Product', () => {
       };
 
       expect(product).toEqual(jasmine.objectContaining(expected));
+      // Product options array
+      expect(product.options.length).toEqual(0);
     });
 
     it('does not allow an empty name field', (done) => {
