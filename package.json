@@ -1,0 +1,36 @@
+{
+  "name": "crypto-shopping-cart",
+  "version": "0.0.1",
+  "description": "Cryptocurrency shopping cart",
+  "main": "app.js",
+  "scripts": {
+    "test": "NODE_ENV=test node_modules/.bin/jasmine",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/TheMiningKing/crypto-shopping-cart.git"
+  },
+  "keywords": [
+    "crypto",
+    "shopping cart"
+  ],
+  "author": "Daniel Bidulock",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/TheMiningKing/crypto-shopping-cart/issues"
+  },
+  "homepage": "https://github.com/TheMiningKing/crypto-shopping-cart#readme",
+  "dependencies": {
+    "body-parser": "^1.18.2",
+    "ejs": "^2.5.7",
+    "express": "^4.15.5",
+    "mongoose": "^4.11.13",
+    "mongoose-seeder": "^1.2.1"
+  },
+  "devDependencies": {
+    "jasmine": "^2.8.0",
+    "pow-mongoose-fixtures": "^0.3.0",
+    "zombie": "^5.0.7"
+  }
+}
