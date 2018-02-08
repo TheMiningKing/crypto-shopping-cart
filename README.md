@@ -23,14 +23,6 @@ Clone and install dependencies:
 npm install
 ```
 
-## .env
-
-Refer to `.example.env`. A _secret key_ needs to be set for JWT. Either `cp .example.env .env` or manually create `.env` and set your own secret value:
-
-```
-SECRET_KEY=s0m3sup3rS3CreTKey
-```
-
 # Testing
 
 ## For Docker fans
