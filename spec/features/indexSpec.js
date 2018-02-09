@@ -12,6 +12,29 @@ describe('index', () => {
 
   let browser;
 
+  it('adds a session on first visit', (done) => {
+    browser = new Browser({ waitDuration: '30s', loadCss: false });
+
+    models.collection('sessions').find({}).toArray((err, results) => {
+      if (err) {
+        done.fail(err);
+      }
+      expect(results.length).toEqual(0);
+      browser.visit('/', (err) => {
+        if (err) {
+          done.fail(err);
+        }
+        models.collection('sessions').find({}).toArray((err, results) => {
+          if (err) {
+            done.fail(err);
+          }
+          expect(results.length).toEqual(1);
+          done();
+        });
+      });
+    });
+  });
+
   describe('when database is empty', () => {
     beforeEach((done) => {
       browser = new Browser({ waitDuration: '30s', loadCss: false });
@@ -73,6 +96,10 @@ describe('index', () => {
       }).catch((error) => {
         done.fail(error);
       });
+    });
+
+    describe('adding item to cart', () => {
+
     });
   });
 });
