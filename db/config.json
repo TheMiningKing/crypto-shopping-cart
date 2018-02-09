@@ -1,0 +1,28 @@
+{
+  "development": {
+    "username": "crypto_cart",
+    "password": "secret",
+    "database": "crypto_cart_development",
+    "host": "localhost"
+  },
+  "test": {
+    "username": "crypto_cart",
+    "password": "secret",
+    "database": "crypto_cart_test",
+    "host": "localhost"
+  },
+  "staging": {
+    "username": "crypto_cart",
+    "password": "secret",
+    "database": "crypto_cart_staging",
+    "host": "mongo",
+    "dialect": "mongodb"
+  },
+  "production": {
+    "username": "crypto_cart",
+    "password": "secret",
+    "database": "crypto_cart_production",
+    "host": "mongo",
+    "dialect": "mongodb"
+  }
+}

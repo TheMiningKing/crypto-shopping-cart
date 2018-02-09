@@ -1,0 +1,26 @@
+{
+  "products": {
+    "_model": "Product",
+    "man-shirt": {
+      "name": "Men's Mining T",
+      "description": "secret",
+      "price": 0.05199,
+      "image": "man-shirt.jpg",
+      "options": ["Small", "Medium", "Large"]
+    },
+    "woman-shirt": {
+      "name": "Women's Mining T",
+      "description": "secret",
+      "price": 0.05199,
+      "image": "woman-shirt.jpg",
+      "options": ["Small", "Medium", "Large"]
+    },
+    "kid-shirt": {
+      "name": "Children's Mining T",
+      "description": "secret",
+      "price": 0.04199,
+      "image": "kid-shirt.jpg",
+      "options": ["Small", "Medium", "Large"]
+    }
+  }
+}
