@@ -1,6 +1,34 @@
 <% include header %>
 <% if (cart) { %>
-
+  <table class="cart-table table table-bordered table-striped">
+    <tbody>
+      <% cart.items.forEach(function(product) { %>
+        <tr>
+          <td>
+            <a href="/cart/remove/<%= product.id%>">
+              <i class="fa fa-remove text-danger"></i>
+            </a>
+          </td>
+          <td class="product-thumb">
+            <img src="/images/products/<%= product.image %>" alt="" class="img-thumbnail img-responsive">
+          </td>
+          <td><%= product.name %></td>
+          <td>
+            <%= product.price %>
+          </td>
+          <td>
+            <input type="hidden" name="id[]" value="<%= product.id%>">
+          </td>
+        </tr>
+      <% }); %>
+      <tr class="info">
+        <td colspan="5" class="text-right">
+          Total:
+          <%= cart.totals %>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 <% } else { %>
   <p class="alert alert-info">Your cart is empty</p>
 <% } %>
