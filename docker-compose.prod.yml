@@ -13,36 +13,14 @@ services:
     volumes:
       - .:/home/node
       - /home/node/node_modules
-
-
-
-#    links:
-#      - mongo
-
   mongo:  
     image: mongo
     restart: unless-stopped
-#    volumes_from:
-#      - accountant_mongo_data
-#    ports:
-#      - "27017"
-    command: --smallfiles #--rest --auth
+    command: --smallfiles
     volumes:
       - crypto_cart_data:/data/db
-
-
-
-#  mongo:
-#    restart: unless-stopped
-#    image: redis
-#    command: redis-server --appendonly yes
-#    volumes:
-#      - corpus_data:/data
-
-
 volumes:
   crypto_cart_data:
-
 networks:
   default:
     external:
