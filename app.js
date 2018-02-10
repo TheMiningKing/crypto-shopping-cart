@@ -16,9 +16,10 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 /**
- * Parse JSON
+ * Parse request body
  */
 app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
 /**
  * Sessions
@@ -54,6 +55,12 @@ app.use('/cart', require('./routes/cart'));
  * Landing page
  */
 app.get('/', (req, res) => {
+  if(!req.session.cart) {
+    req.session.cart = {
+      items: [],
+      totals: 0.00
+    };
+  }  
   models.Product.find({}, (err, products) => {
     if (err) {
       return res.status(500).send(err);
