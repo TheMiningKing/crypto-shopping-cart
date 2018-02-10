@@ -28,4 +28,12 @@ router.post('/', (req, res) => {
   });
 });
 
+/**
+ * GET /remove/:id
+ */
+router.get('/remove/:id', (req, res) => {
+  Cart.removeFromCart(req.params.id, null, req.session.cart);
+  res.redirect('/cart');
+});
+
 module.exports = router;

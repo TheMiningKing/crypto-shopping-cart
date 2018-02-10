@@ -83,5 +83,44 @@ describe('cart', () => {
 
       browser.assert.text('tr.info', `Total: ${products[0].price * 2}`);
     });
+
+    describe('removing item from cart', () => {
+
+      it('removes the item from the session cart', (done) => {
+        models.collection('sessions').find({}).toArray((err, results) => {
+          if (err) {
+            done.fail(err);
+          }
+          expect(results.length).toEqual(1);
+          expect(results[0].session.cart.items.length).toEqual(2);
+          expect(results[0].session.cart.totals).toEqual(products[0].price * 2);
+
+          browser.clickLink(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`, () => {
+            models.collection('sessions').find({}).toArray((err, results) => {
+              if (err) {
+                done.fail(err);
+              }
+              expect(results.length).toEqual(1);
+              expect(results[0].session.cart.items.length).toEqual(1);
+              expect(results[0].session.cart.totals).toEqual(products[0].price);
+              expect(results[0].session.cart.items[0].name).toEqual(products[0].name);
+
+              done();
+            });
+          });
+        });
+      });
+
+      it('removes the item from the display', (done) => {
+        browser.assert.elements('tr', 3);
+        browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].image}"]`);
+
+        browser.clickLink(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`, () => {
+          browser.assert.elements('tr', 2);
+          browser.assert.elements(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].image}"]`, 0);
+          done();
+        });
+      });
+    });
   });
 });
