@@ -69,6 +69,7 @@ describe('index', () => {
       browser = new Browser({ waitDuration: '30s', loadCss: false });
 
       fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+        if (err) done.fail(err);
         browser.visit('/', (err) => {
           if (err) done.fail(err);
           browser.assert.success();
@@ -116,7 +117,8 @@ describe('index', () => {
       });
 
       it('adds an item to the cart session', (done) => {
-        browser.pressButton('form:nth-child(1) div button[type=submit]', () => {
+        browser.pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+
           models.collection('sessions').find({}).toArray((err, results) => {
             if (err) {
               done.fail(err);
@@ -130,7 +132,7 @@ describe('index', () => {
       });
 
       it('redirects to cart', (done) => {
-        browser.pressButton('form:nth-child(1) div button[type=submit]', () => {
+        browser.pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
           browser.assert.redirected();
           browser.assert.url('/cart');
           done();
