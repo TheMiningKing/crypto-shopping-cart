@@ -129,7 +129,7 @@ describe('index', () => {
         });
       });
 
-      it('redirects to cart and displays order', (done) => {
+      it('redirects to cart', (done) => {
         browser.pressButton('form:nth-child(1) div button[type=submit]', () => {
           browser.assert.redirected();
           browser.assert.url('/cart');
