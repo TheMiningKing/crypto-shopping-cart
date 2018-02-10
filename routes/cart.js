@@ -9,9 +9,10 @@ const Cart = require('../lib/cart');
  * GET /
  */
 router.get('/', (req, res) => {
+  let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
   res.render('cart', {
     pageTitle: 'crypto-shopping-cart',
-    cart: null
+    cart: cart
   });
 });
 
