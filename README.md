@@ -62,4 +62,31 @@ Run server:
 npm start
 ```
 
+# Production
+
+Clone:
+
+```
+git clone https://github.com/TheMiningKing/crypto-shopping-cart.git
+```
+
+In the application directory:
+
+```
+cd crypto-shopping-cart
+NODE_ENV=production npm install
+```
+
+The _Dockerized_ production is meant to be deployed behind an `nginx-proxy`/`lets-encrypt` combo:
+
+```
+docker-compose -f docker-compose.prod.yml up -d
+```
+
+## Seed                        
+
+```
+docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV=production
+```
+
 
