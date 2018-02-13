@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
   let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
   res.render('cart', {
     pageTitle: 'crypto-shopping-cart',
+    path: req.originalUrl,
     cart: cart
   });
 });
