@@ -68,6 +68,7 @@ app.get('/', (req, res) => {
 
     res.render('index', {
       pageTitle: 'crypto-shopping-cart',
+      path: req.originalUrl,
       products: products
     });
   });
