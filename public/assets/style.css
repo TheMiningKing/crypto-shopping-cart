@@ -106,3 +106,11 @@ td .qty {
     padding: 1em;
     border-radius: 4px;
 }
+
+/**
+ * My adjustments
+ */
+.navbar-right {
+  float: right !important;
+}
+
