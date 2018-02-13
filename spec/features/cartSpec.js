@@ -32,6 +32,11 @@ describe('cart', () => {
     it('displays a no-products-in-cart message', () => {
       browser.assert.text('p.alert.alert-info', 'Your cart is empty');
     });
+
+    it('displays a continue-shopping message', () => {
+      browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
+      browser.assert.elements('i.fa.fa-shopping-cart.go-to-cart-lnk', 0);
+    });
   });
 
   describe('when cart contains products', () => {

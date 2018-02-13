@@ -82,6 +82,11 @@ describe('index', () => {
       browser.assert.elements('p.alert.alert-info', 0);
     });
 
+    it('displays a checkout button', () => {
+      browser.assert.elements('.navbar-header a.navbar-brand[href="/"]', 0);
+      browser.assert.elements('i.fa.fa-shopping-cart.go-to-cart-lnk', 1);
+    });
+
     it('structures the product list with what\'s in the database', (done) => {
       models.Product.find({}).then((results) => {
         expect(results.length).toEqual(2);
