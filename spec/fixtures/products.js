@@ -8,7 +8,7 @@ exports.Product = {
     _id: new ObjectId(),
     name: 'Men\'s Mining T',
     description: 'secret',
-    price: 0.05199,
+    price: 51990000,
     image: 'man-shirt.jpg',
     options: ['Small', 'Medium', 'Large']
   },
@@ -16,7 +16,7 @@ exports.Product = {
     _id: new ObjectId(),
     name: 'Women\'s Mining T',
     description: 'secret',
-    price: 0.05199,
+    price: 51990000,
     image: 'woman-shirt.jpg',
     options: ['Small', 'Medium', 'Large']
   }

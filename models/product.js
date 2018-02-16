@@ -1,5 +1,7 @@
 'use strict';
 
+const Units = require('ethereumjs-units');
+
 module.exports = function(mongoose) {
   const Schema = mongoose.Schema;
   const Types = Schema.Types;
@@ -25,7 +27,11 @@ module.exports = function(mongoose) {
     },
     options: [Types.String]
   }, {
-      timestamps: true
+    timestamps: true
+  });
+
+  ProductSchema.virtual('formattedTotal').get(function() {
+    return Number(Units.convert(this.price, 'gwei', 'eth'));
   });
 
   return ProductSchema;

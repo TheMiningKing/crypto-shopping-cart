@@ -14,7 +14,7 @@
           </td>
           <td><%= product.name %></td>
           <td>
-            <%= product.price %>
+            <%= product.formattedTotal %>
           </td>
           <td>
             <input type="hidden" name="id[]" value="<%= product.id%>">
@@ -24,7 +24,7 @@
       <tr class="info">
         <td colspan="5" class="text-right">
           Total:
-          <%= cart.totals %>
+          <%= cart.formattedTotal %>
         </td>
       </tr>
     </tbody>

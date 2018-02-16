@@ -3,6 +3,7 @@
 const Cart = require('../../lib/cart');
 const fixtures = require('pow-mongoose-fixtures');
 const models = require('../../models');
+const Units = require('ethereumjs-units');
 
 describe('Cart', () => {
   let product;
@@ -43,11 +44,24 @@ describe('Cart', () => {
       expect(cartSession.totals).toEqual(product.price);
     });
 
+    it('sets the formatted total value', () => {
+      Cart.addToCart(product, "Large", cartSession);
+      expect(cartSession.items.length).toEqual(1);
+      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+    });
+
     it('sets a product option to null if not specified as a parameter', () => {
       expect(cartSession.items.length).toEqual(0);
       Cart.addToCart(product, cartSession);
       expect(cartSession.items.length).toEqual(1);
       expect(cartSession.items[0].option).toBe(null);
+    });
+
+    it('sets a formatted total for the individual product', () => {
+      expect(cartSession.items.length).toEqual(0);
+      Cart.addToCart(product, cartSession);
+      expect(cartSession.items.length).toEqual(1);
+      expect(cartSession.items[0].formattedTotal).toEqual(Number(Units.convert(cartSession.items[0].price, 'gwei', 'eth')));
     });
   });
 
@@ -72,6 +86,14 @@ describe('Cart', () => {
 
       Cart.removeFromCart(product._id, "Large", cartSession);
       expect(cartSession.totals).toEqual(0);
+    });
+
+    it('resets the formmatted total', () => {
+      Cart.addToCart(product, "Large", cartSession);
+      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+
+      Cart.removeFromCart(product._id, "Large", cartSession);
+      expect(cartSession.formattedTotal).toEqual(0);
     });
 
     it('doesn\'t remove a product if the option parameter provides no match', () => {
@@ -143,12 +165,14 @@ describe('Cart', () => {
       Cart.addToCart(product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(3);
       expect(cartSession.totals).toEqual(product.price * 3);
+      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price * 3, 'gwei', 'eth')));
     });
 
     it('empties the cart and resets all the values', () => {
       Cart.emptyCart(cartSession);
       expect(cartSession.items.length).toEqual(0);
       expect(cartSession.totals).toEqual(0);
+      expect(cartSession.formattedTotal).toEqual(0);
     });
   });
 });

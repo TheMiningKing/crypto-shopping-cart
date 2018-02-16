@@ -1,6 +1,7 @@
 'use strict';
 
 describe('Product', () => {
+  const Units = require('ethereumjs-units');
   const db = require('../../models');
   const Product = db.Product;
 
@@ -66,6 +67,21 @@ describe('Product', () => {
         expect(Object.keys(error.errors).length).toEqual(1);
         expect(error.errors['name'].message).toEqual('No product name supplied');
         done();
+      });
+    });
+  });
+  
+  describe('#formattedTotal', () => {
+    it('converts from gwei to eth', (done) => {
+      let product = new Product({ name: "Sweet Mining T",
+                                  description: "Get fired from your job for looking too cool",
+                                  price: 51990000 });
+ 
+      product.save().then((obj) => {
+        expect(product.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+        done();
+      }).catch((error) => {
+        done.fail(error);
       });
     });
   });
