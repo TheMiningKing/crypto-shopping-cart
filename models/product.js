@@ -30,7 +30,7 @@ module.exports = function(mongoose) {
     timestamps: true
   });
 
-  ProductSchema.virtual('formattedTotal').get(function() {
+  ProductSchema.virtual('formattedPrice').get(function() {
     return Number(Units.convert(this.price, 'gwei', 'eth'));
   });
 

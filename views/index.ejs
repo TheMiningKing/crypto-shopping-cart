@@ -12,7 +12,7 @@
             <form action="/cart" method="post">
               <div class="product-info">
                 <span class="price">
-                  <%= product.price %>
+                  <%= product.formattedPrice %>
                 </span>
                 <input type="hidden" name="id" value="<%= product._id %>">
                 <button type="submit" class="btn btn-primary">

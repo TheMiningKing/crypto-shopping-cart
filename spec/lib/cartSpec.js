@@ -61,7 +61,7 @@ describe('Cart', () => {
       expect(cartSession.items.length).toEqual(0);
       Cart.addToCart(product, cartSession);
       expect(cartSession.items.length).toEqual(1);
-      expect(cartSession.items[0].formattedTotal).toEqual(Number(Units.convert(cartSession.items[0].price, 'gwei', 'eth')));
+      expect(cartSession.items[0].formattedPrice).toEqual(Number(Units.convert(cartSession.items[0].price, 'gwei', 'eth')));
     });
   });
 

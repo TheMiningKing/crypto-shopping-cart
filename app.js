@@ -58,7 +58,7 @@ app.get('/', (req, res) => {
   if(!req.session.cart) {
     req.session.cart = {
       items: [],
-      totals: 0.00
+      totals: 0
     };
   }  
   models.Product.find({}, (err, products) => {
