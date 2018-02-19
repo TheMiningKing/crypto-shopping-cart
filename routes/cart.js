@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
  */
 router.post('/', (req, res) => {
   models.Product.findOne({_id: req.body.id}).then(prod => {
-    Cart.addToCart(prod, req.session.cart);
+    Cart.addToCart(prod, req.body.option, req.session.cart);
     res.redirect('/cart');
   }).catch(err => {
     res.redirect('/');

@@ -12,7 +12,12 @@
           <td class="product-thumb">
             <img src="/images/products/<%= product.image %>" alt="" class="img-thumbnail img-responsive">
           </td>
-          <td><%= product.name %></td>
+          <td>
+            <%= product.name %>
+            <% if (product.option) { %>
+              - <%= product.option %>
+            <% } %>
+          </td>
           <td>
             <%= product.formattedPrice %>
           </td>
