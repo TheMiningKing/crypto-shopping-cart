@@ -79,13 +79,11 @@ describe('cart', () => {
       browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].image}"]`);
       browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
       browser.assert.text('tr:nth-child(1) td:nth-child(4)', products[0].formattedPrice);
-      browser.assert.element(`tr:nth-child(1) td:nth-child(5) input[type=hidden][value="${products[0].id}"]`);
 
       browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`);
       browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].image}"]`);
       browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
       browser.assert.text('tr:nth-child(2) td:nth-child(4)', products[1].formattedPrice);
-      browser.assert.element(`tr:nth-child(2) td:nth-child(5) input[type=hidden][value="${products[1].id}"]`);
 
       browser.assert.text('tr.info', `Total: ${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))}`);
     });
