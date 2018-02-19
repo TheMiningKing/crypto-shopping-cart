@@ -49,7 +49,7 @@ describe('cart', () => {
       fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
         if (err) done.fail(err);
 
-        models.Product.find({}).then((results) => {
+        models.Product.find({}).sort('createdAt').then((results) => {
           products = results;
 
           browser.visit('/', (err) => {

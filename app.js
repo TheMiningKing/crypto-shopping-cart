@@ -61,19 +61,17 @@ app.get('/', (req, res) => {
       totals: 0
     };
   }  
-  models.Product.find({}, (err, products) => {
-    if (err) {
-      return res.status(500).send(err);
-    }
 
+  models.Product.find({}).sort('createdAt').then((products) => {
     res.render('index', {
       pageTitle: 'crypto-shopping-cart',
       path: req.originalUrl,
       products: products
     });
+  }).catch((error) => {
+    return res.status(500).send(error);
   });
 });
-
 
 let port = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 app.listen(port, '0.0.0.0', () => {

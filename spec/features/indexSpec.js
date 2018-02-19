@@ -88,7 +88,7 @@ describe('index', () => {
     });
 
     it('structures the product list with what\'s in the database', (done) => {
-      models.Product.find({}).then((results) => {
+      models.Product.find({}).sort('createdAt').then((results) => {
         expect(results.length).toEqual(2);
 
         browser.assert.elements('ul#products li.product', results.length);
@@ -105,6 +105,36 @@ describe('index', () => {
         browser.assert.text('ul#products li.product:nth-child(2) .cart-data form div span.price', results[1].formattedPrice);
         browser.assert.text(`ul#products li.product:nth-child(2) .cart-data form div input[type=hidden][name=id][value="${results[1].id}"]`);
  
+        done();
+      }).catch((error) => {
+        done.fail(error);
+      });
+    });
+
+    it('displays a select dropdown if a product has options', (done) => {
+      models.Product.find({}).sort('createdAt').then((results) => {
+        expect(results.length).toEqual(2);
+
+        expect(results[0].options.length).toEqual(3);
+        expect(results[1].options.length).toEqual(0);
+
+        // First product
+        browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
+        browser.assert.element('ul#products li.product:nth-child(1) .cart-data form .product-info select');
+        browser.assert.elements('ul#products li.product:nth-child(1) .cart-data form .product-info select option',
+                                results[0].options.length);
+
+        browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[0]}]`,
+                            results[0].options[0]);
+        browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[1]}]`,
+                            results[0].options[1]);
+        browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[2]}]`,
+                            results[0].options[2]);
+ 
+        // Second product (no dropdown)
+        browser.assert.text('ul#products li.product:nth-child(2) h3.product-title', results[1].name);
+        browser.assert.elements('ul#products li.product:nth-child(2) .cart-data form .product-info select', 0);
+
         done();
       }).catch((error) => {
         done.fail(error);

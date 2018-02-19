@@ -17,7 +17,6 @@ exports.Product = {
     name: 'Women\'s Mining T',
     description: 'secret',
     price: 51990000,
-    image: 'woman-shirt.jpg',
-    options: ['Small', 'Medium', 'Large']
+    image: 'woman-shirt.jpg'
   }
 };
