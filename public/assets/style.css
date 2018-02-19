@@ -114,3 +114,7 @@ td .qty {
   float: right !important;
 }
 
+select.form-control {
+  display: inline;
+  width: 50%;
+}

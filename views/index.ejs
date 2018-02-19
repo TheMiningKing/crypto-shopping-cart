@@ -15,7 +15,7 @@
                   <%= product.formattedPrice %>
                 </span>
                 <% if (product.options.length) { %>
-                  <select>
+                  <select class="form-control">
                     <% product.options.forEach((option) => { %>
                       <option value="<%= option %>"><%= option %></option>
                     <% }); %>
