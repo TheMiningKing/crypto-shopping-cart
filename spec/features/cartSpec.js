@@ -38,6 +38,10 @@ describe('cart', () => {
       browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
       browser.assert.elements('i.fa.fa-shopping-cart.go-to-cart-lnk', 0);
     });
+
+    it('does not display an order form', () => {
+      browser.assert.elements('form', 0);
+    });
   });
 
   describe('when cart contains products', () => {
