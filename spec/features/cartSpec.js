@@ -90,6 +90,28 @@ describe('cart', () => {
       browser.assert.text('tr.info', `Total: ${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))}`);
     });
 
+    it('displays product variants in the cart', (done) => {
+      browser.visit('/', (err) => {
+        if (err) done.fail(err);
+
+        browser
+        .select('li.product:nth-child(1) form div select', products[0].options[2])
+        .pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+          browser.assert.redirected();
+          browser.assert.url('/cart');
+ 
+          browser.assert.elements('tr', 4);
+    
+          browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
+          browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
+          browser.assert.text('tr:nth-child(3) td:nth-child(3)', `${products[0].name} - ${products[0].options[2]}`);
+
+          done();
+        });
+      });
+    });
+
+
     describe('removing item from cart', () => {
 
       it('removes the item from the session cart', (done) => {
