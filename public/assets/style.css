@@ -118,3 +118,13 @@ select.form-control {
   display: inline;
   width: 50%;
 }
+
+.order-form {
+  width: 80%;
+  margin-right: 10%;
+  margin-left: auto;
+}
+
+.order-form button {
+  float: right;
+}

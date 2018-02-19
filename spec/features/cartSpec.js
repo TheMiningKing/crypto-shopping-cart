@@ -109,6 +109,12 @@ describe('cart', () => {
       });
     });
 
+    it('displays an order submission form', () => {
+      browser.assert.element('form.form-horizontal[action="/cart/checkout"]');
+      browser.assert.element('form.form-horizontal input[type="email"][name="email"]');
+      browser.assert.element('form.form-horizontal button[type="submit"]');
+    });
+
     describe('removing item from cart', () => {
 
       it('removes the item from the session cart', (done) => {
