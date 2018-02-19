@@ -32,8 +32,8 @@ router.post('/', (req, res) => {
 /**
  * GET /remove/:id
  */
-router.get('/remove/:id', (req, res) => {
-  Cart.removeFromCart(req.params.id, null, req.session.cart);
+router.get('/remove/:id/:option?', (req, res) => {
+  Cart.removeFromCart(req.params.id, req.params.option || null, req.session.cart);
   res.redirect('/cart');
 });
 

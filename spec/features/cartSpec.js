@@ -75,7 +75,7 @@ describe('cart', () => {
     it('displays the products in the cart', () => {
       browser.assert.elements('tr', 3);
 
-      browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${products[0].id}"]`);
+      browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${products[0].id}/${products[0].options[0]}"]`);
       browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].image}"]`);
       browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
       browser.assert.text('tr:nth-child(1) td:nth-child(4)', products[0].formattedPrice);
@@ -110,7 +110,6 @@ describe('cart', () => {
         });
       });
     });
-
 
     describe('removing item from cart', () => {
 
@@ -147,6 +146,34 @@ describe('cart', () => {
           browser.assert.elements('tr', 2);
           browser.assert.elements(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].image}"]`, 0);
           done();
+        });
+      });
+
+      it('removes correct product variant from the cart', (done) => {
+        browser.assert.elements('tr', 3);
+        browser.visit('/', (err) => {
+          if (err) done.fail(err);
+  
+          browser
+            .select('li.product:nth-child(1) form div select', products[0].options[2])
+            .pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+              browser.assert.redirected();
+              browser.assert.url('/cart');
+     
+              browser.assert.elements('tr', 4);
+        
+              browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
+              browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
+              browser.assert.text('tr:nth-child(3) td:nth-child(3)', `${products[0].name} - ${products[0].options[2]}`);
+    
+              browser.clickLink(`tr:nth-child(3) td a[href="/cart/remove/${products[0].id}/${products[0].options[2]}"]`, () => {
+                browser.assert.elements('tr', 3);
+                browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
+                browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
+ 
+                done();
+              });
+            });
         });
       });
     });

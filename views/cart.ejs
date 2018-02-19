@@ -5,7 +5,7 @@
       <% cart.items.forEach(function(product) { %>
         <tr>
           <td>
-            <a href="/cart/remove/<%= product.id%>">
+            <a href="/cart/remove/<%= product.id %><%= product.option ? `/${product.option}` : '' %>">
               <i class="fa fa-remove text-danger"></i>
             </a>
           </td>
