@@ -2,6 +2,7 @@
 
 const app = require('../../app'); 
 const models = require('../../models');
+const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
 const Units = require('ethereumjs-units');
 
@@ -183,6 +184,32 @@ describe('cart', () => {
               });
             });
         });
+      });
+    });
+
+    describe('checkout', () => {
+      beforeEach((done) => {
+        browser.assert.url('/cart');
+        browser.fill('email', 'dan@example.com').pressButton('Place Order', () => {
+          done();
+        });
+      });
+
+      afterEach((done) => {
+        mailer.transport.sentMail = [];
+        done();
+      });
+
+      it('redirects and displays a flash message on the homepage', () => {
+  
+      });
+
+      it('sends an email to the buyer', () => {
+
+      });
+
+      it('sends an email to the vendor', () => {
+
       });
     });
   });

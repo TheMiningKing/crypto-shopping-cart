@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const models = require('../models');
 const Cart = require('../lib/cart');
+const mailer = require('../mailer');
 
 /**
  * GET /
@@ -30,7 +31,7 @@ router.post('/', (req, res) => {
 });
 
 /**
- * GET /remove/:id
+ * GET /remove/:id/:option?
  */
 router.get('/remove/:id/:option?', (req, res) => {
   Cart.removeFromCart(req.params.id, req.params.option || null, req.session.cart);

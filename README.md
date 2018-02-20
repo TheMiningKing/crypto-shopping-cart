@@ -56,6 +56,12 @@ Seed database:
 node db/seed.js
 ```
 
+Start `maildev`:
+
+```
+docker run -d --name maildev -p 1080:80 -p 25:25 -p 587:587 djfarrelly/maildev
+```
+
 Run server:
 
 ```
@@ -77,13 +83,20 @@ cd crypto-shopping-cart
 NODE_ENV=production npm install
 ```
 
+Configure `.env`. E.g.:
+
+```
+FROM=your@email.com
+PASSWORD=secret
+```
+
 The _Dockerized_ production is meant to be deployed behind an `nginx-proxy`/`lets-encrypt` combo:
 
 ```
 docker-compose -f docker-compose.prod.yml up -d
 ```
 
-## Seed                        
+## Seed
 
 ```
 docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV=production
