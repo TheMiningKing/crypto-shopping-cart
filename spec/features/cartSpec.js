@@ -208,11 +208,25 @@ describe('cart', () => {
       });
 
       it('sends an email to the buyer', () => {
-
+        expect(mailer.transport.sentMail.length).toEqual(1);
+        expect(mailer.transport.sentMail[0].data.to).toEqual('dan@example.com');
+        expect(mailer.transport.sentMail[0].data.from).toEqual(process.env.FROM);
+        expect(mailer.transport.sentMail[0].data.subject).toEqual('Order received - payment and shipping instructions');
+        expect(mailer.transport.sentMail[0].data.text).toContain('Thanks for your order!');
       });
 
-      it('sends an email to the vendor', () => {
+      it('empties the buyer\'s cart', (done) => {
+        models.collection('sessions').find({}).toArray((err, results) => {
+          if (err) {
+            done.fail(err);
+          }
+          expect(results.length).toEqual(1);
+          expect(results[0].session.cart.items.length).toEqual(0);
+          expect(results[0].session.cart.totals).toEqual(0);
+          expect(results[0].session.cart.formattedTotal).toEqual(0);
 
+          done();
+        });
       });
     });
   });
