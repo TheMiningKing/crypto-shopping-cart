@@ -49,6 +49,12 @@ app.use(session({
 }));
 
 /**
+ * Flash
+ */
+const flash = require('connect-flash');
+app.use(flash());
+
+/**
  * Routes
  */
 app.use('/cart', require('./routes/cart'));

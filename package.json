@@ -23,6 +23,7 @@
   "homepage": "https://github.com/TheMiningKing/crypto-shopping-cart#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^1.4.0",
     "dotenv": "^5.0.0",
     "ejs": "^2.5.7",
