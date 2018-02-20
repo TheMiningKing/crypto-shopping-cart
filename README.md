@@ -88,6 +88,8 @@ Configure `.env`. E.g.:
 ```
 FROM=your@email.com
 PASSWORD=secret
+WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b
+CURRENCY=ETH
 ```
 
 The _Dockerized_ production is meant to be deployed behind an `nginx-proxy`/`lets-encrypt` combo:

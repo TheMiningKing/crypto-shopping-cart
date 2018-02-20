@@ -188,11 +188,22 @@ describe('cart', () => {
     });
 
     describe('checkout', () => {
+      let cart;
+
       beforeEach((done) => {
         browser.assert.url('/cart');
-        browser.fill('email', 'dan@example.com').pressButton('Place Order', () => {
-          browser.assert.success();  
-          done();
+
+        models.collection('sessions').findOne({}, (err, result) => {
+          if (err) {
+            done.fail(err);
+          }
+          cart = result.session.cart;
+          expect(cart.items.length).toEqual(2);
+ 
+          browser.fill('email', 'dan@example.com').pressButton('Place Order', () => {
+            browser.assert.success();  
+            done();
+          });
         });
       });
 
@@ -207,12 +218,19 @@ describe('cart', () => {
         browser.assert.text('.alert-success', 'An email has been sent to dan@example.com with transaction and shipping instructions');  
       });
 
-      it('sends an email to the buyer', () => {
+      it('sends an email with text content to the buyer', () => {
         expect(mailer.transport.sentMail.length).toEqual(1);
         expect(mailer.transport.sentMail[0].data.to).toEqual('dan@example.com');
         expect(mailer.transport.sentMail[0].data.from).toEqual(process.env.FROM);
         expect(mailer.transport.sentMail[0].data.subject).toEqual('Order received - payment and shipping instructions');
-        expect(mailer.transport.sentMail[0].data.text).toContain('Thanks for your order!');
+        const emailText = mailer.transport.sentMail[0].data.text;
+        expect(emailText).toContain('Thanks for your order!');
+        expect(emailText).toContain(
+          `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
+        expect(emailText).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
+        expect(emailText).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+
+        expect(emailText).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
       });
 
       it('empties the buyer\'s cart', (done) => {
