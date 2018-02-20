@@ -46,7 +46,7 @@ router.get('/remove/:id/:option?', (req, res) => {
 router.post('/checkout', (req, res) => {
 
   // Send email to buyer
-  ejs.renderFile(__dirname + "/../views/mailer/buyerText.ejs", { cart: req.session.cart }, (err, textEmail) => {
+  ejs.renderFile(__dirname + "/../views/mailer/orderText.ejs", { cart: req.session.cart }, (err, textEmail) => {
     if (err) {
       console.log(err);
       req.flash('error', err);
