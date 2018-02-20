@@ -74,7 +74,8 @@ app.get('/', (req, res) => {
     res.render('index', {
       pageTitle: 'crypto-shopping-cart',
       path: req.originalUrl,
-      products: products
+      products: products,
+      messages: req.flash()
     });
   }).catch((error) => {
     return res.status(500).send(error);

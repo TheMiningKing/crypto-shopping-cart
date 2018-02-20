@@ -191,6 +191,7 @@ describe('cart', () => {
       beforeEach((done) => {
         browser.assert.url('/cart');
         browser.fill('email', 'dan@example.com').pressButton('Place Order', () => {
+          browser.assert.success();  
           done();
         });
       });
@@ -201,7 +202,9 @@ describe('cart', () => {
       });
 
       it('redirects and displays a flash message on the homepage', () => {
-  
+        browser.assert.redirected();  
+        browser.assert.url('/');  
+        browser.assert.text('.alert-success', 'An email has been sent to dan@example.com with transaction and shipping instructions');  
       });
 
       it('sends an email to the buyer', () => {

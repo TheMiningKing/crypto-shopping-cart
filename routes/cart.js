@@ -38,4 +38,13 @@ router.get('/remove/:id/:option?', (req, res) => {
   res.redirect('/cart');
 });
 
+/**
+ * POST /checkout
+ */
+router.post('/checkout', (req, res) => {
+  req.flash('success', 'An email has been sent to dan@example.com with transaction and shipping instructions');
+  res.redirect('/');
+});
+
+
 module.exports = router;
