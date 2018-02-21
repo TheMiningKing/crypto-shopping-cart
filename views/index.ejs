@@ -13,7 +13,7 @@
             <form action="/cart" method="post">
               <div class="product-info">
                 <span class="price">
-                  <%= product.formattedPrice %>
+                  <%= product.formattedPrice %> <%= process.env.CURRENCY %>
                 </span>
                 <% if (product.options.length) { %>
                   <select class="form-control" name="option">
