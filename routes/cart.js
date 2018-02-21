@@ -65,7 +65,7 @@ router.post('/checkout', (req, res) => {
 
       // Inline CSS processing
       const styliner = new Styliner(__dirname + '/..', {noCSS: false});
-      styliner.processHTML(htmlEmail).then((html) => {
+      styliner.processHTML(htmlEmail).then((htmlAndCss) => {
 
         // Attach images
         let attachments = req.session.cart.items.map((item) => {
@@ -79,7 +79,7 @@ router.post('/checkout', (req, res) => {
           from: process.env.FROM,
           subject: 'Order received - payment and shipping instructions',
           text: textEmail,
-          html: html,
+          html: htmlAndCss,
           attachments: attachments
         };
 
