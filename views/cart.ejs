@@ -1,6 +1,6 @@
 <% include header %>
 <% include messages %>
-<% if (cart) { %>
+<% if (cart && cart.items.length) { %>
   <table class="cart-table table table-bordered table-striped">
     <tbody>
       <% cart.items.forEach(function(product) { %>

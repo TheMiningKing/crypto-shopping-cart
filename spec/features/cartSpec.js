@@ -25,10 +25,13 @@ describe('cart', () => {
     beforeEach((done) => {
       browser = new Browser({ waitDuration: '30s', loadCss: false });
 
-      browser.visit('/cart', (err) => {
+      browser.visit('/', (err) => {
         if (err) done.fail(err);
-        browser.assert.success();
-        done();
+        browser.clickLink('Checkout', (err) => {
+          if (err) done.fail(err);
+          browser.assert.success();
+          done();
+        });
       });
     });
 
