@@ -10,11 +10,11 @@
             <img src="/images/products/<%= product.image %>" alt="" class="img-thumbnail img-responsive">
           </figure>
           <div class="cart-data">
-            <form action="/cart" method="post">
-              <div class="product-info">
-                <span class="price">
-                  <%= product.formattedPrice %> <%= process.env.CURRENCY %>
-                </span>
+            <div class="product-info">
+              <span class="price">
+                <%= product.formattedPrice %> <%= process.env.CURRENCY %>
+              </span>
+              <form action="/cart" method="post">
                 <% if (product.options.length) { %>
                   <select class="form-control" name="option">
                     <% product.options.forEach((option) => { %>
@@ -23,11 +23,11 @@
                   </select>
                 <% } %>
                 <input type="hidden" name="id" value="<%= product._id %>">
-                <button type="submit" class="btn btn-primary">
-                  <i class="fa fa-cart-plus"></i>
+                <button type="submit" class="btn btn-primary add-to-cart">
+                  <i class="fa fa-cart-plus fa-2x"></i>
                 </button>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </li>
       <% }); %>
