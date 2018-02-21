@@ -5,6 +5,7 @@ const models = require('../../models');
 const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
 const Units = require('ethereumjs-units');
+const path = require('path');
 
 const Browser = require('zombie');
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
@@ -240,12 +241,12 @@ describe('cart', () => {
         const html = mailer.transport.sentMail[0].data.html;
         expect(html).toContain('<h3>Thanks for your order!</h3>');
 
-        expect(html).toContain(`<img src="cid:${cart.items[0].image}" class="img-thumbnail img-responsive">`);
+        expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
         expect(html).toContain(cart.items[0].name);
         expect(html).toContain(`- ${cart.items[0].option}`);
         expect(html).toContain(cart.items[0].formattedPrice);
 
-        expect(html).toContain(`<img src="cid:${cart.items[1].image}" class="img-thumbnail img-responsive">`);
+        expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
         expect(html).toContain(cart.items[1].name);
         expect(html).toContain(cart.items[1].formattedPrice);
  
@@ -256,10 +257,10 @@ describe('cart', () => {
         const attachments = mailer.transport.sentMail[0].data.attachments;
         expect(attachments.length).toEqual(2);
         expect(attachments[0].filename).toEqual(cart.items[0].image);
-        expect(attachments[0].path).toEqual('');
+        expect(attachments[0].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[0].image));
         expect(attachments[0].cid).toEqual(cart.items[0].image);
         expect(attachments[1].filename).toEqual(cart.items[1].image);
-        expect(attachments[1].path).toEqual('');
+        expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
         expect(attachments[1].cid).toEqual(cart.items[1].image);
       });
 
