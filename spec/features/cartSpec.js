@@ -94,7 +94,8 @@ describe('cart', () => {
       browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
       browser.assert.text('tr:nth-child(2) td:nth-child(4)', products[1].formattedPrice);
 
-      browser.assert.text('tr.info', `Total: ${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))}`);
+      browser.assert.text('tr.info',
+          `Total: ${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))} ${process.env.CURRENCY}`);
     });
 
     it('displays product variants in the cart', (done) => {
