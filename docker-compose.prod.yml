@@ -13,6 +13,8 @@ services:
     volumes:
       - .:/home/node
       - /home/node/node_modules
+    depends_on:
+      - mongo
   mongo:  
     image: mongo
     restart: unless-stopped
