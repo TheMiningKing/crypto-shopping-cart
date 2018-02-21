@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thanks for your order!</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/assets/style.css" type="text/css" media="screen" />
+</head>
+<body>
+  <section id="content" class="container">
+    <h3>Thanks for your order!</h3>
+    <p>
+      Before you provide shipping information and initiate payment, please verify that it is correct:
+    </p>
+    <table class="cart-table table table-bordered table-striped">
+      <tbody>
+        <% cart.items.forEach(function(product) { %>
+          <tr>
+            <td class="product-thumb">
+              <img src="cid:<%= product.image %>" class="img-thumbnail img-responsive">
+            </td>
+            <td>
+              <%- product.name %>
+              <% if (product.option) { %>
+                - <%- product.option %>
+              <% } %>
+            </td>
+            <td>
+              <%= product.formattedPrice %>
+            </td>
+          </tr>
+        <% }); %>
+        <tr class="info">
+          <td colspan="5" class="text-right">
+            Total: <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <p>
+      Before your order can be processed, you must provide two things:
+      <ol>
+        <li>The transaction ID of your payment</li>
+        <li>A shipping address</li>
+      </ol>
+    </p>
+    <p>
+      Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
+    </p>
+    <p>
+      Respond to this email with the transaction ID, shipping address, or any questions you may have.
+    </p>
+    <p>
+      Thanks again for your order! You will receive confirmation and tracking number when it is shipped.
+    </p>
+  </section>
+</body>
+</html>

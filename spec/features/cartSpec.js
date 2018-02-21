@@ -218,19 +218,49 @@ describe('cart', () => {
         browser.assert.text('.alert-success', 'An email has been sent to dan@example.com with transaction and shipping instructions');  
       });
 
-      it('sends an email with text content to the buyer', () => {
+      it('sends an email with correct header information to the buyer', () => {
         expect(mailer.transport.sentMail.length).toEqual(1);
         expect(mailer.transport.sentMail[0].data.to).toEqual('dan@example.com');
         expect(mailer.transport.sentMail[0].data.from).toEqual(process.env.FROM);
         expect(mailer.transport.sentMail[0].data.subject).toEqual('Order received - payment and shipping instructions');
-        const emailText = mailer.transport.sentMail[0].data.text;
-        expect(emailText).toContain('Thanks for your order!');
-        expect(emailText).toContain(
-          `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
-        expect(emailText).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-        expect(emailText).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+      });
 
-        expect(emailText).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+      it('sends an email with text content to the buyer', () => {
+        const text = mailer.transport.sentMail[0].data.text;
+        expect(text).toContain('Thanks for your order!');
+        expect(text).toContain(
+          `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
+        expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
+        expect(text).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+
+        expect(text).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+      });
+
+      it('sends an email with html content to the buyer', () => {
+        const html = mailer.transport.sentMail[0].data.html;
+        expect(html).toContain('<h3>Thanks for your order!</h3>');
+
+        expect(html).toContain(`<img src="cid:${cart.items[0].image}" class="img-thumbnail img-responsive">`);
+        expect(html).toContain(cart.items[0].name);
+        expect(html).toContain(`- ${cart.items[0].option}`);
+        expect(html).toContain(cart.items[0].formattedPrice);
+
+        expect(html).toContain(`<img src="cid:${cart.items[1].image}" class="img-thumbnail img-responsive">`);
+        expect(html).toContain(cart.items[1].name);
+        expect(html).toContain(cart.items[1].formattedPrice);
+ 
+        expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+
+        expect(html).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+
+        const attachments = mailer.transport.sentMail[0].data.attachments;
+        expect(attachments.length).toEqual(2);
+        expect(attachments[0].filename).toEqual(cart.items[0].image);
+        expect(attachments[0].path).toEqual('');
+        expect(attachments[0].cid).toEqual(cart.items[0].image);
+        expect(attachments[1].filename).toEqual(cart.items[1].image);
+        expect(attachments[1].path).toEqual('');
+        expect(attachments[1].cid).toEqual(cart.items[1].image);
       });
 
       it('empties the buyer\'s cart', (done) => {

@@ -45,7 +45,7 @@ router.get('/remove/:id/:option?', (req, res) => {
  */
 router.post('/checkout', (req, res) => {
 
-  // Send email to buyer
+  // Get email text content 
   ejs.renderFile(__dirname + "/../views/mailer/orderText.ejs", { cart: req.session.cart }, (err, textEmail) => {
     if (err) {
       console.log(err);
@@ -53,20 +53,36 @@ router.post('/checkout', (req, res) => {
       return res.redirect('/cart');
     }
 
-    let mailOptions = {
-      to: req.body.email,
-      from: process.env.FROM,
-      subject: 'Order received - payment and shipping instructions',
-      text: textEmail
-    };
-    mailer.transporter.sendMail(mailOptions, (err, info) => {
+    // Get email HTML content 
+    ejs.renderFile(__dirname + "/../views/mailer/orderHtml.ejs", { cart: req.session.cart }, (err, htmlEmail) => {
       if (err) {
+        console.log(err);
         req.flash('error', err);
         return res.redirect('/cart');
       }
-      Cart.emptyCart(req.session.cart);
-      req.flash('success', `An email has been sent to ${req.body.email} with transaction and shipping instructions`);
-      res.redirect('/');
+
+      // Attach images
+      let attachments = req.session.cart.items.map((item) => {
+        return { filename: item.image, path: '', cid: item.image }
+      });
+  
+      let mailOptions = {
+        to: req.body.email,
+        from: process.env.FROM,
+        subject: 'Order received - payment and shipping instructions',
+        text: textEmail,
+        html: htmlEmail,
+        attachments: attachments
+      };
+      mailer.transporter.sendMail(mailOptions, (err, info) => {
+        if (err) {
+          req.flash('error', err);
+          return res.redirect('/cart');
+        }
+        Cart.emptyCart(req.session.cart);
+        req.flash('success', `An email has been sent to ${req.body.email} with transaction and shipping instructions`);
+        res.redirect('/');
+      });
     });
   });
 });
