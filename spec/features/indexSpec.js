@@ -96,16 +96,16 @@ describe('index', () => {
         // First product
         browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
         browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[0].image}"]`);
-        browser.assert.text('ul#products li.product:nth-child(1) .cart-data form div span.price',
+        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                             `${results[0].formattedPrice} ${process.env.CURRENCY}`);
-        browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form div input[type=hidden][name=id][value="${results[0].id}"]`);
+        browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${results[0].id}"]`);
 
         // Second product
         browser.assert.text('ul#products li.product:nth-child(2) h3.product-title', results[1].name);
         browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[1].image}"]`);
-        browser.assert.text('ul#products li.product:nth-child(2) .cart-data form div span.price',
+        browser.assert.text('ul#products li.product:nth-child(2) .cart-data .product-info span.price',
                             `${results[1].formattedPrice} ${process.env.CURRENCY}`);
-        browser.assert.text(`ul#products li.product:nth-child(2) .cart-data form div input[type=hidden][name=id][value="${results[1].id}"]`);
+        browser.assert.text(`ul#products li.product:nth-child(2) .cart-data form input[type=hidden][name=id][value="${results[1].id}"]`);
  
         done();
       }).catch((error) => {
@@ -122,8 +122,8 @@ describe('index', () => {
 
         // First product
         browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
-        browser.assert.element('ul#products li.product:nth-child(1) .cart-data form .product-info select');
-        browser.assert.elements('ul#products li.product:nth-child(1) .cart-data form .product-info select option',
+        browser.assert.element('ul#products li.product:nth-child(1) .cart-data form select');
+        browser.assert.elements('ul#products li.product:nth-child(1) .cart-data form select option',
                                 results[0].options.length);
 
         browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[0]}]`,
@@ -135,7 +135,7 @@ describe('index', () => {
  
         // Second product (no dropdown)
         browser.assert.text('ul#products li.product:nth-child(2) h3.product-title', results[1].name);
-        browser.assert.elements('ul#products li.product:nth-child(2) .cart-data form .product-info select', 0);
+        browser.assert.elements('ul#products li.product:nth-child(2) .cart-data form select', 0);
 
         done();
       }).catch((error) => {
@@ -154,7 +154,7 @@ describe('index', () => {
       });
 
       it('adds an item to the cart session', (done) => {
-        browser.pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
           models.collection('sessions').find({}).toArray((err, results) => {
             if (err) {
@@ -169,7 +169,7 @@ describe('index', () => {
       });
 
       it('redirects to cart', (done) => {
-        browser.pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
           browser.assert.redirected();
           browser.assert.url('/cart');
           done();

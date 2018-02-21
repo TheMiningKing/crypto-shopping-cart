@@ -64,12 +64,12 @@ describe('cart', () => {
           browser.visit('/', (err) => {
             if (err) done.fail(err);
 
-            browser.pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+            browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
               browser.visit('/', (err) => {
                 if (err) done.fail(err);
 
-                browser.pressButton('li.product:nth-child(2) form div button[type=submit]', () => {
+                browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
                   browser.assert.redirected();
                   browser.assert.url('/cart');
                   done();
@@ -103,8 +103,8 @@ describe('cart', () => {
         if (err) done.fail(err);
 
         browser
-        .select('li.product:nth-child(1) form div select', products[0].options[2])
-        .pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+        .select('li.product:nth-child(1) form select', products[0].options[2])
+        .pressButton('li.product:nth-child(1) form button[type=submit]', () => {
           browser.assert.redirected();
           browser.assert.url('/cart');
  
@@ -169,8 +169,8 @@ describe('cart', () => {
           if (err) done.fail(err);
   
           browser
-            .select('li.product:nth-child(1) form div select', products[0].options[2])
-            .pressButton('li.product:nth-child(1) form div button[type=submit]', () => {
+            .select('li.product:nth-child(1) form select', products[0].options[2])
+            .pressButton('li.product:nth-child(1) form button[type=submit]', () => {
               browser.assert.redirected();
               browser.assert.url('/cart');
      
