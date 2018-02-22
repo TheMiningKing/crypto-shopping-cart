@@ -119,7 +119,6 @@ select.form-control {
 }
 
 @media (min-width: 45em) {
-
   .cart-table,
   .order-form {
     margin: 0 auto;
