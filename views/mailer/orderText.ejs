@@ -1,23 +1,31 @@
-Thanks for your order!
+Thank you!
 
-Before you provide shipping information and initiate payment, please verify that it is correct:
+Before your order can be processed, you must reply to this email with:
+
+1. A shipping address
+2. The transaction ID of your payment
+
+For shipping, be sure to include your:
+
+1. Name
+2. Street address
+3. Province or state
+4. Country
+5. Postal code
+
+Once you've verified that your order is correct (see below), 
+
+Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
 
 --------------------------------
+
 <% cart.items.forEach((item, i) => { %> 
   <%- i + 1 %>. <%- item.name %><%= item.option ? ` - ${item.option}` : '' %>, <%- item.formattedPrice %>
 <% }); %>
+
 ------
 TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
 --------------------------------
 
-Before your order can be processed, you must provide two things:
-
-1. The transaction ID of your payment
-2. A shipping address
-
-Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
-
-Respond to this email with the transaction ID, shipping address, or any questions you may have.
-
-Thanks again for your order! You will receive confirmation and tracking number when it is shipped.
+Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
 

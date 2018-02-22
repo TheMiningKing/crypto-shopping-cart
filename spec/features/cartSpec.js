@@ -232,7 +232,7 @@ describe('cart', () => {
 
       it('sends an email with text content to the buyer', () => {
         const text = mailer.transport.sentMail[0].data.text;
-        expect(text).toContain('Thanks for your order!');
+        expect(text).toContain('Thank you!');
         expect(text).toContain(
           `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
         expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
