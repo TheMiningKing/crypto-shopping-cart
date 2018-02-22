@@ -138,4 +138,11 @@ select.form-control {
   float: right;
 }
 
+.product-info form {
+  margin-top: .75em;
+}
 
+.product-info select.form-control {
+  height: 3em;
+  font-weight: bold;
+}
