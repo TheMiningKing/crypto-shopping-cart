@@ -99,12 +99,12 @@ td .qty {
 }
 
 #info {
-    background: #222;
-    color: #fff;
-    text-align: center;
-    margin-top: 3em;
-    padding: 1em;
-    border-radius: 4px;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  margin-top: 3em;
+  padding: 1em;
+  border-radius: 4px;
 }
 
 /**
@@ -145,4 +145,10 @@ select.form-control {
 .product-info select.form-control {
   height: 3em;
   font-weight: bold;
+}
+
+/* cart */
+.info td {
+  font-weight: bold;
+  font-size: 2em;
 }
