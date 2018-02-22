@@ -243,7 +243,7 @@ describe('cart', () => {
 
       it('sends an email with html content to the buyer', () => {
         const html = mailer.transport.sentMail[0].data.html;
-        expect(html).toContain('<h3>Thanks for your order!</h3>');
+        expect(html).toContain('<h3>Thank you!</h3>');
 
         expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
         expect(html).toContain(cart.items[0].name);

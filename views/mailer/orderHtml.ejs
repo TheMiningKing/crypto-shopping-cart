@@ -8,10 +8,31 @@
 </head>
 <body>
   <section id="content" class="container">
-    <h3>Thanks for your order!</h3>
+    <h3>Thank you!</h3>
     <p>
-      Before you provide shipping information and initiate payment, please verify that it is correct:
+      Before your order can be processed, you must reply to this email with:
+      <ol>
+        <li>A shipping address</li>
+        <li>The transaction ID of your payment</li>
+      </ol>
     </p>
+
+    <p>
+      For shipping, be sure to include your:
+      <ol>
+        <li>Name</li>
+        <li>Street address</li>
+        <li>Province or state</li>
+        <li>Country</li>
+        <li>Postal code</li>
+      </ol>
+    </p>
+    <p>
+      Once you've verified that your order is correct (see below), 
+    </p>
+    <h3>
+      Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
+    </h3>
     <table class="cart-table table table-bordered table-striped">
       <tbody>
         <% cart.items.forEach(function(product) { %>
@@ -38,20 +59,7 @@
       </tbody>
     </table>
     <p>
-      Before your order can be processed, you must provide two things:
-      <ol>
-        <li>The transaction ID of your payment</li>
-        <li>A shipping address</li>
-      </ol>
-    </p>
-    <p>
-      Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
-    </p>
-    <p>
-      Respond to this email with the transaction ID, shipping address, or any questions you may have.
-    </p>
-    <p>
-      Thanks again for your order! You will receive confirmation and tracking number when it is shipped.
+      Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
     </p>
   </section>
 </body>
