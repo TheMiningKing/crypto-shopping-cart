@@ -35,13 +35,22 @@
   <div class="order-form">
     <form action="/cart/checkout" method="post" class="form-horizontal">
       <div class="form-group">
-        <label for="email">Email:</label>
+        <label for="email">Enter your email and place your order:</label>
         <input class="form-control" type="email" name="email" required>
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Place Order</button>
       </div>
     </form>
+    <p>
+      You will receive a response with payment and shipping information. 
+    </p>
+    <h4>
+      Shipping is included!
+    </h4>
+    <h4>
+      No accounts! No signups required!
+    </h4>
   </div>
 <% } else { %>
   <p class="alert alert-info">Your cart is empty</p>
