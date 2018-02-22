@@ -82,6 +82,10 @@ select.form-control {
   margin-left: auto;
 }
 
+.order-form label {
+  font-size: 1.75em;
+}
+
 .order-form button {
   float: right;
 }
@@ -111,15 +115,21 @@ select.form-control {
 }
 
 .alert {
-  font-size: 2em;
+  font-size: 1.75em;
 }
 
 @media (min-width: 45em) {
+
   .cart-table,
   .order-form {
     margin: 0 auto;
     width: 50%;
   }
+
+  .cart-table td {
+    font-size: 1.25em;
+  }
+
   .order-form {
     margin-top: 2em;
   }
