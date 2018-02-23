@@ -256,7 +256,9 @@ describe('cart', () => {
  
         expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
 
-        expect(html).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+        // Send ETH to ...
+        expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
+        expect(html).toContain(`${process.env.WALLET}`);
 
         const attachments = mailer.transport.sentMail[0].data.attachments;
         expect(attachments.length).toEqual(2);
