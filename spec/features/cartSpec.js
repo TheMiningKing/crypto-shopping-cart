@@ -275,9 +275,11 @@ describe('cart', () => {
 
         // Wallet address
         QRCode.toDataURL(process.env.WALLET, (err, url) => {
-          expect(attachments[2].filename).toEqual('qr.png');
-          expect(Buffer.compare(attachments[2].content, new Buffer(url.split("base64,")[1], "base64"))).toEqual(0);
+          if (err) done.fail(err);
+          expect(attachments[2].path).toBe(false);
           expect(attachments[2].cid).toEqual('qr.png');
+          expect(attachments[2].contentType).toEqual('image/png');
+          expect(Buffer.compare(attachments[2].content, new Buffer(url.split("base64,")[1], "base64"))).toEqual(0);
           expect(html).toContain('<img src="cid:qr.png">');
           done();
         });
