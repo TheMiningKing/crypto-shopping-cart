@@ -8,6 +8,7 @@ const mailer = require('../mailer');
 const ejs = require('ejs');
 const Styliner = require('styliner');
 const path = require('path');
+const QRCode = require('qrcode')
 
 /**
  * GET /
@@ -55,48 +56,55 @@ router.post('/checkout', (req, res) => {
       return res.redirect('/cart');
     }
 
-    // Get email HTML content 
-    ejs.renderFile(__dirname + "/../views/mailer/orderHtml.ejs", { cart: req.session.cart }, (err, htmlEmail) => {
+    // Generate QR code for wallet
+    QRCode.toDataURL(process.env.WALLET, (err, qr) => {
       if (err) {
         console.log(err);
-        req.flash('error', 'Something went wrong');
-        return res.redirect('/cart');
       }
 
-      // Inline CSS processing
-      const styliner = new Styliner(__dirname + '/..', {noCSS: false});
-      styliner.processHTML(htmlEmail).then((htmlAndCss) => {
-
-        // Attach images
-        let attachments = req.session.cart.items.map((item) => {
-          return { filename: item.image,
-                   path: path.resolve(__dirname, '../public/images/products', item.image),
-                   cid: item.image }
+      // Get email HTML content 
+      ejs.renderFile(__dirname + "/../views/mailer/orderHtml.ejs", { cart: req.session.cart, qr: qr }, (err, htmlEmail) => {
+        if (err) {
+          console.log(err);
+          req.flash('error', 'Something went wrong');
+          return res.redirect('/cart');
+        }
+  
+        // Inline CSS processing
+        const styliner = new Styliner(__dirname + '/..', {noCSS: false});
+        styliner.processHTML(htmlEmail).then((htmlAndCss) => {
+  
+          // Attach images
+          let attachments = req.session.cart.items.map((item) => {
+            return { filename: item.image,
+                     path: path.resolve(__dirname, '../public/images/products', item.image),
+                     cid: item.image }
+          });
+  
+          let mailOptions = {
+            to: req.body.email,
+            from: process.env.FROM,
+            subject: 'Order received - payment and shipping instructions',
+            text: textEmail,
+            html: htmlAndCss,
+            attachments: attachments
+          };
+  
+          mailer.transporter.sendMail(mailOptions, (err, info) => {
+            if (err) {
+              console.log(err);
+              req.flash('error', 'Something went wrong');
+              return res.redirect('/cart');
+            }
+            Cart.emptyCart(req.session.cart);
+            req.flash('success', `An email has been sent to ${req.body.email} with transaction and shipping instructions`);
+            res.redirect('/');
+          });
+        }).catch((err) => {
+          console.log(err);
+          req.flash('error', 'Something went wrong');
+          return res.redirect('/cart');
         });
-
-        let mailOptions = {
-          to: req.body.email,
-          from: process.env.FROM,
-          subject: 'Order received - payment and shipping instructions',
-          text: textEmail,
-          html: htmlAndCss,
-          attachments: attachments
-        };
-
-        mailer.transporter.sendMail(mailOptions, (err, info) => {
-          if (err) {
-            console.log(err);
-            req.flash('error', 'Something went wrong');
-            return res.redirect('/cart');
-          }
-          Cart.emptyCart(req.session.cart);
-          req.flash('success', `An email has been sent to ${req.body.email} with transaction and shipping instructions`);
-          res.redirect('/');
-        });
-      }).catch((err) => {
-        console.log(err);
-        req.flash('error', 'Something went wrong');
-        return res.redirect('/cart');
       });
     });
   });

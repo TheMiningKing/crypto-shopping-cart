@@ -6,6 +6,7 @@ const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
 const Units = require('ethereumjs-units');
 const path = require('path');
+const QRCode = require('qrcode')
 
 const Browser = require('zombie');
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
@@ -241,7 +242,7 @@ describe('cart', () => {
         expect(text).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
       });
 
-      it('sends an email with html content to the buyer', () => {
+      it('sends an email with html content to the buyer', (done) => {
         const html = mailer.transport.sentMail[0].data.html;
         expect(html).toContain('<h3>Thank you!</h3>');
 
@@ -256,7 +257,7 @@ describe('cart', () => {
  
         expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
 
-        // Send ETH to ...
+        // Send ___ ETH to ___ 
         expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
         expect(html).toContain(`${process.env.WALLET}`);
 
@@ -268,6 +269,12 @@ describe('cart', () => {
         expect(attachments[1].filename).toEqual(cart.items[1].image);
         expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
         expect(attachments[1].cid).toEqual(cart.items[1].image);
+
+        // Wallet address
+        QRCode.toDataURL(process.env.WALLET, (err, url) => {
+          expect(html).toContain(`<img src="${url}">`);
+          done();
+        });
       });
 
       it('empties the buyer\'s cart', (done) => {
