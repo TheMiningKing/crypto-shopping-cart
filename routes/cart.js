@@ -75,11 +75,17 @@ router.post('/checkout', (req, res) => {
         styliner.processHTML(htmlEmail).then((htmlAndCss) => {
   
           // Attach images
-          let attachments = req.session.cart.items.map((item) => {
-            return { filename: item.image,
-                     path: path.resolve(__dirname, '../public/images/products', item.image),
-                     cid: item.image }
-          });
+          let seen = [];
+          let attachments = req.session.cart.items.reduce((atts, item) => {
+            if (seen.indexOf(item.image) < 0) {
+              seen.push(item.image);
+              atts.push({ filename: item.image,
+                         path: path.resolve(__dirname, '../public/images/products', item.image),
+                         cid: item.image });
+            }
+            return atts;
+          }, []);
+
           // Attach QR
           attachments.push({
             path: qr,
