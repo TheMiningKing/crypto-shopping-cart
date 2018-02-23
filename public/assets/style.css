@@ -103,6 +103,12 @@ select.form-control {
   margin-top: .75em;
 }
 
+.product-description {
+  margin: .75em;
+  font-size: 1.5em;
+}
+
+
 .product-info select.form-control {
   height: 3em;
   font-weight: bold;
@@ -131,6 +137,10 @@ select.form-control {
 
   .order-form {
     margin-top: 2em;
+  }
+
+  .product-description {
+    font-size: 1.25em;
   }
 }
 
