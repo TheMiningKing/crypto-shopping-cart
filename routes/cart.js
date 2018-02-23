@@ -82,8 +82,7 @@ router.post('/checkout', (req, res) => {
           });
           // Attach QR
           attachments.push({
-            filename: 'qr.png',
-            content: new Buffer(qr.split("base64,")[1], "base64"),
+            path: qr,
             cid: 'qr.png'
           });
   
