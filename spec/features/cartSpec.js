@@ -262,17 +262,23 @@ describe('cart', () => {
         expect(html).toContain(`${process.env.WALLET}`);
 
         const attachments = mailer.transport.sentMail[0].data.attachments;
-        expect(attachments.length).toEqual(2);
+        expect(attachments.length).toEqual(3);
         expect(attachments[0].filename).toEqual(cart.items[0].image);
         expect(attachments[0].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[0].image));
         expect(attachments[0].cid).toEqual(cart.items[0].image);
         expect(attachments[1].filename).toEqual(cart.items[1].image);
         expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
         expect(attachments[1].cid).toEqual(cart.items[1].image);
+        expect(attachments[1].filename).toEqual(cart.items[1].image);
+        expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
+        expect(attachments[1].cid).toEqual(cart.items[1].image);
 
         // Wallet address
         QRCode.toDataURL(process.env.WALLET, (err, url) => {
-          expect(html).toContain(`<img src="${url}">`);
+          expect(attachments[2].filename).toEqual('qr.png');
+          expect(Buffer.compare(attachments[2].content, new Buffer(url.split("base64,")[1], "base64"))).toEqual(0);
+          expect(attachments[2].cid).toEqual('qr.png');
+          expect(html).toContain('<img src="cid:qr.png">');
           done();
         });
       });

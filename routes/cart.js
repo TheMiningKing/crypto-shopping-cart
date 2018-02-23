@@ -80,6 +80,12 @@ router.post('/checkout', (req, res) => {
                      path: path.resolve(__dirname, '../public/images/products', item.image),
                      cid: item.image }
           });
+          // Attach QR
+          attachments.push({
+            filename: 'qr.png',
+            content: new Buffer(qr.split("base64,")[1], "base64"),
+            cid: 'qr.png'
+          });
   
           let mailOptions = {
             to: req.body.email,
