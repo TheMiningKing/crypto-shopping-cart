@@ -30,15 +30,27 @@
     <p>
       Once you've verified that your order is correct (see below), 
     </p>
-    <h3>
-      Send <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> to <em><%- process.env.WALLET %></em>
-    </h3>
-    <img src="<%- qr %>">
+    <table class="payment-table">
+      <tbody>
+        <tr>
+          <td>Send</td>
+          <td><em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em></td>
+        </tr>
+        <tr>
+          <td>To</td>
+          <td><em><%- process.env.WALLET %></em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><img src="<%- qr %>"></td>
+        </tr>
+      </tbody>
+    </table>
     <hr>
     <h3>
       Your order:
     </h3>
-    <table class="cart-table table table-bordered table-striped">
+    <table class="cart-table">
       <tbody>
         <% cart.items.forEach(function(product) { %>
           <tr>
@@ -63,6 +75,7 @@
         </tr>
       </tbody>
     </table>
+    <hr>
     <p>
       Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
     </p>
