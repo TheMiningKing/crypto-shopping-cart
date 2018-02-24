@@ -1,7 +1,5 @@
-crypto-shopping-cart
-====================
-
-## The world's first open-source crypto-shopping cart!
+The world's first open-source crypto-shopping cart!
+===================================================
 
 Working beta demo: [shop.theminingking.com](https://shop.theminingking.com). Now accepting real orders!
 
