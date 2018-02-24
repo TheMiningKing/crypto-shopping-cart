@@ -7,7 +7,7 @@ Working beta demo: [shop.theminingking.com](https://shop.theminingking.com). Now
 
 This is an experimental project in progress. The styling and basic functionality was straight-up jacked from [this fine fellow](https://github.com/gabrieleromanato/Node.js-Shopping-Cart).
 
-I want to exchange t-shirts and stickers for Ethereum. Apart from some commercial providers, there doesn't seem to be much in the way of open-source cryptocurrency shopping carts. 
+I am exchanging t-shirts and stickers for Ethereum. Apart from some commercial providers, there doesn't seem to be much in the way of open-source cryptocurrency shopping carts. 
 
 This project raises some interesting interface issues. The modest initial goal is to take an order and wait for transaction confirmation before shipping. Traditional shopping carts collect all cart and payment data before processing an order. Credit cards and banks validate the transaction. Since a customer must release the currency from a wallet interface apart from the shopping cart, the checkout experience deviates from what is now considered _normal_:
 
