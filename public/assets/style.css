@@ -1,5 +1,7 @@
 @import url(bootstrap/css/bootstrap.min.css);
 @import url(font-awesome/css/font-awesome.min.css);
+/*Google fonts*/
+@import url('https://fonts.googleapis.com/css?family=Faster+One');
 
 :focus {
   outline-style: none;
@@ -30,6 +32,7 @@
   padding: 5% 0;
 }
 
+.go-to-shop-lnk,
 .go-to-cart-lnk {
   padding-right: 1em;
 }
@@ -124,6 +127,11 @@ select.form-control {
   font-size: 1.75em;
 }
 
+.main-page-link {
+  font-size: 2em;
+  font-family: 'Faster One', 'Times New Roman', sans-serif;
+}
+
 @media (min-width: 45em) {
   .cart-table,
   .order-form {
@@ -141,6 +149,10 @@ select.form-control {
 
   .product-description {
     font-size: 1.25em;
+  }
+
+ .main-page-link {
+    font-size: 1.5em;
   }
 }
 
