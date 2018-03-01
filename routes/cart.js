@@ -15,11 +15,18 @@ const QRCode = require('qrcode')
  */
 router.get('/', (req, res) => {
   let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
-  res.render('cart', {
-    pageTitle: 'crypto-shopping-cart',
-    path: req.originalUrl,
-    cart: cart,
-    messages: req.flash()
+  QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, url) => {
+    if (err) {
+      console.log(err);
+    }
+
+    res.render('cart', {
+      pageTitle: 'crypto-shopping-cart',
+      path: req.originalUrl,
+      cart: cart,
+      messages: req.flash(),
+      qr: url
+    });
   });
 });
 

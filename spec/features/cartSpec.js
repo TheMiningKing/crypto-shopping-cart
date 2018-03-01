@@ -120,8 +120,30 @@ describe('cart', () => {
       });
     });
 
+    // This test is nothing but trouble...
+    it('displays a wallet QR code', (done) => {
+      // Wallet address
+      QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, svg) => {
+        if (err) done.fail(err);
+        browser.assert.element('svg');
+        browser.assert.elements('path', 2);
+        // Zombie renders the html differently than that provided by QRCode 
+        // As such, the following doesn't work. Not a great test...
+        //expect(browser.html()).toMatch(svg);
+        done();
+      });
+    });
+
     it('displays an order submission form', () => {
       browser.assert.element('form.form-horizontal[action="/cart/checkout"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="transaction"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="recipient"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="street"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="city"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="province"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="country"]');
+      browser.assert.element('form.form-horizontal input[type="text"][name="postcode"]');
+      browser.assert.element('form.form-horizontal input[type="checkbox"][checked="checked"][name="contact"]');
       browser.assert.element('form.form-horizontal input[type="email"][name="email"]');
       browser.assert.element('form.form-horizontal button[type="submit"]');
     });

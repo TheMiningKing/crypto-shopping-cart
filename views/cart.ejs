@@ -31,25 +31,87 @@
       </tr>
     </tbody>
   </table>
+  <div class="incentives">
+    <h3>
+      Shipping is included!
+    </h3>
+    <h3>
+      No accounts! No signups required!
+    </h3>
+  </div>
+  <div class="payment-info">
+    <p>
+      Double check your order then... 
+    </p>
+    <div>
+      <span>Send: </span>
+      <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
+    </div>
+    <div>
+      <span>To: </span>
+      <span><%- qr %></span>
+      <span><%- process.env.WALLET %></span>
+    </div>
+    <p>
+      Submit your transaction ID along with your shipping details below
+    </p>
+  </div>
   <div class="order-form">
     <form action="/cart/checkout" method="post" class="form-horizontal">
       <div class="form-group">
-        <label for="email">Enter your email and place your order:</label>
-        <input class="form-control" type="email" name="email" required>
+        <label for="transaction" class="control-label">Transaction ID</label>
+        <input type="text" name="transaction" class="form-control" id="transaction">
+      </div>
+      <div class="form-group">
+        <label for="recipient" class="control-label">Recipient's Name</label>
+        <input type="text" name="recipient" class="form-control" id="recipient">
+      </div>
+      <div class="form-group">
+        <label for="street" class="control-label">Street Address</label>
+        <input type="text" name="street" class="form-control" id="street">
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="city" class="control-label">City</label>
+            <input type="text" name="city" class="form-control" id="city">
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="province" class="control-label">Province/State</label>
+            <input type="text" name="province" class="form-control" id="province">
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="country" class="control-label">Country</label>
+            <input type="text" name="country" class="form-control" id="country">
+          </div>
+        </div>
+        <div class="col-xs-6">
+          <div class="form-group">
+            <label for="postcode" class="control-label">Postal Code</label>
+            <input type="text" name="postcode" class="form-control" id="postcode">
+          </div>
+        </div>
+      </div>
+      <div class="form-check">
+        <label for="email" class="form-check-label">Send invoice and tracking number by email</label>
+        <input class="form-check-input" type="checkbox" name="contact" checked="checked">
+      </div>
+      <div class="form-group">
+        <input class="form-control" type="email" name="email" placeholder="you@example.com">
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Place Order</button>
       </div>
     </form>
     <p>
-      You will receive a response with payment and shipping information. 
+      You will only receive a response email if requested above. 
     </p>
-    <h4>
-      Shipping is included!
-    </h4>
-    <h4>
-      No accounts! No signups required!
-    </h4>
   </div>
 <% } else { %>
   <p class="alert alert-info">Your cart is empty</p>
