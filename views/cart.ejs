@@ -60,27 +60,32 @@
     <form action="/cart/checkout" method="post" class="form-horizontal">
       <div class="form-group">
         <label for="transaction" class="control-label">Transaction ID</label>
-        <input type="text" name="transaction" class="form-control" id="transaction" required>
+        <input type="text" name="transaction" class="form-control"
+               id="transaction" value="<%- details.transaction %>" required>
       </div>
       <div class="form-group">
         <label for="recipient" class="control-label">Recipient's Name</label>
-        <input type="text" name="recipient" class="form-control" id="recipient" required>
+        <input type="text" name="recipient" class="form-control"
+               id="recipient" value="<%- details.recipient %>" required>
       </div>
       <div class="form-group">
         <label for="street" class="control-label">Street Address</label>
-        <input type="text" name="street" class="form-control" id="street" required>
+        <input type="text" name="street" class="form-control"
+               id="street" value="<%- details.street %>" required>
       </div>
       <div class="row">
         <div class="col-xs-6">
           <div class="form-group">
             <label for="city" class="control-label">City</label>
-            <input type="text" name="city" class="form-control" id="city" required>
+            <input type="text" name="city" class="form-control"
+                   id="city" value="<%- details.city %>" required>
           </div>
         </div>
         <div class="col-xs-6">
           <div class="form-group">
             <label for="province" class="control-label">Province/State</label>
-            <input type="text" name="province" class="form-control" id="province" required>
+            <input type="text" name="province" class="form-control"
+                   id="province" value="<%- details.province %>" required>
           </div>
         </div>
       </div>
@@ -88,13 +93,15 @@
         <div class="col-xs-6">
           <div class="form-group">
             <label for="country" class="control-label">Country</label>
-            <input type="text" name="country" class="form-control" id="country" required>
+            <input type="text" name="country" class="form-control"
+                   id="country" value="<%- details.country %>" required>
           </div>
         </div>
         <div class="col-xs-6">
           <div class="form-group">
             <label for="postcode" class="control-label">Postal Code</label>
-            <input type="text" name="postcode" class="form-control" id="postcode" required>
+            <input type="text" name="postcode" class="form-control"
+                   id="postcode" value="<%- details.postcode %>" required>
           </div>
         </div>
       </div>
@@ -103,7 +110,8 @@
         <input class="form-check-input" type="checkbox" name="contact" checked="checked">
       </div>
       <div class="form-group">
-        <input class="form-control" type="email" name="email" placeholder="you@example.com">
+        <input class="form-control" type="email" name="email" placeholder="you@example.com"
+               id="email" value="<%- details.email %>" >
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Place Order</button>

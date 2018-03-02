@@ -68,110 +68,123 @@ describe('checkout', () => {
       browser.assert.element('form.form-horizontal button[type="submit"]');
     });
 
+    const _order = {
+      transaction: '0x50m3crazy1d',
+      recipient: 'Anonymous',
+      street: '123 Fake St',
+      city: 'The C-Spot',
+      province: 'AB',
+      country: 'Canada',
+      postcode: 'T1K-5B3',
+      contact: '1',
+      email: 'me@example.com'
+    }
+
     describe('order entry and validation', () => {
       beforeEach(() => {
-        browser.fill('transaction', '0x50m3crazy1d');
-        browser.fill('recipient', 'Anonymous');
-        browser.fill('street', '123 Fake St');
-        browser.fill('city', 'The C-Spot');
-        browser.fill('province', 'AB');
-        browser.fill('country', 'Canada');
-        browser.fill('postcode', 'T1K-5B3');
+        browser.fill('transaction', _order.transaction);
+        browser.fill('recipient', _order.recipient);
+        browser.fill('street', _order.street);
+        browser.fill('city', _order.city);
+        browser.fill('province', _order.province);
+        browser.fill('country', _order.country);
+        browser.fill('postcode', _order.postcode);
         browser.check('contact');
-        browser.fill('email', 'me@example.com');
+        browser.fill('email', _order.email);
       });
 
       it('reports an error if transaction ID is omitted', (done) => {
-        browser.fill('transaction', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('transaction', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a transaction ID');
           done();
         });
       });
 
       it('reports an error if recipient is omitted', (done) => {
-        browser.fill('recipient', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('recipient', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a recipient');
           done();
         });
       });
 
       it('reports an error if street is omitted', (done) => {
-        browser.fill('street', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('street', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a street');
           done();
         });
       });
 
       it('reports an error if city is omitted', (done) => {
-        browser.fill('city', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('city', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a city');
           done();
         });
       });
 
       it('reports an error if province is omitted', (done) => {
-        browser.fill('province', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('province', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a province');
           done();
         });
       });
 
       it('reports an error if country is omitted', (done) => {
-        browser.fill('country', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('country', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a country');
           done();
         });
       });
 
       it('reports an error if postal code is omitted', (done) => {
-        browser.fill('postcode', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
+        browser.fill('postcode', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a postal code');
           done();
         });
       });
 
       it('reports an error if email confirmation is requested but omitted', (done) => {
-        browser.check('contact').fill('email', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
-          browser.assert.text('.alert-danger', 'You must provide an email');
+        browser.check('contact').fill('email', '   ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
+          browser.assert.text('.alert-danger', 'You requested email confirmation. You must provide an email.');
           done();
         });
       });
 
       it('does not report an error if email confirmation is not requested', (done) => {
-        browser.uncheck('contact').fill('email', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart/receipt');  
-          browser.assert.text('.alert-success', 'Your order has been received. Save this receipt for your records.');
+        browser.uncheck('contact').fill('email', '  ').pressButton('Place Order', () => {
+          browser.assert.url('/cart/receipt');
+          browser.assert.text('.alert-success', 'Your order has been received. Print this receipt for your records.');
           done();
         });
       });
 
       it('chains omitted fields', (done) => {
-        browser.fill('transaction', '').fill('country', '').fill('email', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
-          browser.assert.text('.alert-danger', 'You must provide a transaction ID, country, email');
+        browser.fill('transaction', '   ').fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
+          browser.assert.text('.messages .alert:nth-child(1).alert-danger', 'You must provide a transaction ID, country');
+          browser.assert.text('.messages .alert:nth-child(2).alert-danger', 'You requested email confirmation. You must provide an email.');
           done();
         });
       });
 
       it('repopulates correctly-entered fields', (done) => {
-        browser.fill('transaction', '').fill('country', '').fill('email', '').pressButton('Place Order', () => {
-          browser.assert.url('/cart');  
-          browser.assert.input('transaction', '');
-          browser.assert.input('recipient', 'Anonymous');
-          browser.assert.input('street', '123 Fake St');
-          browser.assert.input('city', 'The C-Spot');
-          browser.assert.input('province', 'AB');
-          browser.assert.input('country', '');
-          browser.assert.input('postcode', 'T1K-5B3');
-          browser.assert.input('email', '');
+        browser.fill('transaction', '  ').fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
+          browser.assert.url('/cart/checkout');
+          browser.assert.input('#transaction', '  ');
+          browser.assert.input('#recipient', 'Anonymous');
+          browser.assert.input('#street', '123 Fake St');
+          browser.assert.input('#city', 'The C-Spot');
+          browser.assert.input('#province', 'AB');
+          browser.assert.input('#country', '  ');
+          browser.assert.input('#postcode', 'T1K-5B3');
+          browser.assert.input('#email', '');
           done();
         });
       });
@@ -180,6 +193,7 @@ describe('checkout', () => {
     describe('order processing', () => {
       let cart;
 
+      const _transaction = '0x50m3crazy1d';
       beforeEach((done) => {
         browser.assert.url('/cart');
         models.collection('sessions').findOne({}, (err, result) => {
@@ -189,7 +203,7 @@ describe('checkout', () => {
           cart = result.session.cart;
           expect(cart.items.length).toEqual(2);
 
-          browser.fill('transaction', '0x50m3crazy1d');
+          browser.fill('transaction', _transaction);
           browser.fill('recipient', 'Anonymous');
           browser.fill('street', '123 Fake St');
           browser.fill('city', 'The C-Spot');
@@ -212,6 +226,57 @@ describe('checkout', () => {
       describe('customer experience', () => {
 
         describe('customer does not request email confirmation', () => {
+          beforeEach((done) => {
+            browser.uncheck('contact');
+            browser.fill('email', '').pressButton('Place Order', () => {
+              browser.assert.success();  
+              browser.assert.url('/cart/receipt');  
+              done();
+            });
+          });
+
+          it('displays a relevant flash message', () => {
+            browser.assert.text('.alert-success', 'Your order has been received. Print this receipt for your records.');
+          });
+
+          it('displays the products ordered', () => {
+            browser.assert.elements('tr', 3);
+            browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].image}"]`);
+            browser.assert.text('tr:nth-child(1) td:nth-child(2)', `${products[0].name} - ${products[0].options[0]}`);
+            browser.assert.text('tr:nth-child(1) td:nth-child(3)', products[0].formattedPrice);
+      
+            browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].image}"]`);
+            browser.assert.text('tr:nth-child(2) td:nth-child(2)', products[1].name);
+            browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].formattedPrice);
+      
+            browser.assert.text('tr.info',
+                `${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))} ${process.env.CURRENCY}`);
+          });
+
+          // Flaky
+          it('displays a QR code and transaction ID', (done) => {
+            QRCode.toString(_transaction, { type: 'svg' }, (err, svg) => {
+              if (err) done.fail(err);
+              browser.assert.element('svg');
+              browser.assert.elements('path', 2);
+              browser.assert.text('#transaction', _transaction);
+              done();
+            });
+          });
+
+          it('empties the shopping cart', (done) => {
+            models.collection('sessions').find({}).toArray((err, results) => {
+              if (err) {
+                done.fail(err);
+              }
+              expect(results.length).toEqual(1);
+              expect(results[0].session.cart.items.length).toEqual(0);
+              expect(results[0].session.cart.totals).toEqual(0);
+              expect(results[0].session.cart.formattedTotal).toEqual(0);
+    
+              done();
+            });
+          });
         });
   
         describe('customer requests email confirmation', () => {
@@ -232,10 +297,34 @@ describe('checkout', () => {
       
             it('redirects and displays a flash message on the homepage', () => {
               browser.assert.redirected();  
-              browser.assert.url('/');  
-              browser.assert.text('.alert-success', 'An email has been sent to dan@example.com with transaction and shipping instructions');  
+              browser.assert.url('/cart/receipt');  
+              browser.assert.text('.alert-success', 'Your order has been received. An email copy of this receipt will be sent to dan@example.com');  
             });
-      
+
+            it('displays the products ordered', () => {
+              browser.assert.elements('tr', 3);
+              browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].image}"]`);
+              browser.assert.text('tr:nth-child(1) td:nth-child(2)', `${products[0].name} - ${products[0].options[0]}`);
+              browser.assert.text('tr:nth-child(1) td:nth-child(3)', products[0].formattedPrice);
+        
+              browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].image}"]`);
+              browser.assert.text('tr:nth-child(2) td:nth-child(2)', products[1].name);
+              browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].formattedPrice);
+        
+              browser.assert.text('tr.info',
+                  `${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))} ${process.env.CURRENCY}`);
+            });
+  
+            it('displays a QR code and transaction ID', (done) => {
+              QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, svg) => {
+                if (err) done.fail(err);
+                browser.assert.element('svg');
+                browser.assert.elements('path', 2);
+                browser.assert.text('#transaction', _transaction);
+                done();
+              });
+            });
+
             it('sends an email with correct header information to the buyer', () => {
               expect(mailer.transport.sentMail.length).toEqual(1);
               expect(mailer.transport.sentMail[0].data.to).toEqual('dan@example.com');
@@ -286,7 +375,7 @@ describe('checkout', () => {
               expect(attachments[1].cid).toEqual(cart.items[1].image);
       
               // Wallet address
-              QRCode.toDataURL(process.env.WALLET, (err, url) => {
+              QRCode.toDataURL(_order.transaction, (err, url) => {
                 if (err) done.fail(err);
                 expect(attachments[2].path).toBe(false);
                 expect(attachments[2].cid).toEqual('qr.png');
@@ -388,7 +477,7 @@ describe('checkout', () => {
               expect(attachments[1].cid).toEqual(cart.items[1].image);
       
               // Wallet address
-              QRCode.toDataURL(process.env.WALLET, (err, url) => {
+              QRCode.toDataURL(_order.transaction, (err, url) => {
                 if (err) done.fail(err);
                 expect(attachments[2].path).toBe(false);
                 expect(attachments[2].cid).toEqual('qr.png');
