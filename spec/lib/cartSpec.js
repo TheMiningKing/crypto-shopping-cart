@@ -174,5 +174,43 @@ describe('Cart', () => {
       expect(cartSession.totals).toEqual(0);
       expect(cartSession.formattedTotal).toEqual(0);
     });
+
+    it('empties order details', () => {
+      Cart.purchase({ transaction: '0x50m3crazy1d' }, cartSession);
+      Cart.emptyCart(cartSession);
+      expect(cartSession.order).toBe(undefined);
+    });
+  });
+
+  describe('.purchase', () => {
+    let cartSession;
+
+    beforeEach(() => {
+      cartSession = { items: [] };
+    });
+
+    it('adds order details to the cart', () => {
+      const order = {
+        transaction: '0x50m3crazy1d',
+        recipient: 'Anonymous',
+        street: '123 Fake Street',
+        city: 'The C-Spot',
+        province: 'AB',
+        country: 'No thanks',
+        postcode: 'T1K-5B3',
+        contact: '1',
+        email: 'me@example.com'
+      };
+
+      Cart.purchase(order, cartSession);
+      expect(cartSession.order.transaction).toEqual(order.transaction);
+      expect(cartSession.order.recipient).toEqual(order.recipient);
+      expect(cartSession.order.street).toEqual(order.street);
+      expect(cartSession.order.city).toEqual(order.city);
+      expect(cartSession.order.province).toEqual(order.province);
+      expect(cartSession.order.postcode).toEqual(order.postcode);
+      expect(cartSession.order.contact).toEqual(order.contact);
+      expect(cartSession.order.email).toEqual(order.email);
+    });
   });
 });
