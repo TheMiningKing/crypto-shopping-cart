@@ -13,17 +13,16 @@
     <div class="navbar-header">
       <a class="navbar-brand main-page-link" href="https://theminingking.com">The Mining King</a>
     </div>
-    <% if (path !== '/') { %>
-      <div class="navbar-header navbar-right">
-        <a class="navbar-brand" href="/">
-          Continue shopping <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
-        </a>
-      </div>
-    <% } %>
-    <% if (path !== '/cart') { %>
+    <% if (path === '/') { %>
       <div class="navbar-header navbar-right">
         <a class="navbar-brand" href="/cart">
           Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
+        </a>
+      </div>
+    <% } else { %>
+      <div class="navbar-header navbar-right">
+        <a class="navbar-brand" href="/">
+          Continue shopping <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
         </a>
       </div>
     <% } %>

@@ -164,6 +164,17 @@ router.post('/checkout', (req, res) => {
  */
 router.get('/receipt', (req, res) => {
   let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
+
+  if (!cart) {
+    res.render('receipt', {
+      cart: cart,
+      pageTitle: 'crypto-shopping-cart',
+      path: req.originalUrl,
+      messages: req.flash()
+    });
+    return;
+  }
+
   QRCode.toString(cart.order.transaction, { type: 'svg' }, (err, url) => {
     if (err) {
       console.log(err);
@@ -179,7 +190,6 @@ router.get('/receipt', (req, res) => {
       messages: req.flash(),
       qr: url
     });
-
   });
 });
 

@@ -1,6 +1,6 @@
 <% include header %>
 <% include messages %>
-<% if (cart && cart.items.length) { %>
+<% if (cart && cart.items.length && cart.order) { %>
   <table class="cart-table table table-bordered table-striped">
     <tbody>
       <% cart.items.forEach(function(product) { %>
@@ -44,6 +44,6 @@
     </p>
   </div>
 <% } else { %>
-  <p class="alert alert-info">No receipt here. You haven't ordered anything.</p>
+  <p class="alert alert-info">No receipt here. There's nothing in your shopping cart.</p>
 <% } %>
 <% include footer %>

@@ -14,7 +14,19 @@ Browser.localhost('example.com', PORT);
 
 describe('checkout', () => {
 
-  let browser;
+  let browser, products;
+  beforeEach((done) => {
+    browser = new Browser({ waitDuration: '30s', loadCss: false });
+
+    fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+      if (err) done.fail(err);
+
+      models.Product.find({}).sort('createdAt').then((results) => {
+        products = results;
+        done();
+      });
+    });
+  });
 
   afterEach((done) => {
     models.dropDatabase(() => {
@@ -22,32 +34,30 @@ describe('checkout', () => {
     });
   });
 
+  it('doesn\'t barf if there is no receipt', (done) => {
+    browser.visit('/cart/receipt', (err) => {
+      if (err) done.fail(err);
+      browser.assert.url('/cart/receipt');
+      browser.assert.text('.alert-info', 'No receipt here. There\'s nothing in your shopping cart.');
+      done();
+    });
+  });
+
   describe('when cart contains products', () => {
-    let products;
 
     beforeEach((done) => {
-      browser = new Browser({ waitDuration: '30s', loadCss: false });
-
-      fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+      browser.visit('/', (err) => {
         if (err) done.fail(err);
 
-        models.Product.find({}).sort('createdAt').then((results) => {
-          products = results;
+        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
           browser.visit('/', (err) => {
             if (err) done.fail(err);
 
-            browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
-
-              browser.visit('/', (err) => {
-                if (err) done.fail(err);
-
-                browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
-                  browser.assert.redirected();
-                  browser.assert.url('/cart');
-                  done();
-                });
-              });
+            browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
+              browser.assert.redirected();
+              browser.assert.url('/cart');
+              done();
             });
           });
         });
@@ -219,7 +229,7 @@ describe('checkout', () => {
         mailer.transport.sentMail = [];
         done();
       });
- 
+
       describe('vendor experience', () => {
       });
 
@@ -237,6 +247,11 @@ describe('checkout', () => {
 
           it('displays a relevant flash message', () => {
             browser.assert.text('.alert-success', 'Your order has been received. Print this receipt for your records.');
+          });
+
+          it('shows the correct cart links', () => {
+            browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
+            browser.assert.elements('i.fa.fa-shopping-cart.go-to-cart-lnk', 0);
           });
 
           it('displays the products ordered', () => {
