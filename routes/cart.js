@@ -165,7 +165,7 @@ router.post('/checkout', (req, res) => {
 router.get('/receipt', (req, res) => {
   let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
 
-  if (!cart) {
+  if (!cart || !cart.order) {
     res.render('receipt', {
       cart: cart,
       pageTitle: 'crypto-shopping-cart',

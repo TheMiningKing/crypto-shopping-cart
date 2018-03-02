@@ -38,7 +38,7 @@ describe('checkout', () => {
     browser.visit('/cart/receipt', (err) => {
       if (err) done.fail(err);
       browser.assert.url('/cart/receipt');
-      browser.assert.text('.alert-info', 'No receipt here. There\'s nothing in your shopping cart.');
+      browser.assert.text('.alert-info', 'No receipt here. Why not place an order?');
       done();
     });
   });
