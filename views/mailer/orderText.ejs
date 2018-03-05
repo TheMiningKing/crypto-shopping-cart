@@ -1,21 +1,8 @@
 Thank you!
 
-Before your order can be processed, you must reply to this email with:
+You sent <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
 
-1. A shipping address
-2. The transaction ID of your payment
-
-For shipping, be sure to include your:
-
-1. Name
-2. Street address
-3. Province or state
-4. Country
-5. Postal code
-
-Once you've verified that your order is correct (see below), 
-
-Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
+Your transaction ID: <%- cart.order.transaction %>
 
 --------------------------------
 
@@ -27,5 +14,15 @@ Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.W
 TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
 --------------------------------
 
-Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
+You will receive confirmation and a tracking number once your order is processed.
+
+Your order will be shipped to:
+
+  <%- cart.order.recipient %>
+  <%- cart.order.street %>
+  <%- cart.order.city %> <%- cart.order.province %>
+  <%- cart.order.postcode %>
+
+Thanks again! Reply to this email with questions.
+ 
 

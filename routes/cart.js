@@ -128,7 +128,7 @@ router.post('/checkout', (req, res) => {
               let mailOptions = {
                 to: req.body.email,
                 from: process.env.FROM,
-                subject: 'Order received - payment and shipping instructions',
+                subject: 'Order received - here is your receipt',
                 text: textEmail,
                 html: htmlAndCss,
                 attachments: attachments

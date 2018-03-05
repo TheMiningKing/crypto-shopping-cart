@@ -10,22 +10,7 @@
   <section id="content" class="container">
     <h3>Thank you!</h3>
     <p>
-      Before your order can be processed, you must reply to this email with:
-      <ol>
-        <li>A shipping address</li>
-        <li>The transaction ID of your payment</li>
-      </ol>
-    </p>
-
-    <p>
-      For shipping, be sure to include your:
-      <ol>
-        <li>Name</li>
-        <li>Street address</li>
-        <li>Province or state</li>
-        <li>Country</li>
-        <li>Postal code</li>
-      </ol>
+      You sent <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> to <em><%- process.env.WALLET %></em>.
     </p>
     <p>
       Once you've verified that your order is correct (see below), 
@@ -76,6 +61,23 @@
       </tbody>
     </table>
     <hr>
+
+    <div class="shipping-info">
+      <header>
+        Once your transaction has been verified, your order will be processed and shipped to:
+      </header>
+      <section>
+        <div class='recipient'><%- cart.order.recipient %></div>
+        <div class='street'><%- cart.order.street %></div>
+        <span class='city'><%- cart.order.city %></span>
+        <span class='province'><%- cart.order.province %></span>
+        <div class='country'><%- cart.order.country %></div>
+        <div class='postcode'><%- cart.order.postcode %></div>
+      </section>
+      <footer>
+        <div>Reply to this email with questions</div>
+      </footer>
+    </div>
     <p>
       Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
     </p>

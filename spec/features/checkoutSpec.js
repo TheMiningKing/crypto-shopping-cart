@@ -230,6 +230,18 @@ describe('checkout', () => {
       });
 
       describe('vendor experience', () => {
+
+        describe('customer does not request email confirmation', () => {
+
+          beforeEach((done) => {
+            browser.uncheck('contact');
+            browser.fill('email', '').pressButton('Place Order', () => {
+              browser.assert.success();
+              browser.assert.url('/cart/receipt');
+              done();
+            });
+          });
+        });
       });
 
       describe('customer experience', () => {
@@ -238,8 +250,8 @@ describe('checkout', () => {
           beforeEach((done) => {
             browser.uncheck('contact');
             browser.fill('email', '').pressButton('Place Order', () => {
-              browser.assert.success();  
-              browser.assert.url('/cart/receipt');  
+              browser.assert.success();
+              browser.assert.url('/cart/receipt');
               done();
             });
           });
@@ -344,7 +356,7 @@ describe('checkout', () => {
   
             // Super flaky
             it('displays a QR code and transaction ID', (done) => {
-              QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, svg) => {
+              QRCode.toString(_order.transaction, { type: 'svg' }, (err, svg) => {
                 if (err) done.fail(err);
                 browser.assert.element('svg');
                 browser.assert.elements('path', 2);
@@ -371,7 +383,7 @@ describe('checkout', () => {
               expect(mailer.transport.sentMail.length).toEqual(1);
               expect(mailer.transport.sentMail[0].data.to).toEqual(_order.email);
               expect(mailer.transport.sentMail[0].data.from).toEqual(process.env.FROM);
-              expect(mailer.transport.sentMail[0].data.subject).toEqual('Order received - payment and shipping instructions');
+              expect(mailer.transport.sentMail[0].data.subject).toEqual('Order received - here is your receipt');
             });
       
             it('sends an email with text content to the buyer', () => {
@@ -382,7 +394,17 @@ describe('checkout', () => {
               expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
               expect(text).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
       
-              expect(text).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+              expect(text).toContain(`You sent ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+              expect(text).toContain(`Your transaction ID: ${_order.transaction}`);
+              expect(text).toContain('You will receive confirmation and a tracking number once your order is processed.');
+
+              expect(text).toContain('Your order will be shipped to:');
+              expect(text).toContain(_order.recipient);
+              expect(text).toContain(_order.street);
+              expect(text).toContain(_order.city);
+              expect(text).toContain(_order.province);
+              expect(text).toContain(_order.postcode);
+              expect(text).toContain('Reply to this email with questions');
             });
       
             it('sends an email with html content to the buyer', (done) => {
@@ -400,10 +422,20 @@ describe('checkout', () => {
        
               expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
       
-              // Send ___ ETH to ___ 
+              // You sent ___ ETH to ___ 
               expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
               expect(html).toContain(`${process.env.WALLET}`);
-      
+
+              // Shipping details
+              expect(html).toContain('Once your transaction has been verified, your order will be processed and shipped to:');
+              expect(html).toContain(_order.recipient);
+              expect(html).toContain(_order.street);
+              expect(html).toContain(_order.city);
+              expect(html).toContain(_order.province);
+              expect(html).toContain(_order.postcode);
+              expect(html).toContain('Reply to this email with questions');
+
+              // File attachments 
               const attachments = mailer.transport.sentMail[0].data.attachments;
               expect(attachments.length).toEqual(3);
               expect(attachments[0].filename).toEqual(cart.items[0].image);
@@ -416,7 +448,7 @@ describe('checkout', () => {
               expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
               expect(attachments[1].cid).toEqual(cart.items[1].image);
       
-              // Wallet address
+              // Transaction ID
               QRCode.toDataURL(_order.transaction, (err, url) => {
                 if (err) done.fail(err);
                 expect(attachments[2].path).toBe(false);
@@ -467,15 +499,15 @@ describe('checkout', () => {
                           cart = result.session.cart;
                           expect(cart.items.length).toEqual(4);
                   
-                          browser.fill('transaction', '0x50m3crazy1d');
-                          browser.fill('recipient', 'Anonymous');
-                          browser.fill('street', '123 Fake St');
-                          browser.fill('city', 'The C-Spot');
-                          browser.fill('province', 'AB');
-                          browser.fill('country', 'Canada');
-                          browser.fill('postcode', 'T1K-5B3');
+                          browser.fill('transaction', _order.transaction);
+                          browser.fill('recipient', _order.recipient);
+                          browser.fill('street', _order.street);
+                          browser.fill('city', _order.city);
+                          browser.fill('province', _order.province);
+                          browser.fill('country', _order.country);
+                          browser.fill('postcode', _order.postcode);
                           browser.check('contact');
-                          browser.fill('email', 'dan@example.com').pressButton('Place Order', () => {
+                          browser.fill('email', _order.email).pressButton('Place Order', () => {
                             browser.assert.success();  
                             done();
                           });
@@ -502,10 +534,20 @@ describe('checkout', () => {
        
               expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
       
-              // Send ___ ETH to ___ 
+              // You sent ___ ETH to ___ 
               expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
               expect(html).toContain(`${process.env.WALLET}`);
-      
+
+              // Shipping details
+              expect(html).toContain('Once your transaction has been verified, your order will be processed and shipped to:');
+              expect(html).toContain(_order.recipient);
+              expect(html).toContain(_order.street);
+              expect(html).toContain(_order.city);
+              expect(html).toContain(_order.province);
+              expect(html).toContain(_order.postcode);
+              expect(html).toContain('Reply to this email with questions');
+
+              // Attachments 
               const attachments = mailer.transport.sentMail[0].data.attachments;
               expect(attachments.length).toEqual(3);
               expect(attachments[0].filename).toEqual(cart.items[0].image);
@@ -514,11 +556,8 @@ describe('checkout', () => {
               expect(attachments[1].filename).toEqual(cart.items[1].image);
               expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
               expect(attachments[1].cid).toEqual(cart.items[1].image);
-              expect(attachments[1].filename).toEqual(cart.items[1].image);
-              expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
-              expect(attachments[1].cid).toEqual(cart.items[1].image);
       
-              // Wallet address
+              // Transaction ID 
               QRCode.toDataURL(_order.transaction, (err, url) => {
                 if (err) done.fail(err);
                 expect(attachments[2].path).toBe(false);
