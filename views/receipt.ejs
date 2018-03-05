@@ -40,6 +40,30 @@
       Thank you for your order!
     </p>
   </div>
+  <div class="shipping-info">
+    <header>
+      Once your transaction has been verified, your order will be processed and shipped to:
+    </header>
+    <section>
+      <div class='recipient'><%- cart.order.recipient %></div>
+      <div class='street'><%- cart.order.street %></div>
+      <div class='city'><%- cart.order.city %></div>
+      <div class='province'><%- cart.order.province %></div>
+      <div class='country'><%- cart.order.country %></div>
+      <div class='postcode'><%- cart.order.postcode %></div>
+      <div class='email'>
+        <% if (cart.order.email) { %>
+          <%- cart.order.email %>
+        <% } else {  %>
+          You declined to provide an email
+        <% } %>
+      </div>
+    </section>
+    <footer>
+      <div>Send questions to <%- process.env.FROM %></div>
+      <div>Keep this order for your records.</div>
+    </footer>
+  </div>
 <% } else { %>
   <p class="alert alert-info">No receipt here. Why not place an order?</p>
 <% } %>

@@ -134,6 +134,7 @@ describe('cart', () => {
       });
     });
 
+    /* See `checkoutSpec.js` for relevant coverage */
     it('displays an order submission form', () => {
       browser.assert.element('form.form-horizontal[action="/cart/checkout"]');
     });

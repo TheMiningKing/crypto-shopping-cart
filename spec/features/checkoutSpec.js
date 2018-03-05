@@ -188,12 +188,12 @@ describe('checkout', () => {
         browser.fill('transaction', '  ').fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.input('#transaction', '  ');
-          browser.assert.input('#recipient', 'Anonymous');
-          browser.assert.input('#street', '123 Fake St');
-          browser.assert.input('#city', 'The C-Spot');
-          browser.assert.input('#province', 'AB');
+          browser.assert.input('#recipient', _order.recipient);
+          browser.assert.input('#street', _order.street);
+          browser.assert.input('#city', _order.city);
+          browser.assert.input('#province', _order.province);
           browser.assert.input('#country', '  ');
-          browser.assert.input('#postcode', 'T1K-5B3');
+          browser.assert.input('#postcode', _order.postcode);
           browser.assert.input('#email', '');
           done();
         });
@@ -203,7 +203,6 @@ describe('checkout', () => {
     describe('order processing', () => {
       let cart;
 
-      const _transaction = '0x50m3crazy1d';
       beforeEach((done) => {
         browser.assert.url('/cart');
         models.collection('sessions').findOne({}, (err, result) => {
@@ -213,13 +212,13 @@ describe('checkout', () => {
           cart = result.session.cart;
           expect(cart.items.length).toEqual(2);
 
-          browser.fill('transaction', _transaction);
-          browser.fill('recipient', 'Anonymous');
-          browser.fill('street', '123 Fake St');
-          browser.fill('city', 'The C-Spot');
-          browser.fill('province', 'AB');
-          browser.fill('country', 'Canada');
-          browser.fill('postcode', 'T1K-5B3');
+          browser.fill('transaction', _order.transaction);
+          browser.fill('recipient', _order.recipient);
+          browser.fill('street', _order.street);
+          browser.fill('city', _order.city);
+          browser.fill('province', _order.province);
+          browser.fill('country', _order.country);
+          browser.fill('postcode', _order.postcode);
  
           done();
         });
@@ -270,13 +269,26 @@ describe('checkout', () => {
 
           // Flaky
           it('displays a QR code and transaction ID', (done) => {
-            QRCode.toString(_transaction, { type: 'svg' }, (err, svg) => {
+            QRCode.toString(_order.transaction, { type: 'svg' }, (err, svg) => {
               if (err) done.fail(err);
               browser.assert.element('svg');
               browser.assert.elements('path', 2);
-              browser.assert.text('#transaction', _transaction);
+              browser.assert.text('#transaction', _order.transaction);
               done();
             });
+          });
+
+          it('displays customer\'s shipping details', () => {
+            browser.assert.text('.shipping-info header',
+                'Once your transaction has been verified, your order will be processed and shipped to:');
+            browser.assert.text('.shipping-info section .recipient', _order.recipient);
+            browser.assert.text('.shipping-info section .street', _order.street);
+            browser.assert.text('.shipping-info section .city', _order.city);
+            browser.assert.text('.shipping-info section .province', _order.province);
+            browser.assert.text('.shipping-info section .postcode', _order.postcode);
+            browser.assert.text('.shipping-info section .email', 'You declined to provide an email');
+            browser.assert.text('.shipping-info footer div:nth-child(1)', `Send questions to ${process.env.FROM}`);
+            browser.assert.text('.shipping-info footer div:nth-child(2)', 'Keep this order for your records.');
           });
 
           it('empties the shopping cart', (done) => {
@@ -298,7 +310,7 @@ describe('checkout', () => {
   
           beforeEach(() => {
             browser.check('contact');
-            browser.fill('email', 'dan@example.com');
+            browser.fill('email', _order.email);
           });
  
           describe('all products are distinct', () => {
@@ -313,7 +325,7 @@ describe('checkout', () => {
             it('redirects and displays a flash message on the homepage', () => {
               browser.assert.redirected();  
               browser.assert.url('/cart/receipt');  
-              browser.assert.text('.alert-success', 'Your order has been received. An email copy of this receipt will be sent to dan@example.com');  
+              browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);  
             });
 
             it('displays the products ordered', () => {
@@ -330,19 +342,34 @@ describe('checkout', () => {
                   `${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))} ${process.env.CURRENCY}`);
             });
   
+            // Super flaky
             it('displays a QR code and transaction ID', (done) => {
               QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, svg) => {
                 if (err) done.fail(err);
                 browser.assert.element('svg');
                 browser.assert.elements('path', 2);
-                browser.assert.text('#transaction', _transaction);
+                browser.assert.text('#transaction', _order.transaction);
                 done();
               });
             });
 
+            it('displays customer\'s shipping details', () => {
+              browser.assert.text('.shipping-info header',
+                  'Once your transaction has been verified, your order will be processed and shipped to:');
+              browser.assert.text('.shipping-info section .recipient', _order.recipient);
+              browser.assert.text('.shipping-info section .street', _order.street);
+              browser.assert.text('.shipping-info section .city', _order.city);
+              browser.assert.text('.shipping-info section .province', _order.province);
+              browser.assert.text('.shipping-info section .country', _order.country);
+              browser.assert.text('.shipping-info section .postcode', _order.postcode);
+              browser.assert.text('.shipping-info section .email', _order.email);
+              browser.assert.text('.shipping-info footer div:nth-child(1)', `Send questions to ${process.env.FROM}`);
+              browser.assert.text('.shipping-info footer div:nth-child(2)', 'Keep this order for your records.');
+            });
+
             it('sends an email with correct header information to the buyer', () => {
               expect(mailer.transport.sentMail.length).toEqual(1);
-              expect(mailer.transport.sentMail[0].data.to).toEqual('dan@example.com');
+              expect(mailer.transport.sentMail[0].data.to).toEqual(_order.email);
               expect(mailer.transport.sentMail[0].data.from).toEqual(process.env.FROM);
               expect(mailer.transport.sentMail[0].data.subject).toEqual('Order received - payment and shipping instructions');
             });
