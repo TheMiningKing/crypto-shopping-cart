@@ -47,10 +47,12 @@
     <section>
       <div class='recipient'><%- cart.order.recipient %></div>
       <div class='street'><%- cart.order.street %></div>
-      <div class='city'><%- cart.order.city %></div>
-      <div class='province'><%- cart.order.province %></div>
+      <span class='city'><%- cart.order.city %></span>
+      <span class='province'><%- cart.order.province %></span>
       <div class='country'><%- cart.order.country %></div>
       <div class='postcode'><%- cart.order.postcode %></div>
+    </section>
+    <section>
       <div class='email'>
         <% if (cart.order.email) { %>
           <%- cart.order.email %>

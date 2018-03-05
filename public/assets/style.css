@@ -132,14 +132,26 @@ select.form-control {
   font-family: 'Faster One', 'Times New Roman', sans-serif;
 }
 
+.shipping-info,
 .payment-info {
   margin: 1.5em auto;
+  padding: 1.5em; 
+}
+
+.payment-info {
   border-radius: 2em;
   background-color: #73AD21;
-  padding: 1.5em; 
   color: #ffffff;
 }
 
+.shipping-info section {
+  margin: 1.5em;
+  font-size: 1.5em;
+  text-align: center; 
+}
+
+.shipping-info header,
+.shipping-info footer,
 .payment-info p {
   margin: 2em;
   font-size: 1.25em;
