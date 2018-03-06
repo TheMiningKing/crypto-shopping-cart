@@ -1,0 +1,29 @@
+<%- cart.formattedTotal %> <%- process.env.CURRENCY %> was sent to <%- process.env.WALLET %>
+
+Transaction ID: <%- cart.order.transaction %>
+
+--------------------------------
+
+<% cart.items.forEach((item, i) => { %> 
+  <%- i + 1 %>. <%- item.name %><%= item.option ? ` - ${item.option}` : '' %>, <%- item.formattedPrice %>
+<% }); %>
+
+------
+TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
+--------------------------------
+
+You will receive confirmation and a tracking number once your order is processed.
+
+Shipping details:
+
+  <%- cart.order.recipient %>
+  <%- cart.order.street %>
+  <%- cart.order.city %> <%- cart.order.province %>
+  <%- cart.order.postcode %>
+
+<% if (cart.order.email) { %>
+  <%- cart.order.email %>
+<% } else { %>
+  Customer declined email contact.
+<% } %>
+

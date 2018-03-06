@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Thanks for your order!</title>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="public/assets/order.css" type="text/css" media="screen" />
+</head>
+<body>
+  <section id="content" class="container">
+    <p>
+      <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> was sent to <em><%- process.env.WALLET %></em>.
+    </p>
+    <p>
+      Once you've verified that your order is correct (see below), 
+    </p>
+    <table class="payment-table">
+      <tbody>
+        <tr>
+          <td>Send</td>
+          <td><em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em></td>
+        </tr>
+        <tr>
+          <td>To</td>
+          <td><em><%- process.env.WALLET %></em></td>
+        </tr>
+        <tr>
+          <td></td>
+          <td><img src="cid:qr.png"></td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+    <h3>
+      The order:
+    </h3>
+    <table class="cart-table">
+      <tbody>
+        <% cart.items.forEach(function(product) { %>
+          <tr>
+            <td class="product-thumb">
+              <img src="cid:<%= product.image %>" class="img-thumbnail img-responsive">
+            </td>
+            <td>
+              <%- product.name %>
+              <% if (product.option) { %>
+                - <%- product.option %>
+              <% } %>
+            </td>
+            <td>
+              <%= product.formattedPrice %>
+            </td>
+          </tr>
+        <% }); %>
+        <tr class="info">
+          <td colspan="5" class="text-right">
+            Total: <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+    <hr>
+
+    <div class="shipping-info">
+      <header>
+        Shipping details:
+      </header>
+      <section>
+        <div class='recipient'><%- cart.order.recipient %></div>
+        <div class='street'><%- cart.order.street %></div>
+        <span class='city'><%- cart.order.city %></span>
+        <span class='province'><%- cart.order.province %></span>
+        <div class='country'><%- cart.order.country %></div>
+        <div class='postcode'><%- cart.order.postcode %></div>
+      </section>
+      <footer>
+        <div class='email'>
+          <% if (cart.order.email) { %>
+            <%- cart.order.email %>
+          <% } else { %>
+            Customer declined email contact
+          <% } %>
+        </div>
+      </footer>
+    </div>
+  </section>
+</body>
+</html>
