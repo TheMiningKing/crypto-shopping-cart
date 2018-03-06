@@ -11,25 +11,19 @@
     <p>
       <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> was sent to <em><%- process.env.WALLET %></em>.
     </p>
-    <p>
-      Once you've verified that your order is correct (see below), 
-    </p>
-    <table class="payment-table">
-      <tbody>
-        <tr>
-          <td>Send</td>
-          <td><em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em></td>
-        </tr>
-        <tr>
-          <td>To</td>
-          <td><em><%- process.env.WALLET %></em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><img src="cid:qr.png"></td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="payment-info">
+      <p>
+        Find the transaction details at this address... 
+      </p>
+      <div></div>
+      <div>
+        <span></span>
+        <span><img src="cid:qr.png"></span>
+        <span id="transaction"><%- cart.order.transaction %></span>
+      </div>
+      <p>
+      </p>
+    </div>
     <hr>
     <h3>
       The order:

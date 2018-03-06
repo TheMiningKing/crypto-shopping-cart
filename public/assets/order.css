@@ -78,11 +78,68 @@ hr {
   background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
 }
 
-.payment-table tbody tr td:first-child {
-  text-align: right;
-  padding-right: 1em;
-}
-
-.payment-table tbody tr td em {
+p em {
   color: green;
 }
+
+
+
+
+.shipping-info,
+.payment-info {
+/*  margin: 1.5em auto;*/
+  padding: 1.5em; 
+}
+
+.payment-info {
+  border-radius: 2em;
+  background-color: #73AD21;
+  color: #ffffff;
+}
+
+.shipping-info section {
+  margin: 1.5em;
+  font-size: 1.5em;
+  text-align: center; 
+}
+
+header,
+.shipping-info header,
+.shipping-info footer,
+.payment-info p {
+  margin: 2em;
+  font-size: 1.25em;
+/*  text-align: center;*/
+}
+
+.payment-info div span {
+  display: block;
+  text-align: center;
+}
+
+.payment-info div span:nth-child(1) {
+  width: 15%;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+.payment-info div:nth-child(2) span:nth-child(2) {
+  font-size: 2.0em;
+}
+
+.payment-info div:nth-child(3) span:first-child {
+  vertical-align: top;
+  margin-top: 2em;
+}
+
+.payment-info div span:nth-child(2) {
+  margin: auto;
+  width: 60%;
+}
+
+.payment-info div span:nth-child(3) {
+  width: 100%;
+}
+
+

@@ -8,29 +8,25 @@
 </head>
 <body>
   <section id="content" class="container">
-    <h3>Thank you!</h3>
-    <p>
-      You sent <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> to <em><%- process.env.WALLET %></em>.
-    </p>
-    <p>
-      Once you've verified that your order is correct (see below), 
-    </p>
-    <table class="payment-table">
-      <tbody>
-        <tr>
-          <td>Send</td>
-          <td><em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em></td>
-        </tr>
-        <tr>
-          <td>To</td>
-          <td><em><%- process.env.WALLET %></em></td>
-        </tr>
-        <tr>
-          <td></td>
-          <td><img src="cid:qr.png"></td>
-        </tr>
-      </tbody>
-    </table>
+    <header>
+      <h3>Thank you!</h3>
+      <p>
+        You sent <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> to <em><%- process.env.WALLET %></em>.
+      </p>
+    </header>
+    <div class="payment-info">
+      <p>
+        Find your transaction details at this address... 
+      </p>
+      <div></div>
+      <div>
+        <span></span>
+        <span><img src="cid:qr.png"></span>
+        <span id="transaction"><%- cart.order.transaction %></span>
+      </div>
+      <p>
+      </p>
+    </div>
     <hr>
     <h3>
       Your order:
@@ -61,7 +57,6 @@
       </tbody>
     </table>
     <hr>
-
     <div class="shipping-info">
       <header>
         Once your transaction has been verified, your order will be processed and shipped to:
@@ -75,12 +70,12 @@
         <div class='postcode'><%- cart.order.postcode %></div>
       </section>
       <footer>
-        <div>Reply to this email with questions</div>
+        <p>Reply to this email with questions.</p>
+        <p>
+          Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
+        </p>
       </footer>
     </div>
-    <p>
-      Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
-    </p>
   </section>
 </body>
 </html>

@@ -281,6 +281,9 @@ describe('checkout', () => {
             expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
             expect(html).toContain(`${process.env.WALLET}`);
 
+            // TransactionID
+            expect(html).toContain(_order.transaction);
+
             // Shipping details
             expect(html).toContain('Shipping details:');
             expect(html).toContain(_order.recipient);
@@ -366,6 +369,9 @@ describe('checkout', () => {
             // ___ ETH was sent to ___ 
             expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
             expect(html).toContain(`${process.env.WALLET}`);
+
+            // TransactionID
+            expect(html).toContain(_order.transaction);
 
             // Shipping details
             expect(html).toContain('Shipping details:');
@@ -582,6 +588,9 @@ describe('checkout', () => {
               expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
               expect(html).toContain(`${process.env.WALLET}`);
 
+              // TransactionID
+              expect(html).toContain(_order.transaction);
+
               // Shipping details
               expect(html).toContain('Once your transaction has been verified, your order will be processed and shipped to:');
               expect(html).toContain(_order.recipient);
@@ -693,6 +702,9 @@ describe('checkout', () => {
               // You sent ___ ETH to ___
               expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
               expect(html).toContain(`${process.env.WALLET}`);
+
+              // TransactionID
+              expect(html).toContain(_order.transaction);
 
               // Shipping details
               expect(html).toContain('Once your transaction has been verified, your order will be processed and shipped to:');
