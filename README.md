@@ -106,4 +106,56 @@ docker-compose -f docker-compose.prod.yml up -d
 docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV=production
 ```
 
+# Tor
+
+Clone:
+
+```
+git clone https://github.com/TheMiningKing/crypto-shopping-cart.git
+```
+
+In the application directory:
+
+```
+cd crypto-shopping-cart
+NODE_ENV=production npm install
+```
+
+Configure `.env`. The `FROM` and `PASSWORD` fields are to be set as specified below. The Tor deployment catches all outgoing order emails and makes them accessible from the host system. This is ensures that your Tor server keeps a low profile with minimal identifiable external traffic. E.g.:
+
+```
+# Don't change these
+FROM=root@localhost
+PASSWORD=secret
+
+# Do change these
+WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b
+CURRENCY=ETH
+```
+
+This Tor-safe composition is meant to be deployed behind a Dockerized Tor proxy. For the moment, details on how to do this can be found [here](https://libertyseeds.ca/2017/12/12/Dockerizing-Tor-to-serve-up-multiple-hidden-web-services/). Once the proxy is setup, execute the Tor deployment like this:
+
+```
+docker-compose -f docker-compose.tor.yml up -d
+```
+
+## Seed
+
+```
+docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV=production
+```
+
+## Retrieving orders
+
+Orders are received, but they never leave the server when deployed in a Tor-safe fashion. All email orders are intercepted and deposited in the `mailorders` directory. I use `mutt` to manage these emails.
+
+```
+sudo apt install mutt
+```
+
+Then, from the application directory, simply execute:
+
+```
+sudo mutt -f mailorders/root
+```
 
