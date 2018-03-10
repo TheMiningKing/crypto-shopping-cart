@@ -18,6 +18,13 @@
     "host": "mongo",
     "dialect": "mongodb"
   },
+  "tor": {
+    "username": "crypto_cart",
+    "password": "secret",
+    "database": "crypto_cart_production",
+    "host": "mongo",
+    "dialect": "mongodb"
+  },
   "production": {
     "username": "crypto_cart",
     "password": "secret",
