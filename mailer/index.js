@@ -15,6 +15,17 @@ module.exports = function() {
       }
     };
   }
+  else if (env == 'tor') {
+    transport = {
+      port: 25,
+      host: 'postfix',
+      ignoreTLS: true,
+      auth: {
+        user: process.env.FROM,
+        pass: process.env.PASSWORD
+      }
+    };
+  }
   else if (env == 'development') {
     transport = {
       port: 25,
