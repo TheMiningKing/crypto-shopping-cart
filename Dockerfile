@@ -2,6 +2,12 @@ FROM node
 ENV NPM_CONFIG_LOGLEVEL warn
 EXPOSE 3000
 
+#
+# Sometimes the host user's id doesn't align with the container user's id.
+# If there are any permission errors, this is one likely cause
+#
+# RUN usermod -u 1001 node
+
 USER node
 ENV HOME=/home/node
 
