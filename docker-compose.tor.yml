@@ -1,0 +1,34 @@
+version: '3'
+services:
+  node:
+    build: .
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=tor
+    volumes:
+      - .:/home/node
+      - /home/node/node_modules
+    depends_on:
+      - mongo
+  mongo:  
+    image: mongo
+    restart: unless-stopped
+    command: --smallfiles
+    volumes:
+      - crypto_cart_data:/data/db
+  postfix:
+    image: catatnight/postfix
+    expose:
+      - 25
+    restart: unless-stopped
+    environment:
+      - maildomain=localhost
+      - smtp_user=root:secret
+    volumes:
+      - ./mailorders:/var/mail
+volumes:
+  crypto_cart_data:
+networks:
+  default:
+    external:
+      name: torproxy_default
