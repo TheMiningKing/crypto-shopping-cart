@@ -317,7 +317,7 @@ describe('checkout', () => {
         });
 
         describe('customer requests email confirmation', () => {
-  
+
           beforeEach((done) => {
             browser.fill('email', _order.email).pressButton('Place Order', (err) => {
               if (err) done.fail(err);
