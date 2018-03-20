@@ -48,6 +48,12 @@ docker start dev-mongo
 npm test
 ```
 
+To execute a single test file, be sure to set the `NODE_ENV` variable:
+
+```
+NODE_ENV=test ./node_modules/.bin/jasmine spec/features/checkoutSpec.js
+```
+
 # Development
 
 To start a Dockerized Mongo container, see above...
