@@ -192,6 +192,20 @@ select.form-control {
   text-align: center;
 }
 
+/**
+ * Reveal/hide instant transaction option
+ * 2018-3-19 https://codersblock.com/blog/checkbox-trickery-with-css/
+ */
+#transaction-field {
+  display: block;
+}
+
+input#email-checkbox:checked ~ #transaction-field {
+  display: none;
+}
+
+
+/* Responsive */
 @media (min-width: 45em) {
   .cart-table,
   .payment-info,
