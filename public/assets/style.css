@@ -208,7 +208,7 @@ input#email-checkbox:checked ~ #transaction-field {
 /* Responsive */
 @media (min-width: 45em) {
   .cart-table,
-  .payment-info,
+  /*.payment-info, */
   .incentives,
   .order-form {
     width: 50%;
@@ -236,8 +236,10 @@ input#email-checkbox:checked ~ #transaction-field {
     font-size: 1.5em;
   }
 
+/*
   .payment-info div span:nth-child(2) {
     width: 40%;
   }
+*/
 }
 
