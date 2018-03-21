@@ -10,19 +10,11 @@
   <section id="content" class="container">
     <header>
       <h3>Thank you!</h3>
-      <p>
-        Once you've verified that your order is correct (see below), 
-        
-        <ol>
-          <li>Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %></li>
-          <li></li>
-        </ol>
-      </p>
+      <h3>
+        Double check your order then... 
+      </h3>
     </header>
     <div class="payment-info">
-      <p>
-        Double check your order then... 
-      </p>
       <div>
         <span>Send:</span>
         <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
@@ -32,10 +24,10 @@
         <span><img src="cid:qr.png"></span>
         <span id="wallet"><%- process.env.WALLET %></span>
       </div>
-      <p>
-        Reply to this email with your transaction ID. 
-      </p>
     </div>
+    <h2>
+      Reply to this email with your transaction ID. 
+    </h2>
     <hr>
     <h3>
       Your order:
@@ -79,7 +71,7 @@
         <div class='postcode'><%- cart.order.postcode %></div>
       </section>
       <footer>
-        <p>Reply to this email with your transaction ID and questions.</p>
+        <h4>Reply to this email with your transaction ID and questions.</h4>
         <p>
           Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
         </p>
