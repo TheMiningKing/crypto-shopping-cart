@@ -80,22 +80,37 @@ router.post('/checkout', (req, res) => {
 
     Cart.purchase(req.body, cart);
 
+    // Determine appropriate mailer templates
+    const orderPaid = req.body.transaction && req.body.transaction.trim();
+    let vendorTextTemplate = 'vendorUnpaidText.ejs';
+    let vendorHtmlTemplate = 'vendorUnpaidHtml.ejs';
+    let buyerTextTemplate = 'orderUnpaidText.ejs';
+    let buyerHtmlTemplate = 'orderUnpaidHtml.ejs';
+    let qrString = process.env.WALLET;
+    if (orderPaid) {
+      vendorTextTemplate = 'vendorText.ejs';
+      vendorHtmlTemplate = 'vendorHtml.ejs';
+      buyerTextTemplate = 'orderText.ejs';
+      buyerHtmlTemplate = 'orderHtml.ejs';
+      qrString = req.body.transaction;
+    }
+
     // Get vendor text content 
-    ejs.renderFile(__dirname + "/../views/mailer/vendorText.ejs", { cart: req.session.cart }, (err, textVendor) => {
+    ejs.renderFile(`${__dirname}/../views/mailer/${vendorTextTemplate}`, { cart: req.session.cart }, (err, textVendor) => {
       if (err) {
         console.log(err);
         req.flash('error', [ { message: 'Something went wrong' } ]);
         return res.redirect('/cart');
       }
 
-      // Generate QR code for transaction 
-      QRCode.toDataURL(cart.order.transaction, (err, qr) => {
+      // Generate QR code for transaction or wallet
+      QRCode.toDataURL(qrString, (err, qr) => {
         if (err) {
           console.log(err);
         }
 
         // Get vendor HTML content 
-        ejs.renderFile(__dirname + "/../views/mailer/vendorHtml.ejs", { cart: req.session.cart, qr: qr }, (err, htmlVendor) => {
+        ejs.renderFile(`${__dirname}/../views/mailer/${vendorHtmlTemplate}`, { cart: req.session.cart, qr: qr }, (err, htmlVendor) => {
           if (err) {
             console.log(err);
             req.flash('error', [ { message: 'Something went wrong' } ]);
@@ -127,7 +142,7 @@ router.post('/checkout', (req, res) => {
             let vendorMailOptions = {
               to: process.env.FROM,
               from: cart.order.email || process.env.FROM,
-              subject: 'New order received',
+              subject: orderPaid ? 'New order received' : 'New order received - unpaid',
               text: textVendor,
               html: vendorHtmlAndCss,
               attachments: attachments
@@ -142,10 +157,10 @@ router.post('/checkout', (req, res) => {
               }
 
               // Customer may decline email contact
-              if (req.body.contact) {
+              if (req.body.email && req.body.email.trim()) {
 
                 // Get email text content
-                ejs.renderFile(__dirname + "/../views/mailer/orderText.ejs", { cart: req.session.cart }, (err, textEmail) => {
+                ejs.renderFile(`${__dirname}/../views/mailer/${buyerTextTemplate}`, { cart: req.session.cart }, (err, textEmail) => {
                   if (err) {
                     console.log(err);
                     req.flash('error', [ { message: 'Something went wrong' } ]);
@@ -153,7 +168,7 @@ router.post('/checkout', (req, res) => {
                   }
 
                   // Get email HTML content 
-                  ejs.renderFile(__dirname + "/../views/mailer/orderHtml.ejs", { cart: req.session.cart, qr: qr }, (err, htmlEmail) => {
+                  ejs.renderFile(`${__dirname}/../views/mailer/${buyerHtmlTemplate}`, { cart: req.session.cart, qr: qr }, (err, htmlEmail) => {
                     if (err) {
                       console.log(err);
                       req.flash('error', [ { message: 'Something went wrong' } ]);
@@ -161,13 +176,12 @@ router.post('/checkout', (req, res) => {
                     }
     
                     // Inline CSS processing
-//                    const styliner = new Styliner(__dirname + '/..', {noCSS: false});
                     styliner.processHTML(htmlEmail).then((htmlAndCss) => {
          
                       let mailOptions = {
                         to: req.body.email,
                         from: process.env.FROM,
-                        subject: 'Order received - here is your receipt',
+                        subject: `Order received - ${orderPaid ? 'here is your receipt' : 'payment instructions'}`,
                         text: textEmail,
                         html: htmlAndCss,
                         attachments: attachments
@@ -179,8 +193,13 @@ router.post('/checkout', (req, res) => {
                           req.flash('error', [ { message: 'Something went wrong' } ]);
                           return res.redirect('/cart');
                         }
-                        req.flash('success', `Your order has been received. An email copy of this receipt will be sent to ${req.body.email}`);
-                        res.redirect('/cart/receipt');
+                        if (orderPaid) {
+                          req.flash('success', `Your order has been received. An email copy of this receipt will be sent to ${req.body.email}`);
+                          return res.redirect('/cart/receipt');
+                        }
+                        Cart.emptyCart(cart);
+                        req.flash('success', `Your order has been received. Transaction instructions will be sent to ${req.body.email}`);
+                        res.redirect('/');
                       });
                     }).catch((err) => {
                       console.log(err);

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Thanks for your order!</title>
+  <title>Order received - unpaid</title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="stylesheet" href="public/assets/order.css" type="text/css" media="screen" />
@@ -9,21 +9,8 @@
 <body>
   <section id="content" class="container">
     <p>
-      <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> was sent to <em><%- process.env.WALLET %></em>.
+      The customer was instructed to send <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> to <em><%- process.env.WALLET %></em>.
     </p>
-    <div class="payment-info">
-      <p>
-        Find the transaction details at this address... 
-      </p>
-      <div></div>
-      <div>
-        <span></span>
-        <span><img src="cid:qr.png"></span>
-        <span id="transaction"><%- cart.order.transaction %></span>
-      </div>
-      <p>
-      </p>
-    </div>
     <hr>
     <h3>
       The order:
@@ -69,11 +56,7 @@
       </section>
       <footer>
         <div class='email'>
-          <% if (cart.order.email) { %>
-            Send confirmation and a tracking number to <%- cart.order.email %>
-          <% } else { %>
-            Customer declined email contact
-          <% } %>
+          Once payment is received, send confirmation and a tracking number to <%- cart.order.email %>
         </div>
       </footer>
     </div>

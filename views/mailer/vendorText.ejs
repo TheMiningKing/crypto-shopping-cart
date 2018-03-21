@@ -12,17 +12,16 @@ Transaction ID: <%- cart.order.transaction %>
 TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
 --------------------------------
 
-You will receive confirmation and a tracking number once your order is processed.
-
 Shipping details:
 
   <%- cart.order.recipient %>
   <%- cart.order.street %>
   <%- cart.order.city %> <%- cart.order.province %>
+  <%- cart.order.country %>
   <%- cart.order.postcode %>
 
 <% if (cart.order.email) { %>
-  <%- cart.order.email %>
+  Send confirmation and a tracking number to <%- cart.order.email %>
 <% } else { %>
   Customer declined email contact.
 <% } %>

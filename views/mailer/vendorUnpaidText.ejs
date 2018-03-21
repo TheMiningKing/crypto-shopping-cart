@@ -1,8 +1,4 @@
-Thank you!
-
-You sent <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
-
-Your transaction ID: <%- cart.order.transaction %>
+The customer was instructed to send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>.
 
 --------------------------------
 
@@ -14,9 +10,7 @@ Your transaction ID: <%- cart.order.transaction %>
 TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
 --------------------------------
 
-You will receive confirmation and a tracking number once your order is processed.
-
-Your order will be shipped to:
+Shipping details:
 
   <%- cart.order.recipient %>
   <%- cart.order.street %>
@@ -24,6 +18,4 @@ Your order will be shipped to:
   <%- cart.order.country %>
   <%- cart.order.postcode %>
 
-Thanks again! Reply to this email with questions.
- 
-
+Once payment is received, send confirmation and a tracking number to <%- cart.order.email %>

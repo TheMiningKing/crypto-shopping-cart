@@ -54,7 +54,7 @@
     </section>
     <section>
       <div class='email'>
-        <% if (cart.order.email) { %>
+        <% if (cart.order.email && cart.order.email.trim()) { %>
           <%- cart.order.email %>
         <% } else {  %>
           You declined to provide an email

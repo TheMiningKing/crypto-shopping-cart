@@ -39,30 +39,8 @@
       No accounts! No signups required!
     </h3>
   </div>
-  <div class="payment-info">
-    <p>
-      Double check your order then... 
-    </p>
-    <div>
-      <span>Send:</span>
-      <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
-    </div>
-    <div>
-      <span>To:</span>
-      <span><%- qr %></span>
-      <span><%- process.env.WALLET %></span>
-    </div>
-    <p>
-      Submit your transaction ID along with your shipping details below
-    </p>
-  </div>
   <div class="order-form">
     <form action="/cart/checkout" method="post" class="form-horizontal">
-      <div class="form-group">
-        <label for="transaction" class="control-label">Transaction ID</label>
-        <input type="text" name="transaction" class="form-control"
-               id="transaction" value="<%- details.transaction %>" required>
-      </div>
       <div class="form-group">
         <label for="recipient" class="control-label">Recipient's Name</label>
         <input type="text" name="recipient" class="form-control"
@@ -105,22 +83,40 @@
           </div>
         </div>
       </div>
-      <div class="form-check">
-        <label for="contact" class="form-check-label">Send invoice and tracking number by email</label>
-        <input class="form-check-input" type="checkbox" name="contact" checked="checked">
-      </div>
-      <div class="form-group">
+      <div class="form-group form-check">
+        <label for="contact" class="form-check-label">Complete transaction by email</label>
+        <input id="email-checkbox" class="form-check-input" type="checkbox" name="contact" checked="checked">
         <input class="form-control" type="email" name="email"
                placeholder="you@example.com (optional but recommended)"
                id="email" value="<%- details.email %>" >
+        <div id="transaction-field" class="form-group">
+          <div class="payment-info">
+            <p>
+              Double check your order then... 
+            </p>
+            <div>
+              <span>Send:</span>
+              <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
+            </div>
+            <div>
+              <span>To:</span>
+              <span><%- qr %></span>
+              <span><%- process.env.WALLET %></span>
+            </div>
+            <br>
+            <label for="transaction" class="control-label">Submit your Transaction ID</label>
+            <input type="text" name="transaction" class="form-control"
+                   id="transaction" value="<%- details.transaction %>">
+            <p>
+              You will only receive a response email if you provide one above. 
+            </p>
+          </div>
+        </div>
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Place Order</button>
       </div>
     </form>
-    <p>
-      You will only receive a response email if requested above. 
-    </p>
   </div>
 <% } else { %>
   <p class="alert alert-info">Your cart is empty</p>
