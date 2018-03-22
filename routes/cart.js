@@ -139,7 +139,7 @@ router.post('/checkout', (req, res) => {
  
             let vendorMailOptions = {
               to: process.env.FROM,
-              from: cart.order.email || process.env.FROM,
+              from: req.body.email || process.env.FROM,
               subject: orderPaid ? 'New order received' : 'New order received - unpaid',
               text: textVendor,
               html: vendorHtmlAndCss,
