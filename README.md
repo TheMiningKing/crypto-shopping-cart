@@ -147,6 +147,7 @@ Configure `.env`. The `FROM` and `PASSWORD` fields are to be set as specified be
 # Don't change these
 FROM=root@localhost
 PASSWORD=secret
+TOR=true
 
 # Do change these
 WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b

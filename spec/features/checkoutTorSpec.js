@@ -1,6 +1,5 @@
 'use strict';                  
 
-process.env.TOR=true;
 
 const app = require('../../app'); 
 const models = require('../../models');
@@ -18,6 +17,7 @@ describe('checkout', () => {
 
   let browser, products;
   beforeEach((done) => {
+    process.env.TOR = true;
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
     fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
@@ -33,6 +33,7 @@ describe('checkout', () => {
   afterEach((done) => {
     models.dropDatabase(() => {
       mailer.transport.sentMail = [];
+      process.env.TOR = '';
       done();
     });
   });

@@ -177,8 +177,8 @@ router.post('/checkout', (req, res) => {
                     styliner.processHTML(htmlEmail).then((htmlAndCss) => {
          
                       let mailOptions = {
-                        to: req.body.email,
-                        from: process.env.FROM,
+                        to: process.env.TOR ? process.env.FROM : req.body.email,
+                        from: process.env.TOR ? req.body.email : process.env.FROM,
                         subject: `Order received - ${orderPaid ? 'here is your receipt' : 'payment instructions'}`,
                         text: textEmail,
                         html: htmlAndCss,
