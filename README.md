@@ -164,7 +164,7 @@ docker-compose -f docker-compose.tor.yml up -d
 ## Seed
 
 ```
-docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV=production
+docker-compose -f docker-compose.tor.yml run --rm node node db/seed.js NODE_ENV=production
 ```
 
 ## Retrieving orders
