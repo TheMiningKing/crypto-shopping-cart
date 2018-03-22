@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title><%= pageTitle %></title>
+  <title><%= process.env.SITE_NAME %></title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <link rel="shortcut icon" href="/images/favicon.ico">
@@ -11,7 +11,9 @@
 <section id="content" class="container">
   <nav class="navbar navbar-inverse">
     <div class="navbar-header">
-      <a class="navbar-brand main-page-link" href="https://theminingking.com">The Mining King</a>
+      <a class="navbar-brand main-page-link" href="<%= process.env.SITE_URL || '/' %>">
+        <%= process.env.SITE_NAME %>
+      </a>
     </div>
     <% if (path === '/') { %>
       <div class="navbar-header navbar-right">
