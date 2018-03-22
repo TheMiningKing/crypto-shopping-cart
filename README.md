@@ -94,10 +94,24 @@ NODE_ENV=production npm install
 Configure `.env`. E.g.:
 
 ```
+#
+# Your email (rigged for Gmail)
+#
 FROM=your@email.com
 PASSWORD=secret
+
+#
+# Main store wallet
+#
 WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b
 CURRENCY=ETH
+
+#
+# Site name and URL
+#
+SITE_NAME=The Mining King
+# Leave blank if no main page
+SITE_URL=https://theminingking.com
 ```
 
 The _Dockerized_ production is meant to be deployed behind an `nginx-proxy`/`lets-encrypt` combo:
@@ -137,6 +151,8 @@ PASSWORD=secret
 # Do change these
 WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b
 CURRENCY=ETH
+SITE_NAME=The Mining King
+SITE_URL=https://theminingking.com
 ```
 
 This Tor-safe composition is meant to be deployed behind a Dockerized Tor proxy. For the moment, details on how to do this can be found [here](https://libertyseeds.ca/2017/12/12/Dockerizing-Tor-to-serve-up-multiple-hidden-web-services/). Once the proxy is setup, execute the Tor deployment like this:
