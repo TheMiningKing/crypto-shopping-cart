@@ -22,7 +22,6 @@ router.get('/', (req, res) => {
     }
 
     res.render('cart', {
-      pageTitle: 'crypto-shopping-cart',
       path: req.originalUrl,
       cart: cart,
       messages: req.flash(),
@@ -67,7 +66,6 @@ router.post('/checkout', (req, res) => {
       }
 
       res.render('cart', {
-        pageTitle: 'crypto-shopping-cart',
         path: req.originalUrl,
         cart: cart,
         messages: { error: errors },
@@ -234,7 +232,6 @@ router.get('/receipt', (req, res) => {
   if (!cart || !cart.order) {
     res.render('receipt', {
       cart: cart,
-      pageTitle: 'crypto-shopping-cart',
       path: req.originalUrl,
       messages: req.flash()
     });
@@ -250,7 +247,6 @@ router.get('/receipt', (req, res) => {
     Cart.emptyCart(req.session.cart);
 
     res.render('receipt', {
-      pageTitle: 'crypto-shopping-cart',
       path: req.originalUrl,
       cart: cart,
       messages: req.flash(),

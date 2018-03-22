@@ -72,7 +72,6 @@ app.get('/', (req, res) => {
 
   models.Product.find({}).sort('createdAt').then((products) => {
     res.render('index', {
-      pageTitle: 'crypto-shopping-cart',
       path: req.originalUrl,
       products: products,
       messages: req.flash()
