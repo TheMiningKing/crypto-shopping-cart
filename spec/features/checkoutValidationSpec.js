@@ -157,7 +157,7 @@ describe('checkout', () => {
       it('reports an error if email  omitted', (done) => {
         browser.fill('email', '   ').pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
-          browser.assert.text('.alert-danger', 'You must provide an email.');
+          browser.assert.text('.alert-danger', 'You must provide an email');
           expect(mailer.transport.sentMail.length).toEqual(0);
           done();
         });
