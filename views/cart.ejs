@@ -84,34 +84,10 @@
         </div>
       </div>
       <div class="form-group form-check">
-        <label for="contact" class="form-check-label">Complete transaction by email</label>
-        <input id="email-checkbox" class="form-check-input" type="checkbox" name="contact" checked="checked">
+        <label for="contact" class="form-check-label">You will complete the transaction by email</label>
         <input class="form-control" type="email" name="email"
                placeholder="you@example.com (optional but recommended)"
                id="email" value="<%- details.email %>" >
-        <div id="transaction-field" class="form-group">
-          <div class="payment-info">
-            <p>
-              Double check your order then... 
-            </p>
-            <div>
-              <span>Send:</span>
-              <span>$<%- cart.formattedTotal %></span>
-            </div>
-            <div>
-              <span>To:</span>
-              <span></span>
-              <span><%- process.env.INTERAC_EMAIL %></span>
-            </div>
-            <br>
-            <label for="transaction" class="control-label">Submit your Transaction ID</label>
-            <input type="text" name="transaction" class="form-control"
-                   id="transaction" value="<%- details.transaction %>">
-            <p>
-              You will only receive a response email if you provide one above. 
-            </p>
-          </div>
-        </div>
       </div>
       <div class="form-group">
         <button type="submit" class="btn btn-primary">Place Order</button>
