@@ -9,25 +9,35 @@
 <body>
   <section id="content" class="container">
     <header>
-      <h3>Thank you!</h3>
-      <h3>
-        Double check your order then... 
-      </h3>
+      <h3>Thank you for your order!</h3>
+      <p>
+        Your order is on hold until we confirm your Interac e-Transfer has been
+        received. Your order details are shown below for your reference.
+      </p>
+      <h3>Interac e-Transfer instructions:</h3>
     </header>
     <div class="payment-info">
       <div>
         <span>Send:</span>
-        <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
+        <span>$<%- cart.formattedTotal %></span>
       </div>
       <div>
         <span>To:</span>
-        <span><img src="cid:qr.png"></span>
-        <span id="wallet"><%- process.env.WALLET %></span>
+        <span id="e-transfer-email"><%- process.env.INTERAC_EMAIL %></span>
+      </div>
+      <div>
+        <span>Set the recipient name to:</span>
+        <span id="recipient-name"><%- process.env.RECIPIENT_NAME %></span>
+      </div>
+      <div>
+        <span>Security question:</span>
+        <span id="security-question"><%- process.env.SECURITY_QUESTION %></span>
+      </div>
+      <div>
+        <span>The answer to the question:</span>
+        <span id="security-answer"><%- process.env.SECURITY_ANSWER %></span>
       </div>
     </div>
-    <h2>
-      Reply to this email with your transaction ID. 
-    </h2>
     <hr>
     <h3>
       Your order:
@@ -60,7 +70,7 @@
     <hr>
     <div class="shipping-info">
       <header>
-        Once your transaction has been verified, your order will be processed and shipped to:
+        Once your payment has been accepted, your order will be processed and shipped to:
       </header>
       <section>
         <div class='recipient'><%- cart.order.recipient %></div>
@@ -71,9 +81,30 @@
         <div class='postcode'><%- cart.order.postcode %></div>
       </section>
       <footer>
-        <h4>Reply to this email with your transaction ID and questions.</h4>
         <p>
-          Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
+          We ship Monday to Friday.
+        </p>
+        <p>
+          Orders received along with their accompanying payment before 3pm
+          will be shipped the same day unless circumstances interfere. Orders
+          received after will go out the next day.
+        </p>
+        <p>
+          Orders received on Friday after 3pm orders will be shipped the next
+          business day.
+        </p>
+        <p>
+          We do not ship weekends, holidays, or when Canada Post is closed.
+        </p>
+
+        <h4>Reply to this email with questions.</h4>
+        <p>
+          We strive to be the best customer service provider we can be. Please
+          contact us with any request you may have and we will do our best to accommodate.
+        </p>
+        <p>
+          Thanks again for your order! You will receive confirmation and a
+          tracking number when it is shipped.
         </p>
       </footer>
     </div>

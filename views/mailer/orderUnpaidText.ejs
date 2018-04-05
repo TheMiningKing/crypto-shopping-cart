@@ -1,10 +1,19 @@
-Thank you!
+Thank you for your order!
 
-Once you've verified that your order is correct (see below), 
+Your order is on hold until we confirm your Interac e-Transfer has been
+received. Your order details are shown below for your reference.
 
-1. Send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
+Interac e-Transfer instructions:
 
-2. Reply to this email with your transaction ID
+- Send: $<%- cart.formattedTotal %>
+
+- To: <%- process.env.INTERAC_EMAIL %>
+
+- Set the recipient name to:<%- process.env.RECIPIENT_NAME %>
+
+- Security question: <%- process.env.SECURITY_QUESTION %>
+
+- The answer to the question: <%- process.env.SECURITY_ANSWER %>
 
 --------------------------------
 
@@ -13,12 +22,10 @@ Once you've verified that your order is correct (see below),
 <% }); %>
 
 ------
-TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
+TOTAL: $<%- cart.formattedTotal %>
 --------------------------------
 
-When your transaction is verified, you will receive confirmation and a tracking number once your order is processed.
-
-Your order will be shipped to:
+Once your payment has been accepted, your order will be processed and shipped to:
 
   <%- cart.order.recipient %>
   <%- cart.order.street %>
@@ -26,5 +33,21 @@ Your order will be shipped to:
   <%- cart.order.country %>
   <%- cart.order.postcode %>
 
-Thanks again! Reply to this email with your transaction ID and any questions.
+
+We ship Monday to Friday.
+
+Orders received along with their accompanying payment before 3pm
+will be shipped the same day unless circumstances interfere. Orders
+received after will go out the next day.
+
+Orders received on Friday after 3pm orders will be shipped the next business day.
+
+We do not ship weekends, holidays, or when Canada Post is closed.
+
+Reply to this email with questions.
+
+We strive to be the best customer service provider we can be. Please
+contact us with any request you may have and we will do our best to accommodate.
+
+Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.
 
