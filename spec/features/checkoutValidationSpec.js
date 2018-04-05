@@ -64,27 +64,27 @@ describe('checkout', () => {
 
     it('displays an order submission form', () => {
       browser.assert.element('form.form-horizontal[action="/cart/checkout"]');
-      browser.assert.element('form.form-horizontal input[type="text"][name="transaction"]');
+      browser.assert.elements('form.form-horizontal input[type="text"][name="transaction"]', 0);
       browser.assert.element('form.form-horizontal input[type="text"][name="recipient"]');
       browser.assert.element('form.form-horizontal input[type="text"][name="street"]');
       browser.assert.element('form.form-horizontal input[type="text"][name="city"]');
       browser.assert.element('form.form-horizontal input[type="text"][name="province"]');
       browser.assert.element('form.form-horizontal input[type="text"][name="country"]');
       browser.assert.element('form.form-horizontal input[type="text"][name="postcode"]');
-      browser.assert.element('form.form-horizontal input[type="checkbox"][checked="checked"][name="contact"]');
+      browser.assert.elements('form.form-horizontal input[type="checkbox"][checked="checked"][name="contact"]', 0);
       browser.assert.element('form.form-horizontal input[type="email"][name="email"]');
       browser.assert.element('form.form-horizontal button[type="submit"]');
     });
 
     const _order = {
-      transaction: '0x50m3crazy1d',
+//      transaction: '0x50m3crazy1d',
       recipient: 'Anonymous',
       street: '123 Fake St',
       city: 'The C-Spot',
       province: 'AB',
       country: 'Canada',
       postcode: 'T1K-5B3',
-      contact: '1',
+//      contact: '1',
       email: 'me@example.com'
     }
 
@@ -96,7 +96,7 @@ describe('checkout', () => {
         browser.fill('province', _order.province);
         browser.fill('country', _order.country);
         browser.fill('postcode', _order.postcode);
-        browser.check('contact');
+//        browser.check('contact');
         browser.fill('email', _order.email);
       });
 
@@ -154,10 +154,10 @@ describe('checkout', () => {
         });
       });
 
-      it('reports an error if email confirmation is requested but omitted', (done) => {
-        browser.check('contact').fill('email', '   ').pressButton('Place Order', () => {
+      it('reports an error if email  omitted', (done) => {
+        browser.fill('email', '   ').pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
-          browser.assert.text('.alert-danger', 'You requested email confirmation. You must provide an email.');
+          browser.assert.text('.alert-danger', 'You must provide an email.');
           expect(mailer.transport.sentMail.length).toEqual(0);
           done();
         });
@@ -171,9 +171,7 @@ describe('checkout', () => {
           .pressButton('Place Order', () => {
             browser.assert.url('/cart/checkout');
             browser.assert.text('.messages .alert:nth-child(1).alert-danger',
-                                'You must provide a country, postal code');
-            browser.assert.text('.messages .alert:nth-child(2).alert-danger',
-                                'You requested email confirmation. You must provide an email.');
+                                'You must provide a country, postal code, email');
             expect(mailer.transport.sentMail.length).toEqual(0);
             done();
           });
@@ -182,7 +180,7 @@ describe('checkout', () => {
       it('repopulates correctly-entered fields', (done) => {
         browser.fill('transaction', '  ').fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
-          browser.assert.input('#transaction', '  ');
+//          browser.assert.input('#transaction', '  ');
           browser.assert.input('#recipient', _order.recipient);
           browser.assert.input('#street', _order.street);
           browser.assert.input('#city', _order.city);
@@ -195,45 +193,45 @@ describe('checkout', () => {
         });
       });
 
-      describe('email confirmation declined', () => {
-        it('reports an error if transaction ID is not provided', (done) => {
-          browser.uncheck('contact')
-            .fill('email', '  ')
-            .fill('transaction', '  ')
-            .pressButton('Place Order', () => {
-              browser.assert.url('/cart/checkout');
-              browser.assert.text('.alert-danger',
-                                  'You must provide a transaction ID if not completing order via email');
-              expect(mailer.transport.sentMail.length).toEqual(0);
-              done();
-            });
-        });
-
-        it('does not report an error if transaction ID is provided', (done) => {
-          browser.uncheck('contact')
-            .fill('email', '  ')
-            .fill('transaction', _order.transaction)
-            .pressButton('Place Order', () => {
-              browser.assert.url('/cart/receipt');
-              browser.assert.text('.alert-success',
-                                  'Your order has been received. Print this receipt for your records.');
-              expect(mailer.transport.sentMail.length).toEqual(1);
-              done();
-            });
-        });
-
-        it('does not report an error if transaction ID and email are provided', (done) => {
-          browser.uncheck('contact')
-            .fill('email', _order.email)
-            .fill('transaction', _order.transaction)
-            .pressButton('Place Order', () => {
-              browser.assert.url('/cart/receipt');
-              browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);
-              expect(mailer.transport.sentMail.length).toEqual(2);
-              done();
-            });
-        });
-      });
+//      describe('email confirmation declined', () => {
+//        it('reports an error if transaction ID is not provided', (done) => {
+//          browser.uncheck('contact')
+//            .fill('email', '  ')
+//            .fill('transaction', '  ')
+//            .pressButton('Place Order', () => {
+//              browser.assert.url('/cart/checkout');
+//              browser.assert.text('.alert-danger',
+//                                  'You must provide a transaction ID if not completing order via email');
+//              expect(mailer.transport.sentMail.length).toEqual(0);
+//              done();
+//            });
+//        });
+//
+//        it('does not report an error if transaction ID is provided', (done) => {
+//          browser.uncheck('contact')
+//            .fill('email', '  ')
+//            .fill('transaction', _order.transaction)
+//            .pressButton('Place Order', () => {
+//              browser.assert.url('/cart/receipt');
+//              browser.assert.text('.alert-success',
+//                                  'Your order has been received. Print this receipt for your records.');
+//              expect(mailer.transport.sentMail.length).toEqual(1);
+//              done();
+//            });
+//        });
+//
+//        it('does not report an error if transaction ID and email are provided', (done) => {
+//          browser.uncheck('contact')
+//            .fill('email', _order.email)
+//            .fill('transaction', _order.transaction)
+//            .pressButton('Place Order', () => {
+//              browser.assert.url('/cart/receipt');
+//              browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);
+//              expect(mailer.transport.sentMail.length).toEqual(2);
+//              done();
+//            });
+//        });
+//      });
     });
   });
 });
