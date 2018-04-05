@@ -90,12 +90,6 @@ FROM=your@email.com
 PASSWORD=secret
 
 #
-# Main store wallet
-#
-WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b
-CURRENCY=ETH
-
-#
 # Site name and URL
 #
 SITE_NAME=The Mining King
@@ -139,8 +133,6 @@ PASSWORD=secret
 TOR=true
 
 # Do change these
-WALLET=0xd24def0856636050cf891befc0fa69ecf96c160b
-CURRENCY=ETH
 SITE_NAME=The Mining King
 SITE_URL=https://theminingking.com
 ```
