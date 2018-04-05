@@ -6,7 +6,6 @@ const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
 const Units = require('ethereumjs-units');
 const path = require('path');
-const QRCode = require('qrcode')
 
 const Browser = require('zombie');
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
@@ -95,8 +94,7 @@ describe('cart', () => {
       browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
       browser.assert.text('tr:nth-child(2) td:nth-child(4)', products[1].formattedPrice);
 
-      browser.assert.text('tr.info',
-          `${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))} ${process.env.CURRENCY}`);
+      browser.assert.text('tr.info', `$${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))}`);
     });
 
     it('displays product variants in the cart', (done) => {
@@ -117,20 +115,6 @@ describe('cart', () => {
 
           done();
         });
-      });
-    });
-
-    // This test is nothing but trouble...
-    it('displays a wallet QR code', (done) => {
-      // Wallet address
-      QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, svg) => {
-        if (err) done.fail(err);
-        browser.assert.element('svg');
-        browser.assert.elements('path', 2);
-        // Zombie renders the html differently than that provided by QRCode 
-        // As such, the following doesn't work. Not a great test...
-        //expect(browser.html()).toMatch(svg);
-        done();
       });
     });
 

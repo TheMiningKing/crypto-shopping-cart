@@ -26,7 +26,7 @@
       <% }); %>
       <tr class="info">
         <td colspan="5" class="text-right">
-          <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+          $<%= cart.formattedTotal %>
         </td>
       </tr>
     </tbody>
@@ -96,12 +96,12 @@
             </p>
             <div>
               <span>Send:</span>
-              <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
+              <span>$<%- cart.formattedTotal %></span>
             </div>
             <div>
               <span>To:</span>
-              <span><%- qr %></span>
-              <span><%- process.env.WALLET %></span>
+              <span></span>
+              <span><%- process.env.INTERAC_EMAIL %></span>
             </div>
             <br>
             <label for="transaction" class="control-label">Submit your Transaction ID</label>
