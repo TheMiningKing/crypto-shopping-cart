@@ -7,7 +7,6 @@ const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
 const Units = require('ethereumjs-units');
 const path = require('path');
-const QRCode = require('qrcode')
 
 const Browser = require('zombie');
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
