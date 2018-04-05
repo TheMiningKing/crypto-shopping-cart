@@ -1,5 +1,5 @@
 {
-  "name": "crypto-shopping-cart",
+  "name": "interac-e-transfer-shopping-cart",
   "version": "0.0.1",
   "description": "Cryptocurrency shopping cart",
   "main": "app.js",
@@ -9,18 +9,18 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/TheMiningKing/crypto-shopping-cart.git"
+    "url": "git+https://github.com/RaphaelDelaGhetto/interac-e-transfer-shopping-cart.git"
   },
   "keywords": [
-    "crypto",
+    "interac-e-transfer",
     "shopping cart"
   ],
   "author": "Daniel Bidulock",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/TheMiningKing/crypto-shopping-cart/issues"
+    "url": "https://github.com/RaphaelDelaGhetto/interac-e-transfer-shopping-cart/issues"
   },
-  "homepage": "https://github.com/TheMiningKing/crypto-shopping-cart#readme",
+  "homepage": "https://github.com/RaphaelDelaGhetto/interac-e-transfer-shopping-cart#readme",
   "dependencies": {
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",

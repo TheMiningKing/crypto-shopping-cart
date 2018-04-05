@@ -20,9 +20,9 @@ services:
     restart: unless-stopped
     command: --smallfiles
     volumes:
-      - crypto_cart_data:/data/db
+      - interac_e_transfer_cart_data:/data/db
 volumes:
-  crypto_cart_data:
+  interac_e_transfer_cart_data:
 networks:
   default:
     external:

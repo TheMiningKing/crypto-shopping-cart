@@ -1,34 +1,34 @@
 {
   "development": {
-    "username": "crypto_cart",
+    "username": "interac_e_transfer_cart",
     "password": "secret",
-    "database": "crypto_cart_development",
+    "database": "interac_e_transfer_cart_development",
     "host": "localhost"
   },
   "test": {
-    "username": "crypto_cart",
+    "username": "interac_e_transfer_cart",
     "password": "secret",
-    "database": "crypto_cart_test",
+    "database": "interac_e_transfer_cart_test",
     "host": "localhost"
   },
   "staging": {
-    "username": "crypto_cart",
+    "username": "interac_e_transfer_cart",
     "password": "secret",
-    "database": "crypto_cart_staging",
+    "database": "interac_e_transfer_cart_staging",
     "host": "mongo",
     "dialect": "mongodb"
   },
   "tor": {
-    "username": "crypto_cart",
+    "username": "interac_e_transfer_cart",
     "password": "secret",
-    "database": "crypto_cart_production",
+    "database": "interac_e_transfer_cart_production",
     "host": "mongo",
     "dialect": "mongodb"
   },
   "production": {
-    "username": "crypto_cart",
+    "username": "interac_e_transfer_cart",
     "password": "secret",
-    "database": "crypto_cart_production",
+    "database": "interac_e_transfer_cart_production",
     "host": "mongo",
     "dialect": "mongodb"
   }

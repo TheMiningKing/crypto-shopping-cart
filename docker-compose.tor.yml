@@ -15,7 +15,7 @@ services:
     restart: unless-stopped
     command: --smallfiles
     volumes:
-      - crypto_cart_data:/data/db
+      - interac_e_transfer_cart_data:/data/db
   postfix:
     image: catatnight/postfix
     expose:
@@ -27,7 +27,7 @@ services:
     volumes:
       - ./mailorders:/var/mail
 volumes:
-  crypto_cart_data:
+  interac_e_transfer_cart_data:
 networks:
   default:
     external:
