@@ -11,6 +11,7 @@ Clone and install dependencies:
 
 ```
 npm install
+cp .env.example .env
 ```
 
 # Testing
