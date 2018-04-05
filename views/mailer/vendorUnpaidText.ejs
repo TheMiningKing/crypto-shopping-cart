@@ -1,4 +1,4 @@
-The customer was instructed to send <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>.
+The customer was instructed to send $<%- cart.formattedTotal %> to <%- process.env.INTERAC_EMAIL %>.
 
 --------------------------------
 
@@ -7,7 +7,7 @@ The customer was instructed to send <%- cart.formattedTotal %> <%- process.env.C
 <% }); %>
 
 ------
-TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
+TOTAL: $<%- cart.formattedTotal %>
 --------------------------------
 
 Shipping details:
