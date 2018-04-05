@@ -1,21 +1,9 @@
-The world's first open-source crypto-shopping cart!
-===================================================
+Open source Interac e-Transfer shopping cart
+============================================
 
-Working beta demo: [shop.theminingking.com](https://shop.theminingking.com). Now accepting real orders!
+Intended for small online shop keeps. Web dev knowledge is a must. Interac e-Transfers are only available in Canada (to the best of my knowledge).
 
-This is an experimental project in progress. The styling and basic functionality was straight-up jacked from [this fine fellow](https://github.com/gabrieleromanato/Node.js-Shopping-Cart).
-
-I am exchanging t-shirts and stickers for Ethereum. Apart from some commercial providers, there doesn't seem to be much in the way of open-source cryptocurrency shopping carts. 
-
-This project raises some interesting interface issues. The modest initial goal is to take an order and wait for transaction confirmation before shipping. Traditional shopping carts collect all cart and payment data before processing an order. Credit cards and banks validate the transaction. Since a customer must release the currency from a wallet interface apart from the shopping cart, the checkout experience deviates from what is now considered _normal_:
-
-1. Place order
-2. Send currency from external wallet interface
-3. Submit transaction ID on shopping car interface for order verification
-
-This is a very different conclusion to contemporary shopping cart expectations. And arguably, it necessitates trust in what should be a _trustless_ situation. That is, the customer has no recourse through banks or credit cards if the vendor is a scammer (though perhaps there's no recourse anyway).
-
-Future work: contracts that fulfil when the post office reports _delivered_... less trust required.
+The styling and basic functionality was straight-up jacked from [this fine fellow](https://github.com/gabrieleromanato/Node.js-Shopping-Cart).
 
 # Setup
 
@@ -81,13 +69,13 @@ npm start
 Clone:
 
 ```
-git clone https://github.com/TheMiningKing/crypto-shopping-cart.git
+git clone https://github.com/RaphaelDeLaGhetto/interac-e-transfer-shopping-cart.git
 ```
 
 In the application directory:
 
 ```
-cd crypto-shopping-cart
+cd interac-e-transfer-shopping-cart
 NODE_ENV=production npm install
 ```
 
@@ -131,13 +119,13 @@ docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV
 Clone:
 
 ```
-git clone https://github.com/TheMiningKing/crypto-shopping-cart.git
+git clone https://github.com/RaphaelDeLaGhetto/interac-e-transfer-shopping-cart.git
 ```
 
 In the application directory:
 
 ```
-cd crypto-shopping-cart
+cd interac-e-transfer-shopping-cart
 NODE_ENV=production npm install
 ```
 
