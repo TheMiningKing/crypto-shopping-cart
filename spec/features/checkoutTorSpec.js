@@ -59,14 +59,12 @@ describe('checkout', () => {
 
     describe('order processing', () => {
       const _order = {
-        transaction: '0x50m3crazy1d',
         recipient: 'Anonymous',
         street: '123 Fake St',
         city: 'The C-Spot',
         province: 'AB',
         country: 'Canada',
         postcode: 'T1K-5B3',
-        contact: '1',
         email: 'me@example.com'
       };
 
@@ -94,26 +92,6 @@ describe('checkout', () => {
 
       describe('vendor experience', () => {
 
-        describe('customer request no email contact', () => {
-
-          beforeEach((done) => {
-            browser.uncheck('contact');
-            browser.fill('transaction', _order.transaction);
-            browser.fill('email', '').pressButton('Place Order', () => {
-              browser.assert.success();
-              browser.assert.url('/cart/receipt');
-              done();
-            });
-          });
-
-          it('sends an email with correct header information to the vendor', () => {
-            expect(mailer.transport.sentMail.length).toEqual(1);
-            expect(mailer.transport.sentMail[0].data.to).toEqual(process.env.FROM);
-            expect(mailer.transport.sentMail[0].data.from).toEqual(process.env.FROM);
-            expect(mailer.transport.sentMail[0].data.subject).toEqual('New order received');
-          });
-        });
-
         describe('customer requests email transaction', () => {
 
           beforeEach((done) => {
@@ -137,31 +115,6 @@ describe('checkout', () => {
             expect(mailer.transport.sentMail[1].data.to).toEqual(process.env.FROM);
             expect(mailer.transport.sentMail[1].data.from).toEqual(_order.email);
             expect(mailer.transport.sentMail[1].data.subject).toEqual('Order received - payment instructions');
-          });
-        });
-
-        describe('customer requests no email transaction but provides email', () => {
-          beforeEach((done) => {
-            browser.uncheck('contact').fill('transaction', _order.transaction).fill('email', _order.email).pressButton('Place Order', (err) => {
-              if (err) done.fail(err);
-              browser.assert.success();
-              browser.assert.url('/cart/receipt');
-              done();
-            });
-          });
-
-          it('sends an email with correct header information to the vendor', () => {
-            expect(mailer.transport.sentMail.length).toEqual(2);
-            expect(mailer.transport.sentMail[0].data.to).toEqual(process.env.FROM);
-            expect(mailer.transport.sentMail[0].data.from).toEqual(_order.email);
-            expect(mailer.transport.sentMail[0].data.subject).toEqual('New order received');
-          });
-
-          it('sends customer email with correct header information to the vendor', () => {
-            expect(mailer.transport.sentMail.length).toEqual(2);
-            expect(mailer.transport.sentMail[1].data.to).toEqual(process.env.FROM);
-            expect(mailer.transport.sentMail[1].data.from).toEqual(_order.email);
-            expect(mailer.transport.sentMail[1].data.subject).toEqual('Order received - here is your receipt');
           });
         });
       });
