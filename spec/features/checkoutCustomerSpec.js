@@ -56,14 +56,12 @@ describe('checkout', () => {
 
     describe('order processing', () => {
       const _order = {
-//        transaction: '0x50m3crazy1d',
         recipient: 'Anonymous',
         street: '123 Fake St',
         city: 'The C-Spot',
         province: 'AB',
         country: 'Canada',
         postcode: 'T1K-5B3',
-//        contact: '1',
         email: 'me@example.com'
       };
 
@@ -94,8 +92,6 @@ describe('checkout', () => {
         describe('customer email transaction', () => {
   
           beforeEach(() => {
-            browser.check('contact');
-            browser.fill('transaction', '   ');
             browser.fill('email', _order.email);
           });
  
@@ -130,16 +126,23 @@ describe('checkout', () => {
       
             it('sends an email with text content to the buyer', () => {
               const text = mailer.transport.sentMail[1].data.text;
-              expect(text).toContain('Thank you!');
+              expect(text).toContain('Thank you for your order!');
+              expect(text).toContain('Your order is on hold until we confirm your Interac e-Transfer has been received.');
+
+              // Send $___ to ___ 
+              expect(text).toContain(`$${cart.formattedTotal}`);
+              expect(text).toContain(`${process.env.INTERAC_EMAIL}`);
+              // Interac e-Transfer
+              expect(text).toContain(process.env.RECIPIENT_NAME);
+              expect(text).toContain(process.env.SECURITY_QUESTION);
+              expect(text).toContain(process.env.SECURITY_ANSWER);
+
               expect(text).toContain(
                 `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
               expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-              expect(text).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+              expect(text).toContain(`TOTAL: $${cart.formattedTotal}`);
       
-              expect(text).toContain(`Send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
-              expect(text).toContain('When your transaction is verified, you will receive confirmation and a tracking number once your order is processed');
-
-              expect(text).toContain('Your order will be shipped to:');
+              expect(text).toContain('Once your payment has been accepted, your order will be processed and shipped to:');
               expect(text).toContain(_order.recipient);
               expect(text).toContain(_order.street);
               expect(text).toContain(_order.city);
@@ -151,7 +154,7 @@ describe('checkout', () => {
       
             it('sends an email with html content to the buyer', (done) => {
               const html = mailer.transport.sentMail[1].data.html;
-              expect(html).toContain('<h3>Thank you!</h3>');
+              expect(html).toContain('<h3>Thank you for your order!</h3>');
       
               expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
               expect(html).toContain(cart.items[0].name);
@@ -162,28 +165,29 @@ describe('checkout', () => {
               expect(html).toContain(cart.items[1].name);
               expect(html).toContain(cart.items[1].formattedPrice);
        
-              expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+              expect(html).toContain(`Total: $${cart.formattedTotal}`);
       
-              // Send ___ ETH to ___ 
-              expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
-              expect(html).toContain(`${process.env.WALLET}`);
-
-              // Wallet Address 
-              expect(html).toContain(process.env.WALLET);
+              // Send $___ to ___ 
+              expect(html).toContain(`$${cart.formattedTotal}`);
+              expect(html).toContain(`${process.env.INTERAC_EMAIL}`);
+              // Interac e-Transfer
+              expect(html).toContain(process.env.RECIPIENT_NAME);
+              expect(html).toContain(process.env.SECURITY_QUESTION);
+              expect(html).toContain(process.env.SECURITY_ANSWER);
 
               // Shipping details
-              expect(html).toContain('Once your transaction has been verified, your order will be processed and shipped to:');
+              expect(html).toContain('Once your payment has been accepted, your order will be processed and shipped to:');
               expect(html).toContain(_order.recipient);
               expect(html).toContain(_order.street);
               expect(html).toContain(_order.city);
               expect(html).toContain(_order.province);
               expect(html).toContain(_order.postcode);
               expect(html).toContain(_order.country);
-              expect(html).toContain('Reply to this email with your transaction ID.');
+              expect(html).toContain('Reply to this email with any questions.');
 
               // File attachments 
               const attachments = mailer.transport.sentMail[0].data.attachments;
-              expect(attachments.length).toEqual(3);
+              expect(attachments.length).toEqual(2);
               expect(attachments[0].filename).toEqual(cart.items[0].image);
               expect(attachments[0].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[0].image));
               expect(attachments[0].cid).toEqual(cart.items[0].image);
@@ -235,15 +239,13 @@ describe('checkout', () => {
                           }
                           cart = result.session.cart;
                           expect(cart.items.length).toEqual(4);
-                  
-                          //browser.fill('transaction', _order.transaction);
+
                           browser.fill('recipient', _order.recipient);
                           browser.fill('street', _order.street);
                           browser.fill('city', _order.city);
                           browser.fill('province', _order.province);
                           browser.fill('country', _order.country);
                           browser.fill('postcode', _order.postcode);
-                          //browser.check('contact');
                           browser.fill('email', _order.email).pressButton('Place Order', () => {
                             browser.assert.success();  
                             done();
@@ -258,7 +260,7 @@ describe('checkout', () => {
   
             it('does not attach duplicate product images to the HTML email', (done) => {
               const html = mailer.transport.sentMail[1].data.html;
-              expect(html).toContain('<h3>Thank you!</h3>');
+              expect(html).toContain('<h3>Thank you for your order!</h3>');
 
               expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
               expect(html).toContain(cart.items[0].name);
@@ -271,26 +273,27 @@ describe('checkout', () => {
 
               expect(html).toContain(`Total: $${cart.formattedTotal}`);
 
-              // Send ___ ETH to ___
-              expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
-              expect(html).toContain(`${process.env.WALLET}`);
-
-              // TransactionID
-              expect(html).not.toContain(_order.transaction);
+              // Send $___ to ___
+              expect(html).toContain(`$${cart.formattedTotal}`);
+              expect(html).toContain(process.env.INTERAC_EMAIL);
+              // Interac e-Transfer
+              expect(html).toContain(process.env.RECIPIENT_NAME);
+              expect(html).toContain(process.env.SECURITY_QUESTION);
+              expect(html).toContain(process.env.SECURITY_ANSWER);
 
               // Shipping details
-              expect(html).toContain('Once your transaction has been verified, your order will be processed and shipped to:');
+              expect(html).toContain('Once your payment has been accepted, your order will be processed and shipped to:');
               expect(html).toContain(_order.recipient);
               expect(html).toContain(_order.street);
               expect(html).toContain(_order.city);
               expect(html).toContain(_order.province);
               expect(html).toContain(_order.country);
               expect(html).toContain(_order.postcode);
-              expect(html).toContain('Reply to this email with your transaction ID.');
+              expect(html).toContain('Reply to this email with any questions.');
 
               // Attachments
               const attachments = mailer.transport.sentMail[0].data.attachments;
-              expect(attachments.length).toEqual(3);
+              expect(attachments.length).toEqual(2);
               expect(attachments[0].filename).toEqual(cart.items[0].image);
               expect(attachments[0].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[0].image));
               expect(attachments[0].cid).toEqual(cart.items[0].image);
