@@ -77,14 +77,12 @@ describe('checkout', () => {
     });
 
     const _order = {
-//      transaction: '0x50m3crazy1d',
       recipient: 'Anonymous',
       street: '123 Fake St',
       city: 'The C-Spot',
       province: 'AB',
       country: 'Canada',
       postcode: 'T1K-5B3',
-//      contact: '1',
       email: 'me@example.com'
     }
 
@@ -96,7 +94,6 @@ describe('checkout', () => {
         browser.fill('province', _order.province);
         browser.fill('country', _order.country);
         browser.fill('postcode', _order.postcode);
-//        browser.check('contact');
         browser.fill('email', _order.email);
       });
 
@@ -178,9 +175,8 @@ describe('checkout', () => {
       });
 
       it('repopulates correctly-entered fields', (done) => {
-        browser.fill('transaction', '  ').fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
+        browser.fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
-//          browser.assert.input('#transaction', '  ');
           browser.assert.input('#recipient', _order.recipient);
           browser.assert.input('#street', _order.street);
           browser.assert.input('#city', _order.city);
@@ -192,46 +188,6 @@ describe('checkout', () => {
           done();
         });
       });
-
-//      describe('email confirmation declined', () => {
-//        it('reports an error if transaction ID is not provided', (done) => {
-//          browser.uncheck('contact')
-//            .fill('email', '  ')
-//            .fill('transaction', '  ')
-//            .pressButton('Place Order', () => {
-//              browser.assert.url('/cart/checkout');
-//              browser.assert.text('.alert-danger',
-//                                  'You must provide a transaction ID if not completing order via email');
-//              expect(mailer.transport.sentMail.length).toEqual(0);
-//              done();
-//            });
-//        });
-//
-//        it('does not report an error if transaction ID is provided', (done) => {
-//          browser.uncheck('contact')
-//            .fill('email', '  ')
-//            .fill('transaction', _order.transaction)
-//            .pressButton('Place Order', () => {
-//              browser.assert.url('/cart/receipt');
-//              browser.assert.text('.alert-success',
-//                                  'Your order has been received. Print this receipt for your records.');
-//              expect(mailer.transport.sentMail.length).toEqual(1);
-//              done();
-//            });
-//        });
-//
-//        it('does not report an error if transaction ID and email are provided', (done) => {
-//          browser.uncheck('contact')
-//            .fill('email', _order.email)
-//            .fill('transaction', _order.transaction)
-//            .pressButton('Place Order', () => {
-//              browser.assert.url('/cart/receipt');
-//              browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);
-//              expect(mailer.transport.sentMail.length).toEqual(2);
-//              done();
-//            });
-//        });
-//      });
     });
   });
 });
