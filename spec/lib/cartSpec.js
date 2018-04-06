@@ -3,7 +3,7 @@
 const Cart = require('../../lib/cart');
 const fixtures = require('pow-mongoose-fixtures');
 const models = require('../../models');
-const Units = require('ethereumjs-units');
+const currencyFormatter = require('currency-formatter');
 
 describe('Cart', () => {
   let product;
@@ -47,7 +47,7 @@ describe('Cart', () => {
     it('sets the formatted total value', () => {
       Cart.addToCart(product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
-      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+      expect(cartSession.formattedTotal).toEqual(currencyFormatter.format(product.price, { code: 'CAD' }));
     });
 
     it('sets a product option to null if not specified as a parameter', () => {
@@ -61,7 +61,7 @@ describe('Cart', () => {
       expect(cartSession.items.length).toEqual(0);
       Cart.addToCart(product, cartSession);
       expect(cartSession.items.length).toEqual(1);
-      expect(cartSession.items[0].formattedPrice).toEqual(Number(Units.convert(cartSession.items[0].price, 'gwei', 'eth')));
+      expect(cartSession.items[0].formattedPrice).toEqual(currencyFormatter.format(cartSession.items[0].price, { code: 'CAD' }));
     });
   });
 
@@ -90,10 +90,10 @@ describe('Cart', () => {
 
     it('resets the formmatted total', () => {
       Cart.addToCart(product, "Large", cartSession);
-      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+      expect(cartSession.formattedTotal).toEqual(currencyFormatter.format(product.price, { code: 'CAD' }));
 
       Cart.removeFromCart(product._id, "Large", cartSession);
-      expect(cartSession.formattedTotal).toEqual(0);
+      expect(cartSession.formattedTotal).toEqual('$0.00');
     });
 
     it('doesn\'t remove a product if the option parameter provides no match', () => {
@@ -165,7 +165,7 @@ describe('Cart', () => {
       Cart.addToCart(product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(3);
       expect(cartSession.totals).toEqual(product.price * 3);
-      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price * 3, 'gwei', 'eth')));
+      expect(cartSession.formattedTotal).toEqual(currencyFormatter.format(product.price * 3, { code: 'CAD' }));
     });
 
     it('empties the cart and resets all the values', () => {

@@ -5,7 +5,6 @@ const app = require('../../app');
 const models = require('../../models');
 const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
-const Units = require('ethereumjs-units');
 const path = require('path');
 
 const Browser = require('zombie');

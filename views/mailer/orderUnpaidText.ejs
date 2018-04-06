@@ -4,7 +4,7 @@ Your order is on hold until we confirm your Interac e-Transfer has been received
 
 Interac e-Transfer instructions:
 
-- Send: $<%- cart.formattedTotal %>
+- Send: <%- cart.formattedTotal %>
 
 - To: <%- process.env.INTERAC_EMAIL %>
 
@@ -21,7 +21,7 @@ Interac e-Transfer instructions:
 <% }); %>
 
 ------
-TOTAL: $<%- cart.formattedTotal %>
+TOTAL: <%- cart.formattedTotal %>
 --------------------------------
 
 Once your payment has been accepted, your order will be processed and shipped to:

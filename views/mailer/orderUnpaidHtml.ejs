@@ -19,7 +19,7 @@
     <div class="payment-info">
       <div>
         <span>Send:</span>
-        <span>$<%- cart.formattedTotal %></span>
+        <span><%- cart.formattedTotal %></span>
       </div>
       <div>
         <span>To:</span>
@@ -62,7 +62,7 @@
         <% }); %>
         <tr class="info">
           <td colspan="5" class="text-right">
-            Total: $<%= cart.formattedTotal %>
+            Total: <%= cart.formattedTotal %>
           </td>
         </tr>
       </tbody>

@@ -1,6 +1,6 @@
 'use strict';
 
-const Units = require('ethereumjs-units');
+const currencyFormatter = require('currency-formatter');
 
 module.exports = function(mongoose) {
   const Schema = mongoose.Schema;
@@ -31,7 +31,7 @@ module.exports = function(mongoose) {
   });
 
   ProductSchema.virtual('formattedPrice').get(function() {
-    return Number(Units.convert(this.price, 'gwei', 'eth'));
+    return currencyFormatter.format(this.price, { code: 'CAD' });
   });
 
   return ProductSchema;

@@ -4,7 +4,7 @@ const app = require('../../app');
 const models = require('../../models');
 const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
-const Units = require('ethereumjs-units');
+const currencyFormatter = require('currency-formatter');
 const path = require('path');
 
 const Browser = require('zombie');
@@ -94,7 +94,7 @@ describe('cart', () => {
       browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
       browser.assert.text('tr:nth-child(2) td:nth-child(4)', products[1].formattedPrice);
 
-      browser.assert.text('tr.info', `$${Number(Units.convert(products[0].price * 2, 'gwei', 'eth'))}`);
+      browser.assert.text('tr.info', `${currencyFormatter.format(products[0].price * 2, { code: 'CAD' })}`);
     });
 
     it('displays product variants in the cart', (done) => {

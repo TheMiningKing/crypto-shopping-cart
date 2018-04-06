@@ -9,7 +9,7 @@
 <body>
   <section id="content" class="container">
     <p>
-      The customer was instructed to send <em>$<%- cart.formattedTotal %></em> to <em><%- process.env.INTERAC_EMAIL %></em>.
+      The customer was instructed to send <em><%- cart.formattedTotal %></em> to <em><%- process.env.INTERAC_EMAIL %></em>.
     </p>
     <hr>
     <h3>
@@ -35,7 +35,7 @@
         <% }); %>
         <tr class="info">
           <td colspan="5" class="text-right">
-            Total: $<%= cart.formattedTotal %>
+            Total: <%= cart.formattedTotal %>
           </td>
         </tr>
       </tbody>

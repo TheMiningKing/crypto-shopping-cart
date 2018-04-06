@@ -1,7 +1,8 @@
 'use strict';
 
 describe('Product', () => {
-  const Units = require('ethereumjs-units');
+ // const Units = require('ethereumjs-units');
+  const currencyFormatter = require('currency-formatter');
   const db = require('../../models');
   const Product = db.Product;
 
@@ -78,7 +79,7 @@ describe('Product', () => {
                                   price: 51990000 });
  
       product.save().then((obj) => {
-        expect(product.formattedPrice).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+        expect(product.formattedPrice).toEqual(currencyFormatter.format(product.price, { code: 'CAD' }));
         done();
       }).catch((error) => {
         done.fail(error);

@@ -4,7 +4,6 @@ const app = require('../../app');
 const models = require('../../models');
 const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
-const Units = require('ethereumjs-units');
 const path = require('path');
 
 const Browser = require('zombie');
@@ -130,7 +129,7 @@ describe('checkout', () => {
               expect(text).toContain('Your order is on hold until we confirm your Interac e-Transfer has been received.');
 
               // Send $___ to ___ 
-              expect(text).toContain(`$${cart.formattedTotal}`);
+              expect(text).toContain(`${cart.formattedTotal}`);
               expect(text).toContain(`${process.env.INTERAC_EMAIL}`);
               // Interac e-Transfer
               expect(text).toContain(process.env.RECIPIENT_NAME);
@@ -140,7 +139,7 @@ describe('checkout', () => {
               expect(text).toContain(
                 `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
               expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-              expect(text).toContain(`TOTAL: $${cart.formattedTotal}`);
+              expect(text).toContain(`TOTAL: ${cart.formattedTotal}`);
       
               expect(text).toContain('Once your payment has been accepted, your order will be processed and shipped to:');
               expect(text).toContain(_order.recipient);
@@ -165,10 +164,10 @@ describe('checkout', () => {
               expect(html).toContain(cart.items[1].name);
               expect(html).toContain(cart.items[1].formattedPrice);
        
-              expect(html).toContain(`Total: $${cart.formattedTotal}`);
+              expect(html).toContain(`Total: ${cart.formattedTotal}`);
       
               // Send $___ to ___ 
-              expect(html).toContain(`$${cart.formattedTotal}`);
+              expect(html).toContain(`${cart.formattedTotal}`);
               expect(html).toContain(`${process.env.INTERAC_EMAIL}`);
               // Interac e-Transfer
               expect(html).toContain(process.env.RECIPIENT_NAME);
@@ -271,10 +270,10 @@ describe('checkout', () => {
               expect(html).toContain(cart.items[1].name);
               expect(html).toContain(cart.items[1].formattedPrice);
 
-              expect(html).toContain(`Total: $${cart.formattedTotal}`);
+              expect(html).toContain(`Total: ${cart.formattedTotal}`);
 
               // Send $___ to ___
-              expect(html).toContain(`$${cart.formattedTotal}`);
+              expect(html).toContain(`${cart.formattedTotal}`);
               expect(html).toContain(process.env.INTERAC_EMAIL);
               // Interac e-Transfer
               expect(html).toContain(process.env.RECIPIENT_NAME);

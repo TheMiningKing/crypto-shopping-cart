@@ -4,7 +4,6 @@ const app = require('../../app');
 const models = require('../../models');
 const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
-const Units = require('ethereumjs-units');
 const path = require('path');
 
 const Browser = require('zombie');
@@ -121,9 +120,9 @@ describe('checkout', () => {
             expect(text).toContain(
               `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
             expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-            expect(text).toContain(`TOTAL: $${cart.formattedTotal}`);
+            expect(text).toContain(`TOTAL: ${cart.formattedTotal}`);
     
-            expect(text).toContain(`The customer was instructed to send $${cart.formattedTotal} to ${process.env.INTERAC_EMAIL}`);
+            expect(text).toContain(`The customer was instructed to send ${cart.formattedTotal} to ${process.env.INTERAC_EMAIL}`);
 
             expect(text).toContain('Shipping details:');
             expect(text).toContain(_order.recipient);
@@ -146,10 +145,10 @@ describe('checkout', () => {
             expect(html).toContain(cart.items[1].name);
             expect(html).toContain(cart.items[1].formattedPrice);
      
-            expect(html).toContain(`Total: $${cart.formattedTotal}`);
+            expect(html).toContain(`Total: ${cart.formattedTotal}`);
     
             // The customer was instructed to send $___  to ___ 
-            expect(html).toContain(`$${cart.formattedTotal}`);
+            expect(html).toContain(`${cart.formattedTotal}`);
             expect(html).toContain(`${process.env.INTERAC_EMAIL}`);
 
             // Shipping details
