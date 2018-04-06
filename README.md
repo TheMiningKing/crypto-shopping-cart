@@ -100,6 +100,9 @@ SITE_URL=https://theminingking.com
 # Interac e-Transfer 
 #
 INTERAC_EMAIL=send@money.here
+RECIPIENT_NAME=The Mining King
+SECURITY_QUESTION=What's the greatest city in the world?
+SECURITY_ANSWER=Calgary
 ```
 
 The _Dockerized_ production is meant to be deployed behind an `nginx-proxy`/`lets-encrypt` combo:
@@ -141,6 +144,9 @@ TOR=true
 SITE_NAME=The Mining King
 SITE_URL=https://theminingking.com
 INTERAC_EMAIL=send@money.here
+RECIPIENT_NAME=The Mining King
+SECURITY_QUESTION=What's the greatest city in the world?
+SECURITY_ANSWER=Calgary
 ```
 
 This Tor-safe composition is meant to be deployed behind a Dockerized Tor proxy. For the moment, details on how to do this can be found [here](https://libertyseeds.ca/2017/12/12/Dockerizing-Tor-to-serve-up-multiple-hidden-web-services/). Once the proxy is setup, execute the Tor deployment like this:
