@@ -1,7 +1,7 @@
 Open source Interac e-Transfer shopping cart
 ============================================
 
-Intended for small online shop keeps. Web dev knowledge is a must. Interac e-Transfers are only available in Canada (to the best of my knowledge).
+Intended for small online shopkeeps. Web dev knowledge is a must. Interac e-Transfers are only available in Canada (to the best of my knowledge).
 
 The styling and basic functionality was straight-up jacked from [this fine fellow](https://github.com/gabrieleromanato/Node.js-Shopping-Cart).
 
