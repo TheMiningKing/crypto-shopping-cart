@@ -60,7 +60,7 @@ describe('index', () => {
     });
 
     it('displays a no-products-in-db message', () => {
-      browser.assert.text('p.alert.alert-info', 'Sorry, no products to show.');
+      browser.assert.text('.alert.alert-info', 'Sorry, no products to show.');
     });
   });
 
