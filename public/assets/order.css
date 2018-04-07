@@ -31,44 +31,42 @@
   padding-right: 3em;
 }
 #content {
-    padding: 5% 0;
+  padding: 5% 0;
 }
 
 .go-to-cart-lnk {
-    padding-right: 1em;
+  padding-right: 1em;
 }
 
 .navbar .navbar-brand {
-    color: #fff;
+  color: #fff;
 }
 
 .cart-data {
-    margin-top: 1.5em;
+  margin-top: 1.5em;
 }
 
 .product-thumb {
-    max-width: 80px;
+  max-width: 80px;
 }
 
 .cart-footer .btn {
-    border: none;
-    font-weight: bold;
+  border: none;
+  font-weight: bold;
 }
 
 .checkout-btn-wrap {
-    padding-top: 3em;
+  padding-top: 3em;
 }
 
 #info {
-    background: #222;
-    color: #fff;
-    text-align: center;
-    margin-top: 3em;
-    padding: 1em;
-    border-radius: 4px;
+  background: #222;
+  color: #fff;
+  text-align: center;
+  margin-top: 3em;
+  padding: 1em;
+  border-radius: 4px;
 }
-
-
 
 /* Gradient transparent - color - transparent */
 /* 2018-2-22 https://css-tricks.com/examples/hrs/ */
@@ -82,12 +80,8 @@ p em {
   color: green;
 }
 
-
-
-
 .shipping-info,
 .payment-info {
-/*  margin: 1.5em auto;*/
   padding: 1.5em; 
 }
 
@@ -109,37 +103,33 @@ header,
 .payment-info p {
   margin: 2em;
   font-size: 1.25em;
-/*  text-align: center;*/
+}
+
+.payment-info div {
+  margin: .75em;
 }
 
 .payment-info div span {
-  display: block;
-  text-align: center;
+  display: inline-block;
+  text-align: left;
 }
 
 .payment-info div span:nth-child(1) {
-  width: 20%;
+  width: 25%;
   text-align: right;
   font-weight: bold;
-  font-size: 1.5em;
-}
-
-.payment-info div:nth-child(2) span:nth-child(2) {
-  font-size: 2.0em;
 }
 
 .payment-info div:nth-child(3) span:first-child {
   vertical-align: top;
-  margin-top: 2em;
+  margin-bottom: 2em;
 }
 
 .payment-info div span:nth-child(2) {
-  margin: auto;
-  width: 60%;
+  margin-left: 5%;
+  width: 55%;
 }
 
 .payment-info div span:nth-child(3) {
   width: 100%;
 }
-
-
