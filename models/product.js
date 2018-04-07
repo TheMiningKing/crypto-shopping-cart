@@ -25,7 +25,8 @@ module.exports = function(mongoose) {
       type: Types.String,
       trim: true
     },
-    options: [Types.String]
+    options: [Types.String],
+    categories: [Types.String]
   }, {
     timestamps: true
   });
