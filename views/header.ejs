@@ -15,17 +15,25 @@
         <%= process.env.SITE_NAME %>
       </a>
     </div>
-    <% if (path === '/') { %>
-      <div class="navbar-header navbar-right">
+    <div class="navbar-header navbar-right">
+      <% if (path === '/') { %>
         <a class="navbar-brand" href="/cart">
           Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
         </a>
-      </div>
-    <% } else { %>
-      <div class="navbar-header navbar-right">
-        <a class="navbar-brand" href="/">
+      <% } else if (path.match('category')) { %>
+        <% if (products && products.length) { %>
+          <a class="navbar-brand" href="/cart">
+            Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
+          </a>
+        <% } else { %>
+          <a class="navbar-brand" href="/">
+            See all products <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
+          </a>
+        <% } %>
+      <% } else { %>
+        <a class="navbar-brand" href="<%= referrer %>">
           Continue shopping <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
         </a>
-      </div>
-    <% } %>
+      <% } %>
+    </div>
   </nav>

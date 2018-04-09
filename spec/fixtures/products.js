@@ -10,13 +10,15 @@ exports.Product = {
     description: 'Get fired from your job for looking too cool in this sweet Mining King T',
     price: 59.99,
     image: 'man-shirt.jpg',
-    options: ['Small', 'Medium', 'Large']
+    options: ['Small', 'Medium', 'Large'],
+    categories: ['mens']
   },
   woman_shirt: {
     _id: new ObjectId(),
     name: 'Women\'s Mining T',
     description: 'Mining Ts are like sexy ladies... they come in all sizes!',
     price: 59.99,
-    image: 'woman-shirt.jpg'
-  }
+    image: 'woman-shirt.jpg',
+    categories: ['womens']
+  },
 };

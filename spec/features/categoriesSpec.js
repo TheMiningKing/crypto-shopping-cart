@@ -2,9 +2,7 @@
 
 const app = require('../../app'); 
 const models = require('../../models');
-//const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
-//const path = require('path');
 
 const Browser = require('zombie');
 const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
@@ -12,7 +10,7 @@ Browser.localhost('example.com', PORT);
 
 describe('categories', () => {
 
-  let browser, products;
+  let browser, _products;
   beforeEach((done) => {
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
@@ -20,7 +18,7 @@ describe('categories', () => {
       if (err) done.fail(err);
 
       models.Product.find({}).sort('createdAt').then((results) => {
-        products = results;
+        _products = results;
         done();
       });
     });
@@ -60,17 +58,6 @@ describe('categories', () => {
     });
   });
 
-  it('displays a Continue Shopping button', (done) => {
-    browser.visit('/category/dummy', (err) => {
-      if (err) {
-        done.fail(err);
-      }
-      browser.assert.elements('i.fa.fa-shopping-cart.go-to-shop-lnk', 1);
-      browser.assert.link('.navbar-brand', 'Continue shopping', '/');
-      done();
-    });
-  });
-
   describe('when no such category exists', () => {
     beforeEach((done) => {
       browser.visit('/category/nosuchcategory', (err) => {
@@ -84,9 +71,61 @@ describe('categories', () => {
     it('displays an appropriate message', () => {
       browser.assert.text('.alert-info', 'No such category exists: nosuchcategory');
     });
+
+    it('displays a Continue Shopping button linking to root', () => {
+      browser.assert.elements('i.fa.fa-shopping-cart.go-to-shop-lnk', 1);
+      browser.assert.link('.navbar-brand', 'See all products', '/');
+    });
   });
 
   describe('when category exists', () => {
-  });
+    beforeEach((done) => {
+      browser.visit('/category/mens', (err) => {
+        if (err) {
+          done.fail(err);
+        } 
+        browser.assert.success();
+        done();
+      });
+    });
 
+    it('displays only the products in that category', (done) => {
+      models.Product.find({ categories: 'mens' }).sort('createdAt').then((results) => {
+        expect(results.length).toEqual(1);
+        expect(results[0].categories.length).toEqual(1);
+        expect(results[0].categories[0]).toEqual('mens');
+
+        browser.assert.elements('ul#products li.product', results.length);
+
+        // Man's t-shirt
+        browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
+        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[0].image}"]`);
+        browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
+        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price', `${results[0].formattedPrice}`);
+        browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${results[0].id}"]`);
+
+        done();
+      });
+    });
+
+    it('displays a Checkout button', (done) => {
+      browser.clickLink('Checkout', (err) => {
+        if (err) done.fail(err);
+        browser.assert.success();
+        done();
+      });
+    });
+
+    describe('contextual checkout behaviour', () => {
+      it('displays a Continue Shopping button linking category path', (done) => {
+        browser.clickLink('Checkout', (err) => {
+          if (err) done.fail(err);
+          browser.assert.success();
+          browser.assert.elements('i.fa.fa-shopping-cart.go-to-shop-lnk', 1);
+          browser.assert.link('.navbar-brand', 'Continue shopping', '/category/mens');
+          done();
+        });
+      });
+    });
+  });
 });

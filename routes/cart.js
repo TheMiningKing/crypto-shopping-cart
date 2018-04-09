@@ -19,6 +19,7 @@ router.get('/', (req, res) => {
     path: req.originalUrl,
     cart: cart,
     messages: req.flash(),
+    referrer: req.get('Referrer'),
     details: {}
   });
 });
@@ -56,6 +57,7 @@ router.post('/checkout', (req, res) => {
       path: req.originalUrl,
       cart: cart,
       messages: { error: errors },
+      referrer: req.get('Referrer'),
       details: req.body
     });
   }
@@ -197,7 +199,8 @@ router.get('/receipt', (req, res) => {
     res.render('receipt', {
       cart: cart,
       path: req.originalUrl,
-      messages: req.flash()
+      messages: req.flash(),
+      referrer: req.get('Referrer')
     });
     return;
   }
