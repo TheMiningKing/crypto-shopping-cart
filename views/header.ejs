@@ -21,13 +21,12 @@
           Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
         </a>
       <% } else if (path.match('category')) { %>
+        <a class="navbar-brand" href="/">
+          <i class="fa fa-backward go-to-shop-lnk"></i>See all products
+        </a>
         <% if (products && products.length) { %>
           <a class="navbar-brand" href="/cart">
             Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
-          </a>
-        <% } else { %>
-          <a class="navbar-brand" href="/">
-            See all products <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
           </a>
         <% } %>
       <% } else { %>
