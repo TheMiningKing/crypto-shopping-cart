@@ -1,30 +1,113 @@
 {
   "products": {
     "_model": "Product",
-    "man-shirt": {
-      "name": "Men's Mining T",
-      "description": "Get fired from your job for looking too cool in this sick Mining King T",
-      "price": 59.99,
-      "image": "man-shirt.jpg",
-      "options": ["Small", "Medium", "Large"],
-      "categories": ["mens"]
-    },
-    "woman-shirt": {
-      "name": "Women's Mining T",
-      "description": "Mining Ts are like sexy ladies... they come in all sizes!",
-      "price": 59.99,
-      "image": "woman-shirt.jpg",
-      "options": ["Small", "Medium", "Large"],
-      "categories": ["womens"]
-
-    },
-    "kid-shirt": {
-      "name": "Children's Mining T",
-      "description": "Kids aren't allowed in the mines, but they can still rock cool Mining schwag",
+    "vintage-pillow": {
+      "name": "All Things Vintage",
       "price": 45,
-      "image": "kid-shirt.jpg",
-      "options": ["Small", "Medium", "Large"],
-      "categories": ["kids"]
+      "image": "all-things-vintage-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "bless-this-nest-pillow": {
+      "name": "Bless this Nest",
+      "price": 45,
+      "image": "bless-this-nest-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "blessed-pillow": {
+      "name": "Blessed",
+      "price": 45,
+      "image": "blessed-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "bunny-stuffies": {
+      "name": "Charlotte O'Hare",
+      "price": 45,
+      "image": "bunny-stuffies.jpg",
+      "categories": ["stuffies"]
+    },
+    "deer-pillow": {
+      "name": "Blessed",
+      "price": 45,
+      "image": "deer-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "farm-pillow": {
+      "name": "Farm cross",
+      "price": 45,
+      "image": "farm-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "feather-cover-pillow": {
+      "name": "He will cover you with his Feathers",
+      "price": 45,
+      "image": "feather-cover-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "fox-stuffy": {
+      "name": "Guy Fox",
+      "price": 45,
+      "image": "fox-stuffy.jpg",
+      "categories": ["stuffies"]
+    },
+    "grocery-sign": {
+      "name": "Grocery Sign",
+      "price": 45,
+      "image": "grocery-sign.jpg",
+      "categories": ["signs"]
+    },
+    "happy-camper-pillow": {
+      "name": "Happy Camper",
+      "price": 45,
+      "image": "happy-camper-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "home-pillow": {
+      "name": "Home",
+      "price": 45,
+      "image": "home-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "in-christ-alone-pillow": {
+      "name": "In Christ Alone",
+      "price": 45,
+      "image": "in-christ-alone-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "lets-cuddle-pillow": {
+      "name": "Let's Cuddle",
+      "price": 45,
+      "image": "lets-cuddle-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "tree-pillow": {
+      "name": "Tree Stamps",
+      "price": 45,
+      "image": "tree-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "triangle-pillow": {
+      "name": "Triangle Stamps",
+      "price": 45,
+      "image": "triangle-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "vintage-pillow": {
+      "name": "Vintage",
+      "price": 45,
+      "image": "vintage-pillow.jpg",
+      "categories": ["pillows"]
+    },
+    "wall-hanger": {
+      "name": "Wooden wall hanger",
+      "price": 45,
+      "image": "wall-hanger.jpg",
+      "categories": ["decor"]
+    },
+    "xmas-tree-pillow": {
+      "name": "Christmas tree stamps",
+      "price": 45,
+      "image": "xmas-tree-pillow.jpg",
+      "categories": ["pillows", "christmas"]
     }
   }
 }
