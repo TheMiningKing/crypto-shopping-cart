@@ -7,8 +7,8 @@ services:
       - 3000
     environment:
       - NODE_ENV=production
-      - VIRTUAL_HOST=shop.theminingking.com
-      - LETSENCRYPT_HOST=shop.theminingking.com
+      - VIRTUAL_HOST=shop.lifewithlyndsay.com
+      - LETSENCRYPT_HOST=shop.lifewithlyndsay.com
       - LETSENCRYPT_EMAIL=daniel@capitolhill.ca
     volumes:
       - .:/home/node
