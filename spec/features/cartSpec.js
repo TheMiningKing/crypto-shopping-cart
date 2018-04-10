@@ -118,7 +118,7 @@ describe('cart', () => {
       });
     });
 
-    /* See `checkoutSpec.js` for relevant coverage */
+    /* See `checkoutCustomerSpec.js` for relevant coverage */
     it('displays an order submission form', () => {
       browser.assert.element('form.form-horizontal[action="/cart/checkout"]');
     });
@@ -186,6 +186,14 @@ describe('cart', () => {
                 done();
               });
             });
+        });
+      });
+
+      it('sets a sensible URL for the Continue Shopping link', (done) => {
+        browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
+        browser.clickLink(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`, () => {
+          browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
+          done();
         });
       });
     });

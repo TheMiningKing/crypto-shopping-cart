@@ -200,7 +200,7 @@ router.get('/receipt', (req, res) => {
       cart: cart,
       path: req.originalUrl,
       messages: req.flash(),
-      referrer: req.get('Referrer')
+      referrer: req.get('Referrer') || '/'
     });
     return;
   }

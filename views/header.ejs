@@ -30,7 +30,7 @@
           </a>
         <% } %>
       <% } else { %>
-        <a class="navbar-brand" href="<%= referrer %>">
+        <a class="navbar-brand" href="<%= referrer.match('cart') ? '/' : referrer %>">
           Continue shopping <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
         </a>
       <% } %>
