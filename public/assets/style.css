@@ -204,6 +204,15 @@ input#email-checkbox:checked ~ #transaction-field {
   display: none;
 }
 
+.img-thumbnail {
+  border: none;
+}
+
+.col-md-4 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
 
 /* Responsive */
 @media (min-width: 45em) {
