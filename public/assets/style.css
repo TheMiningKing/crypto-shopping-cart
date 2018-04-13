@@ -236,6 +236,11 @@ input#email-checkbox:checked ~ #transaction-field {
     font-size: 1.5em;
   }
 
+  .row.equal {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
 /*
   .payment-info div span:nth-child(2) {
     width: 40%;
