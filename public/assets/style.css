@@ -20,7 +20,6 @@
 .product-title {
   text-transform: capitalize;
   font-weight: bold;
-  font-family: 'Arapey', serif;
   font-size: 1.5em;
 }
 
@@ -30,6 +29,7 @@
 
 #content {
   padding: 5% 0;
+  font-family: 'Arapey', serif;
 }
 
 .go-to-shop-lnk,
@@ -39,7 +39,6 @@
 
 .navbar .navbar-brand {
   color: #fff;
-  font-family: 'Arapey', serif;
 }
 
 .cart-data {
@@ -130,7 +129,6 @@ select.form-control {
 
 .main-page-link {
   font-size: 2em;
-  font-family: 'Arapey', serif;
 }
 
 .shipping-info,
@@ -215,6 +213,9 @@ input#email-checkbox:checked ~ #transaction-field {
   padding-right: 0;
 }
 
+#interac {
+  max-width: 100%
+}
 
 /* Responsive */
 @media (min-width: 45em) {
