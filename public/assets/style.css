@@ -20,7 +20,7 @@
 .product-title {
   text-transform: capitalize;
   font-weight: bold;
-  font-family: sans-serif;
+  font-family: 'Arapey', serif;
   font-size: 1.5em;
 }
 
@@ -39,6 +39,7 @@
 
 .navbar .navbar-brand {
   color: #fff;
+  font-family: 'Arapey', serif;
 }
 
 .cart-data {
@@ -206,6 +207,7 @@ input#email-checkbox:checked ~ #transaction-field {
 
 .img-thumbnail {
   border: none;
+  padding: 0;
 }
 
 .col-md-4 {
@@ -250,6 +252,10 @@ input#email-checkbox:checked ~ #transaction-field {
     flex-wrap: wrap;
   }
 
+  .col-md-4 {
+    padding-left: .5em;
+    padding-right: .5em;
+  }
 /*
   .payment-info div span:nth-child(2) {
     width: 40%;
