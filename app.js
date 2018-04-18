@@ -58,6 +58,7 @@ app.use(flash());
  * Routes
  */
 app.use('/cart', require('./routes/cart'));
+app.use('/category', require('./routes/category'));
 
 /**
  * Landing page
@@ -71,6 +72,9 @@ app.get('/', (req, res) => {
   }  
 
   models.Product.find({}).sort('createdAt').then((products) => {
+    if (!products.length) {
+      req.flash('info', 'Sorry, no products to show.');
+    }
     res.render('index', {
       path: req.originalUrl,
       products: products,

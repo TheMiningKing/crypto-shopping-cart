@@ -48,6 +48,9 @@ describe('Product', () => {
       expect(product).toEqual(jasmine.objectContaining(expected));
       // Product options array
       expect(product.options.length).toEqual(0);
+
+      // Product categories array
+      expect(product.categories.length).toEqual(0);
     });
 
     it('does not allow an empty name field', (done) => {

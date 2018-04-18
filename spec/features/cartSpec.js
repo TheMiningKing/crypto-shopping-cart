@@ -204,6 +204,14 @@ describe('cart', () => {
             });
         });
       });
+
+      it('sets a sensible URL for the Continue Shopping link', (done) => {
+        browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
+        browser.clickLink(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`, () => {
+          browser.assert.link('.navbar-header a.navbar-brand', 'Continue shopping', '/');
+          done();
+        });
+      });
     });
   });
 });

@@ -4,7 +4,7 @@
   <title><%= process.env.SITE_NAME %></title>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="shortcut icon" href="/images/favicon.ico">
+  <link rel="shortcut icon" href="favicon.ico">
   <link rel="stylesheet" href="/assets/style.css" type="text/css" media="screen" />
 </head>
 <body>
@@ -15,17 +15,24 @@
         <%= process.env.SITE_NAME %>
       </a>
     </div>
-    <% if (path === '/') { %>
-      <div class="navbar-header navbar-right">
+    <div class="navbar-header navbar-right">
+      <% if (path === '/') { %>
         <a class="navbar-brand" href="/cart">
           Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
         </a>
-      </div>
-    <% } else { %>
-      <div class="navbar-header navbar-right">
+      <% } else if (path.match('category')) { %>
         <a class="navbar-brand" href="/">
+          <i class="fa fa-backward go-to-shop-lnk"></i>See all products
+        </a>
+        <% if (products && products.length) { %>
+          <a class="navbar-brand" href="/cart">
+            Checkout <i class="fa fa-shopping-cart go-to-cart-lnk"></i>
+          </a>
+        <% } %>
+      <% } else { %>
+        <a class="navbar-brand" href="<%= referrer.match('cart') ? '/' : referrer %>">
           Continue shopping <i class="fa fa-shopping-cart go-to-shop-lnk"></i>
         </a>
-      </div>
-    <% } %>
+      <% } %>
+    </div>
   </nav>

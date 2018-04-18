@@ -26,6 +26,7 @@ router.get('/', (req, res) => {
       cart: cart,
       messages: req.flash(),
       details: {},
+      referrer: req.get('Referrer'),
       qr: url
     });
   });
@@ -70,6 +71,7 @@ router.post('/checkout', (req, res) => {
         cart: cart,
         messages: { error: errors },
         qr: url,
+        referrer: req.get('Referrer'),
         details: req.body
       });
     });
@@ -233,6 +235,7 @@ router.get('/receipt', (req, res) => {
     res.render('receipt', {
       cart: cart,
       path: req.originalUrl,
+      referrer: req.get('Referrer') || '/',
       messages: req.flash()
     });
     return;
@@ -249,6 +252,7 @@ router.get('/receipt', (req, res) => {
     res.render('receipt', {
       path: req.originalUrl,
       cart: cart,
+      referrer: req.get('Referrer') || '/',
       messages: req.flash(),
       qr: url
     });
