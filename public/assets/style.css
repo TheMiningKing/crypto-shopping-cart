@@ -204,6 +204,19 @@ input#email-checkbox:checked ~ #transaction-field {
   display: none;
 }
 
+.img-thumbnail {
+  border: none;
+  padding: 0;
+}
+
+.col-md-4 {
+  padding-left: 0;
+  padding-right: 0;
+}
+
+#interac {
+  max-width: 100%
+}
 
 /* Responsive */
 @media (min-width: 45em) {
@@ -236,6 +249,15 @@ input#email-checkbox:checked ~ #transaction-field {
     font-size: 1.5em;
   }
 
+  .row.equal {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  .col-md-4 {
+    padding-left: .5em;
+    padding-right: .5em;
+  }
 /*
   .payment-info div span:nth-child(2) {
     width: 40%;
