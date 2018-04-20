@@ -72,8 +72,56 @@ describe('Product', () => {
         done();
       });
     });
+
+    describe('friendly links', () => {
+      it('strips all non-alphanumerics and replaces spaces with dashes', (done) => {
+        let product = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
+                                    description: "Get fired from your job for looking too cool",
+                                    price: 51990000 });
+
+        product.save().then((obj) => {
+          expect(product.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap');
+          done();
+        }).catch((error) => {
+          done.fail(error);
+        });
+      });
+
+      it('appends a number when there are duplicate friendly links', (done) => {
+        let product1 = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
+                                     description: "Get fired from your job for looking too cool",
+                                     price: 51990000 });
+
+        product1.save().then((obj) => {
+          expect(product1.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap');
+
+          let product2 = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
+                                       description: "Get fired from your job for looking too cool",
+                                       price: 51990000 });
+
+          product2.save().then((obj) => {
+            expect(product2.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap-2');
+
+            let product3 = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
+                                         description: "Get fired from your job for looking too cool",
+                                         price: 51990000 });
+
+            product3.save().then((obj) => {
+              expect(product3.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap-3');
+              done();
+            }).catch((error) => {
+              done.fail(error);
+            });
+          }).catch((error) => {
+            done.fail(error);
+          });
+        }).catch((error) => {
+          done.fail(error);
+        });
+      });
+    });
   });
-  
+
   describe('#formattedPrice', () => {
     it('converts from gwei to eth', (done) => {
       let product = new Product({ name: "Sweet Mining T",
