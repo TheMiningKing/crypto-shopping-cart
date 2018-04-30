@@ -59,6 +59,7 @@ app.use(flash());
  */
 app.use('/cart', require('./routes/cart'));
 app.use('/category', require('./routes/category'));
+app.use('/product', require('./routes/product'));
 
 /**
  * Landing page

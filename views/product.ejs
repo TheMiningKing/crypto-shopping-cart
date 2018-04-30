@@ -1,0 +1,38 @@
+<% include header %>
+<% include messages %>
+
+<% if(product) { %>
+  <ul id="products" class="row equal">
+    <li class="product col col-md-4">
+      <h3 class="product-title"><%= product.name %></h3>
+      <figure class="product-image">
+        <img src="/images/products/<%= product.image %>" alt="" class="img-thumbnail img-responsive">
+      </figure>
+      <div class="product-description">
+        <%= product.description %>
+      </div>
+      <div class="cart-data">
+        <div class="product-info">
+          <span class="price">
+            <%= product.formattedPrice %> <%= process.env.CURRENCY %>
+          </span>
+          <form action="/cart" method="post">
+            <% if (product.options.length) { %>
+              <select class="form-control" name="option">
+                <% product.options.forEach((option) => { %>
+                  <option value="<%= option %>"><%= option %></option>
+                <% }); %>
+              </select>
+            <% } %>
+            <input type="hidden" name="id" value="<%= product._id %>">
+            <button type="submit" class="btn btn-primary add-to-cart">
+              <i class="fa fa-cart-plus fa-2x"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </li>
+  </ul>
+<% } %>
+
+<% include footer %>
