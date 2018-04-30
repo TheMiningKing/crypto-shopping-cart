@@ -5,21 +5,21 @@
       "name": "Men's Mining T",
       "description": "Get fired from your job for looking too cool in this sick Mining King T",
       "price": 91990000,
-      "image": "man-shirt.jpg",
+      "images": ["man-shirt.jpg"],
       "options": ["Small", "Medium", "Large"]
     },
     "woman-shirt": {
       "name": "Women's Mining T",
       "description": "Mining Ts are like sexy ladies... they come in all sizes!",
       "price": 91990000,
-      "image": "woman-shirt.jpg",
+      "images": ["woman-shirt.jpg"],
       "options": ["Small", "Medium", "Large"]
     },
     "kid-shirt": {
       "name": "Children's Mining T",
       "description": "Kids aren't allowed in the mines, but they can still rock cool Mining schwag",
       "price": 81990000,
-      "image": "kid-shirt.jpg",
+      "images": ["kid-shirt.jpg"],
       "options": ["Small", "Medium", "Large"]
     }
   }
