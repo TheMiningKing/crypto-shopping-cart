@@ -40,7 +40,6 @@ describe('Product', () => {
         name: "Sweet Mining T",
         description: "Get fired from your job for looking too cool",
         price: 0.01,
-        image: undefined,
         createdAt: undefined,
         updatedAt: undefined
       };
@@ -51,6 +50,9 @@ describe('Product', () => {
 
       // Product categories array
       expect(product.categories.length).toEqual(0);
+
+      // Images array
+      expect(product.images.length).toEqual(0);
     });
 
     it('does not allow an empty name field', (done) => {

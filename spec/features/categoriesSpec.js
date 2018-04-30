@@ -99,7 +99,7 @@ describe('categories', () => {
 
         // Man's t-shirt
         browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
-        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[0].image}"]`);
+        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[0].images[0]}"]`);
         browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
         browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                             `${results[0].formattedPrice} ${process.env.CURRENCY}`);

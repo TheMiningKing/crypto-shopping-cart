@@ -9,7 +9,7 @@ exports.Product = {
     name: 'Men\'s Mining T',
     description: 'Get fired from your job for looking too cool in this sweet Mining King T',
     price: 51990000,
-    image: 'man-shirt.jpg',
+    images: ['man-shirt.jpg'],
     options: ['Small', 'Medium', 'Large'],
     categories: ['mens'],
     createdAt: new Date((new Date)*1 - 1000*3600*2)
@@ -19,7 +19,7 @@ exports.Product = {
     name: 'Women\'s Mining T',
     description: 'Mining Ts are like sexy ladies... they come in all sizes!',
     price: 51990000,
-    image: 'woman-shirt.jpg',
+    images: ['woman-shirt.jpg'],
     categories: ['womens']
   }
 };

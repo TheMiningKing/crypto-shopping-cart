@@ -21,10 +21,11 @@ module.exports = function(mongoose) {
       type: Types.Number,
       default: 0
     },
-    image: {
-      type: Types.String,
-      trim: true
-    },
+//    image: {
+//      type: Types.String,
+//      trim: true
+//    },
+    images: [Types.String],
     options: [Types.String],
     categories: [Types.String],
     friendlyLink: Types.String

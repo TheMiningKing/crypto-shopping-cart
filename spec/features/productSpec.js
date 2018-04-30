@@ -114,7 +114,7 @@ describe('products', () => {
 
       // Man's t-shirt
       browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', prod.name);
-      browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${prod.image}"]`);
+      browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${prod.images[0]}"]`);
       browser.assert.text('ul#products li.product:nth-child(1) .product-description', prod.description);
       browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                           `${prod.formattedPrice} ${process.env.CURRENCY}`);
@@ -140,7 +140,7 @@ describe('products', () => {
 
         // Woman's t-shirt (no options specified)
         browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', prod.name);
-        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${prod.image}"]`);
+        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${prod.images[0]}"]`);
         browser.assert.text('ul#products li.product:nth-child(1) .product-description', prod.description);
         browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                             `${prod.formattedPrice} ${process.env.CURRENCY}`);
