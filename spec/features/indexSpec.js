@@ -95,7 +95,8 @@ describe('index', () => {
 
         // First product
         browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
-        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[0].images[0]}"]`);
+        browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[0].images[0]}"]`);
+        browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[0].friendlyLink}`);
         browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
         browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                             `${results[0].formattedPrice} ${process.env.CURRENCY}`);
@@ -103,7 +104,8 @@ describe('index', () => {
 
         // Second product
         browser.assert.text('ul#products li.product:nth-child(2) .product-description', results[1].description);
-        browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[1].images[0]}"]`);
+        browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[1].images[0]}"]`);
+        browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[1].friendlyLink}`);
         browser.assert.text('ul#products li.product:nth-child(2) .cart-data .product-info span.price',
                             `${results[1].formattedPrice} ${process.env.CURRENCY}`);
         browser.assert.text(`ul#products li.product:nth-child(2) .cart-data form input[type=hidden][name=id][value="${results[1].id}"]`);
