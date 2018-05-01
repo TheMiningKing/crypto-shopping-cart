@@ -110,22 +110,52 @@ describe('products', () => {
     it('displays the product matched to the friendly link', () => {
       let prod = _products[0];
 
-      browser.assert.elements('ul#products li.product', 1);
+      browser.assert.elements('ul#products li.product .thumb-viewer', 1);
 
       // Man's t-shirt
-      browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', prod.name);
+      browser.assert.text('ul#products li.product:nth-child(2) h3.product-title', prod.name);
       browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${prod.images[0]}"]`);
-      browser.assert.text('ul#products li.product:nth-child(1) .product-description', prod.description);
-      browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+      browser.assert.text('ul#products li.product:nth-child(3) .product-description', prod.description);
+      browser.assert.text('ul#products li.product:nth-child(3) .cart-data .product-info span.price',
                           `${prod.formattedPrice} ${process.env.CURRENCY}`);
-      browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${prod.id}"]`);
+      browser.assert.text(`ul#products li.product:nth-child(3) .cart-data form input[type=hidden][name=id][value="${prod.id}"]`);
+    });
+
+    it('displays the product options if present', () => {
+      let prod = _products[0];
 
       // Options
-      browser.assert.element('ul#products li.product:nth-child(1) .cart-data form select');
-      browser.assert.elements('ul#products li.product:nth-child(1) .cart-data form select option', prod.options.length);
-      browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${prod.options[0]}]`, prod.options[0]);
-      browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${prod.options[1]}]`, prod.options[1]);
-      browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${prod.options[2]}]`, prod.options[2]);
+      browser.assert.element('ul#products li.product:nth-child(3) .cart-data form select');
+      browser.assert.elements('ul#products li.product:nth-child(3) .cart-data form select option', prod.options.length);
+      browser.assert.text(`ul#products li.product:nth-child(3) select option[value=${prod.options[0]}]`, prod.options[0]);
+      browser.assert.text(`ul#products li.product:nth-child(3) select option[value=${prod.options[1]}]`, prod.options[1]);
+      browser.assert.text(`ul#products li.product:nth-child(3) select option[value=${prod.options[2]}]`, prod.options[2]);
+    });
+
+    it('displays product thumbnail images if there is more than one', () => {
+      let prod = _products[0];
+      browser.assert.elements('input[type=radio]', prod.images.length);
+
+      // Spacer image to account for absolute product positioning
+      browser.assert.style('section.thumb-viewer figure.product-image', 'visibility', 'hidden');
+
+      // Thumb 1
+      browser.assert.style('input#thumb-0[type=radio]', 'content', `url('/images/products/${prod.images[0]}')`);
+      browser.assert.element('input#thumb-0[type=radio][checked=checked]');
+      browser.assert.text('head style', /input\[type="radio"\]#thumb-0:checked\+label {/);
+      browser.assert.text('head style', new RegExp(`content: url\\('\\/images\\/products\\/${prod.images[0]}'\\);`));
+
+      // Thumb 2
+      browser.assert.style('input#thumb-1[type=radio]', 'content', `url('/images/products/${prod.images[1]}')`);
+      browser.assert.elements('input#thumb-1[type=radio][checked=checked]', 0);
+      browser.assert.text('head style', /input\[type="radio"\]#thumb-1:checked\+label {/);
+      browser.assert.text('head style', new RegExp(`content: url\\('\\/images\\/products\\/${prod.images[1]}'\\);`));
+
+      // Thumb 3
+      browser.assert.style('input#thumb-2[type=radio]', 'content', `url('/images/products/${prod.images[2]}')`);
+      browser.assert.elements('input#thumb-2[type=radio][checked=checked]', 0);
+      browser.assert.text('head style', /input\[type="radio"\]#thumb-2:checked\+label {/);
+      browser.assert.text('head style', new RegExp(`content: url\\('\\/images\\/products\\/${prod.images[2]}'\\);`));
     });
 
     it('does not display a select dropdown if product has no options', (done) => {
@@ -139,15 +169,31 @@ describe('products', () => {
         browser.assert.success();
 
         // Woman's t-shirt (no options specified)
-        browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', prod.name);
+        browser.assert.text('ul#products li.product:nth-child(2) h3.product-title', prod.name);
         browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${prod.images[0]}"]`);
-        browser.assert.text('ul#products li.product:nth-child(1) .product-description', prod.description);
-        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+        browser.assert.text('ul#products li.product:nth-child(3) .product-description', prod.description);
+        browser.assert.text('ul#products li.product:nth-child(3) .cart-data .product-info span.price',
                             `${prod.formattedPrice} ${process.env.CURRENCY}`);
-        browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${prod.id}"]`);
+        browser.assert.text(`ul#products li.product:nth-child(3) .cart-data form input[type=hidden][name=id][value="${prod.id}"]`);
 
-        browser.assert.elements('ul#products li.product:nth-child(1) .cart-data form select', 0);
+        browser.assert.elements('ul#products li.product:nth-child(3) .cart-data form select', 0);
 
+        done();
+      });
+    });
+
+    it('does not display product thumbnails if only one image specified', (done) => {
+      let prod = _products[1];
+      expect(prod.images.length).toEqual(1);
+
+      browser.visit(`/product/${prod.friendlyLink}`, (err) => {
+        if (err) {
+          done.fail(err);
+        } 
+        browser.assert.success();
+
+        browser.assert.style('section.thumb-viewer figure.product-image', 'visibility', 'visible');
+        browser.assert.elements('input[type=radio]', 0);
         done();
       });
     });
@@ -160,7 +206,7 @@ describe('products', () => {
       });
 
       it('adds an item to the cart session', (done) => {
-        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+        browser.pressButton('li.product:nth-child(3) form button[type=submit]', () => {
 
           models.collection('sessions').find({}).toArray((err, results) => {
             if (err) {
@@ -175,7 +221,7 @@ describe('products', () => {
       });
 
       it('redirects to cart', (done) => {
-        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+        browser.pressButton('li.product:nth-child(3) form button[type=submit]', () => {
           browser.assert.redirected();
           browser.assert.url('/cart');
           done();
