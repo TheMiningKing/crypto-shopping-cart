@@ -9,7 +9,7 @@ exports.Product = {
     name: 'Men\'s Mining T',
     description: 'Get fired from your job for looking too cool in this sweet Mining King T',
     price: 51990000,
-    images: ['man-shirt.jpg'],
+    images: ['man-shirt.jpg', 'man-shirt-back.jpg', 'man-shirt-back-cu.jpg'],
     options: ['Small', 'Medium', 'Large'],
     categories: ['mens'],
     createdAt: new Date((new Date)*1 - 1000*3600*2)
