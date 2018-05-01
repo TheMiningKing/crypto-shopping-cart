@@ -13,7 +13,7 @@ router.get('/:friendlyLink', (req, res) => {
       items: [],
       totals: 0
     };
-  }  
+  }
 
   models.Product.findOne({ friendlyLink: req.params.friendlyLink }).then((product) => {
     if (!product) {

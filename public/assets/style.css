@@ -258,10 +258,4 @@ input#email-checkbox:checked ~ #transaction-field {
     padding-left: .5em;
     padding-right: .5em;
   }
-/*
-  .payment-info div span:nth-child(2) {
-    width: 40%;
-  }
-*/
 }
-
