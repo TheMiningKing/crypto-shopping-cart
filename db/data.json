@@ -5,7 +5,7 @@
       "name": "Men's Mining T",
       "description": "Get fired from your job for looking too cool in this sick Mining King T",
       "price": 91990000,
-      "images": ["man-shirt.jpg"],
+      "images": ["man-shirt.jpg", "man-shirt-back.jpg", "man-shirt-back-cu.jpg"],
       "options": ["Small", "Medium", "Large"]
     },
     "woman-shirt": {
