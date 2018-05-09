@@ -23,23 +23,5 @@ module.exports = function(mongoose) {
     timestamps: true
   });
 
-//  WalletSchema.virtual('formattedPrice').get(function() {
-//    return Number(Units.convert(this.price, 'gwei', 'eth'));
-//  });
-//
-//  WalletSchema.pre('save', function(next) {
-//    let self = this;
-//    this.friendlyLink = this.name.replace(/\s/gi, '-').replace(/[^\w-]/gi, '').toLowerCase();
-//    this.constructor.find({ friendlyLink: new RegExp(this.friendlyLink, 'i') }).then((results) => {
-//      if (results.length) {
-//        self.friendlyLink += `-${results.length + 1}`;
-//      }
-//      next();
-//    }).catch((err) => {
-//      console.log(err);
-//      next(err);
-//    });
-//  });
-
   return WalletSchema;
 };

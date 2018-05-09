@@ -1,7 +1,6 @@
 'use strict';
 
 describe('Wallet', () => {
-//  const Units = require('ethereumjs-units');
   const db = require('../../models');
   const Wallet = db.Wallet;
 

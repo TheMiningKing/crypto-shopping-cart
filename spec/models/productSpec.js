@@ -32,14 +32,13 @@ describe('Product', () => {
 
     it('initializes the object with the correct key/value pairs', () => {
       let product = new Product({ name: "Sweet Mining T",
-                                  description: "Get fired from your job for looking too cool",
-                                  price: 0.01 });
+                                  description: "Get fired from your job for looking too cool" });
       // Believe it or not, the `undefined` values actually work to
       // verify schema membership
       const expected = {
         name: "Sweet Mining T",
         description: "Get fired from your job for looking too cool",
-        price: 0.01,
+        price: 0,
         createdAt: undefined,
         updatedAt: undefined
       };
@@ -78,8 +77,7 @@ describe('Product', () => {
     describe('friendly links', () => {
       it('strips all non-alphanumerics and replaces spaces with dashes', (done) => {
         let product = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
-                                    description: "Get fired from your job for looking too cool",
-                                    price: 51990000 });
+                                    description: "Get fired from your job for looking too cool" });
 
         product.save().then((obj) => {
           expect(product.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap');
@@ -91,8 +89,7 @@ describe('Product', () => {
 
       it('appends a number when there are duplicate friendly links', (done) => {
         let product1 = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
-                                     description: "Get fired from your job for looking too cool",
-                                     price: 51990000 });
+                                     description: "Get fired from your job for looking too cool" });
 
         product1.save().then((obj) => {
           expect(product1.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap');
@@ -105,8 +102,7 @@ describe('Product', () => {
             expect(product2.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap-2');
 
             let product3 = new Product({ name: "The Mining King's Sweet Mining T-Shirts (cheap!)",
-                                         description: "Get fired from your job for looking too cool",
-                                         price: 51990000 });
+                                         description: "Get fired from your job for looking too cool" });
 
             product3.save().then((obj) => {
               expect(product3.friendlyLink).toEqual('the-mining-kings-sweet-mining-t-shirts-cheap-3');
@@ -122,6 +118,10 @@ describe('Product', () => {
         });
       });
     });
+  });
+
+  describe('multiple currency prices', () => {
+
   });
 
   describe('#formattedPrice', () => {
