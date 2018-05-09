@@ -6,6 +6,28 @@ module.exports = function(mongoose) {
   const Schema = mongoose.Schema;
   const Types = Schema.Types;
 
+  /**
+   * Allows multiple currencies with varying prices
+   */
+  const PriceSchema = new Schema({
+    price: {
+      type: Types.Number,
+      default: 0
+    },
+    wallet: {
+      type: Types.ObjectId,
+      required: [true, 'No wallet supplied'],
+      empty: [false, 'No wallet supplied']
+    }
+  });
+
+  PriceSchema.virtual('formattedPrice').get(function() {
+    return Number(Units.convert(this.price, 'gwei', 'eth'));
+  })
+
+  /**
+   * Product
+   */
   const ProductSchema = new Schema({
     name: {
       type: Types.String,
@@ -17,20 +39,13 @@ module.exports = function(mongoose) {
       type: Types.String,
       trim: true
     },
-    price: {
-      type: Types.Number,
-      default: 0
-    },
+    prices: [PriceSchema],
     images: [Types.String],
     options: [Types.String],
     categories: [Types.String],
     friendlyLink: Types.String
   }, {
     timestamps: true
-  });
-
-  ProductSchema.virtual('formattedPrice').get(function() {
-    return Number(Units.convert(this.price, 'gwei', 'eth'));
   });
 
   ProductSchema.pre('save', function(next) {
