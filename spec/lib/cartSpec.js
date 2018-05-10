@@ -6,15 +6,19 @@ const models = require('../../models');
 const Units = require('ethereumjs-units');
 
 describe('Cart', () => {
-  let product;
+  let _product;
 
   beforeEach((done) => {
-    fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+    fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
       if (err) done.fail(err);
-      models.Product.findOne({}, (err, results) => {
+      fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
         if (err) done.fail(err);
-        product = results;
-        done();
+        models.Product.findOne({}).populate({ path: 'prices.wallet' }).then((results) => {
+          _product = results;
+          done();
+        }).catch((err) => {
+          done.fail(err);
+        });
       });
     });
   });
@@ -34,34 +38,39 @@ describe('Cart', () => {
 
     it('adds a product to the cart session object passed as a parameter', () => {
       expect(cartSession.items.length).toEqual(0);
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
     });
 
-    it('calculates the total value of the cart', () => {
-      Cart.addToCart(product, "Large", cartSession);
+    it('calculates the total value of the cart for each currency', () => {
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
-      expect(cartSession.totals).toEqual(product.price);
+      expect(cartSession.totals.currencies['ETH'].total).toEqual(_product.prices[0].price);
+      expect(cartSession.totals.currencies['BTC'].total).toEqual(_product.prices[1].price);
     });
 
     it('sets the formatted total value', () => {
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
-      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price, 'gwei', 'eth')));
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price, 'gwei', 'eth')));
     });
 
     it('sets a product option to null if not specified as a parameter', () => {
       expect(cartSession.items.length).toEqual(0);
-      Cart.addToCart(product, cartSession);
+      Cart.addToCart(_product, cartSession);
       expect(cartSession.items.length).toEqual(1);
       expect(cartSession.items[0].option).toBe(null);
     });
 
-    it('sets a formatted total for the individual product', () => {
+    it('sets formatted prices for the individual products', () => {
       expect(cartSession.items.length).toEqual(0);
-      Cart.addToCart(product, cartSession);
+      Cart.addToCart(_product, cartSession);
       expect(cartSession.items.length).toEqual(1);
-      expect(cartSession.items[0].formattedPrice).toEqual(Number(Units.convert(cartSession.items[0].price, 'gwei', 'eth')));
+      expect(cartSession.items[0].prices['ETH'].formattedPrice).
+        toEqual(Number(Units.convert(cartSession.items[0].prices['ETH'].price, 'gwei', 'eth')));
+      expect(cartSession.items[0].prices['BTC'].formattedPrice).
+        toEqual(Number(Units.convert(cartSession.items[0].prices['BTC'].price, 'gwei', 'eth')));
     });
   });
 
@@ -73,51 +82,67 @@ describe('Cart', () => {
     });
 
     it('removes a product from the cart session object passed as a parameter', () => {
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
 
-      Cart.removeFromCart(product._id, "Large", cartSession);
+      Cart.removeFromCart(_product._id, "Large", cartSession);
       expect(cartSession.items.length).toEqual(0);
     });
 
-    it('recalculate cart total order price', () => {
-      Cart.addToCart(product, "Large", cartSession);
-      expect(cartSession.totals).toEqual(product.price);
+    it('removes all totals if cart is empty as a result', () => {
+      Cart.addToCart(_product, "Large", cartSession);
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price, 'gwei', 'eth')));
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price, 'gwei', 'eth')));
 
-      Cart.removeFromCart(product._id, "Large", cartSession);
-      expect(cartSession.totals).toEqual(0);
+      Cart.removeFromCart(_product._id, "Large", cartSession);
+      expect(cartSession.totals.currencies).toEqual({});
     });
 
-    it('resets the formmatted total', () => {
-      Cart.addToCart(product, "Large", cartSession);
-      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price, 'gwei', 'eth')));
+    it('recalculates cart totals', () => {
+      Cart.addToCart(_product, "Large", cartSession);
+      Cart.addToCart(_product, "Small", cartSession);
+      expect(cartSession.totals.currencies['ETH'].total).toEqual(_product.prices[0].price * 2);
+      expect(cartSession.totals.currencies['BTC'].total).toEqual(_product.prices[1].price * 2);
 
-      Cart.removeFromCart(product._id, "Large", cartSession);
-      expect(cartSession.formattedTotal).toEqual(0);
+      Cart.removeFromCart(_product._id, "Large", cartSession);
+      expect(cartSession.totals.currencies['ETH'].total).toEqual(_product.prices[0].price);
+      expect(cartSession.totals.currencies['BTC'].total).toEqual(_product.prices[1].price);
+    });
+
+
+    it('recalculates cart formatted totals', () => {
+      Cart.addToCart(_product, "Large", cartSession);
+      Cart.addToCart(_product, "Small", cartSession);
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price, 'gwei', 'eth')) * 2);
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price, 'gwei', 'eth')) * 2);
+
+      Cart.removeFromCart(_product._id, "Large", cartSession);
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price, 'gwei', 'eth')));
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price, 'gwei', 'eth')));
     });
 
     it('doesn\'t remove a product if the option parameter provides no match', () => {
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
 
-      Cart.removeFromCart(product._id, "Small", cartSession);
+      Cart.removeFromCart(_product._id, "Small", cartSession);
       expect(cartSession.items.length).toEqual(1);
     });
 
     it('removes only one product from the cart session object passed as a parameter', () => {
-      Cart.addToCart(product, "Large", cartSession);
-      Cart.addToCart(product, "Small", cartSession);
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
+      Cart.addToCart(_product, "Small", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(3);
 
-      Cart.removeFromCart(product._id, "Large",  cartSession);
+      Cart.removeFromCart(_product._id, "Large",  cartSession);
       expect(cartSession.items.length).toEqual(2);
       expect(cartSession.items[0].option).toEqual("Small");
       expect(cartSession.items[1].option).toEqual("Large");
     });
 
     it('doesn\'t barf if removing a non-existent product from the cart session object', () => {
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(1);
       Cart.removeFromCart('nosuchid', "Large",  cartSession);
       expect(cartSession.items.length).toEqual(1);
@@ -125,7 +150,7 @@ describe('Cart', () => {
 
     it('doesn\'t barf if removing a non-existent product from an empty cart session object', () => {
       expect(cartSession.items.length).toEqual(0);
-      Cart.removeFromCart(product._id, "Large",  cartSession);
+      Cart.removeFromCart(_product._id, "Large",  cartSession);
       expect(cartSession.items.length).toEqual(0);
     });
   });
@@ -139,19 +164,28 @@ describe('Cart', () => {
 
     it('calculates and sets the total order price', () => {
       Cart.calculateTotals(cartSession);
-      expect(cartSession.totals).toEqual(0)
-      Cart.addToCart(product, "Large", cartSession);
+      expect(cartSession.totals).toEqual({ currencies: {} });
+      Cart.addToCart(_product, "Large", cartSession);
       Cart.calculateTotals(cartSession);
-      expect(cartSession.totals).toEqual(product.price)
-      Cart.addToCart(product, "Large", cartSession);
+      expect(cartSession.totals.currencies['ETH'].total).toEqual(_product.prices[0].price);
+      expect(cartSession.totals.currencies['BTC'].total).toEqual(_product.prices[1].price);
+      Cart.addToCart(_product, "Large", cartSession);
       Cart.calculateTotals(cartSession);
-      expect(cartSession.totals).toEqual(product.price * 2)
+      expect(cartSession.totals.currencies['ETH'].total).toEqual(_product.prices[0].price * 2);
+      expect(cartSession.totals.currencies['BTC'].total).toEqual(_product.prices[1].price * 2);
     });
 
-    it('calculates a zero total on an empty cart', () => {
-      expect(cartSession.totals).toBe(undefined)
+    it('calculates and sets the formatted totals on the order', () => {
       Cart.calculateTotals(cartSession);
-      expect(cartSession.totals).toBe(0)
+      expect(cartSession.totals).toEqual({ currencies: {} });
+      Cart.addToCart(_product, "Large", cartSession);
+      Cart.calculateTotals(cartSession);
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price, 'gwei', 'eth')));
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price, 'gwei', 'eth')));
+      Cart.addToCart(_product, "Large", cartSession);
+      Cart.calculateTotals(cartSession);
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price, 'gwei', 'eth')) * 2);
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price, 'gwei', 'eth')) * 2);
     });
   });
 
@@ -160,19 +194,22 @@ describe('Cart', () => {
 
     beforeEach(() => {
       cartSession = { items: [] };
-      Cart.addToCart(product, "Large", cartSession);
-      Cart.addToCart(product, "Small", cartSession);
-      Cart.addToCart(product, "Large", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
+      Cart.addToCart(_product, "Small", cartSession);
+      Cart.addToCart(_product, "Large", cartSession);
       expect(cartSession.items.length).toEqual(3);
-      expect(cartSession.totals).toEqual(product.price * 3);
-      expect(cartSession.formattedTotal).toEqual(Number(Units.convert(product.price * 3, 'gwei', 'eth')));
+
+      expect(cartSession.totals.currencies['ETH'].total).toEqual(_product.prices[0].price * 3);
+      expect(cartSession.totals.currencies['BTC'].total).toEqual(_product.prices[1].price * 3);
+
+      expect(cartSession.totals.currencies['ETH'].formattedTotal).toEqual(Number(Units.convert(_product.prices[0].price * 3, 'gwei', 'eth')));
+      expect(cartSession.totals.currencies['BTC'].formattedTotal).toEqual(Number(Units.convert(_product.prices[1].price * 3, 'gwei', 'eth')));
     });
 
     it('empties the cart and resets all the values', () => {
       Cart.emptyCart(cartSession);
       expect(cartSession.items.length).toEqual(0);
-      expect(cartSession.totals).toEqual(0);
-      expect(cartSession.formattedTotal).toEqual(0);
+      expect(cartSession.totals.currencies).toEqual({});
     });
 
     it('empties order details', () => {

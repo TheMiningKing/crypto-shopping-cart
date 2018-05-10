@@ -17,7 +17,7 @@ module.exports = function(mongoose) {
     wallet: {
       type: Types.ObjectId,
       required: [true, 'No wallet supplied'],
-      empty: [false, 'No wallet supplied']
+      ref: 'Wallet'
     }
   });
 
