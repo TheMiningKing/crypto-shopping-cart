@@ -13,6 +13,12 @@ module.exports = function(mongoose) {
       required: [true, 'No wallet currency supplied'],
       empty: [false, 'No wallet currency supplied']
     },
+    name: {
+      type: Types.String,
+      trim: true,
+      required: [true, 'No currency name supplied'],
+      empty: [false, 'No currency name supplied']
+    },
     address: {
       type: Types.String,
       trim: true,

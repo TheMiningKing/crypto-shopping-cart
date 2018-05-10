@@ -7,11 +7,13 @@ exports.Wallet = {
   eth: {
     _id: new ObjectId(),
     currency: 'ETH',
-    address: '0x123abc'
+    address: '0x123abc',
+    name: 'Ethereum'
   },
   btc: {
     _id: new ObjectId(),
     currency: 'BTC',
-    address: '0x123abc'
+    address: '0x123abc',
+    name: 'Bitcoin'
   }
 };

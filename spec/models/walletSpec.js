@@ -14,7 +14,7 @@ describe('Wallet', () => {
 
   describe('basic validation', () => {
     it('sets the createdAt and updatedAt fields', (done) => {
-      let wallet = new Wallet({ currency: "ETH", address: "0x123abc" });
+      let wallet = new Wallet({ currency: "ETH", address: "0x123abc", name: 'Ethereum' });
  
       expect(wallet.createdAt).toBe(undefined);
       expect(wallet.updatedAt).toBe(undefined);
@@ -28,12 +28,13 @@ describe('Wallet', () => {
     });
 
     it('initializes the object with the correct key/value pairs', () => {
-      let wallet = new Wallet({ currency: "     ETH   ", address: " 0x123abc  " });
+      let wallet = new Wallet({ currency: '     ETH   ', address: ' 0x123abc  ', name: '  Ethereum  ' });
       // Believe it or not, the `undefined` values actually work to
       // verify schema membership
       const expected = {
-        currency: "ETH",
-        address: "0x123abc",
+        currency: 'ETH',
+        address: '0x123abc',
+        name: 'Ethereum',
         createdAt: undefined,
         updatedAt: undefined
       };
@@ -42,7 +43,7 @@ describe('Wallet', () => {
     });
 
     it('does not allow an empty currency field', (done) => {
-      Wallet.create({ currency: '    ', address: '0x123abc' }).then((obj) => {
+      Wallet.create({ currency: '    ', address: '0x123abc', name: 'Ethereum' }).then((obj) => {
         done.fail('This should not have saved');
       }).catch((error) => {
         expect(Object.keys(error.errors).length).toEqual(1);
@@ -52,7 +53,7 @@ describe('Wallet', () => {
     });
 
     it('does not allow an undefined currency field', (done) => {
-      Wallet.create({ address: '0x123abc' }).then((obj) => {
+      Wallet.create({ address: '0x123abc', name: 'Ethereum' }).then((obj) => {
         done.fail('This should not have saved');
       }).catch((error) => {
         expect(Object.keys(error.errors).length).toEqual(1);
@@ -62,7 +63,7 @@ describe('Wallet', () => {
     });
 
     it('does not allow an empty address field', (done) => {
-      Wallet.create({ currency: 'ETH', address: '   ' }).then((obj) => {
+      Wallet.create({ currency: 'ETH', name: 'Ethereum', address: '   ' }).then((obj) => {
         done.fail('This should not have saved');
       }).catch((error) => {
         expect(Object.keys(error.errors).length).toEqual(1);
@@ -72,11 +73,31 @@ describe('Wallet', () => {
     });
 
     it('does not allow an undefined address field', (done) => {
-      Wallet.create({ currency: 'ETH' }).then((obj) => {
+      Wallet.create({ currency: 'ETH', name: 'Ethereum' }).then((obj) => {
         done.fail('This should not have saved');
       }).catch((error) => {
         expect(Object.keys(error.errors).length).toEqual(1);
         expect(error.errors['address'].message).toEqual('No wallet address supplied');
+        done();
+      });
+    });
+
+    it('does not allow an empty name field', (done) => {
+      Wallet.create({ currency: 'ETH', address: '0x123abc', name: '   ' }).then((obj) => {
+        done.fail('This should not have saved');
+      }).catch((error) => {
+        expect(Object.keys(error.errors).length).toEqual(1);
+        expect(error.errors['name'].message).toEqual('No currency name supplied');
+        done();
+      });
+    });
+
+    it('does not allow an undefined name field', (done) => {
+      Wallet.create({ currency: 'ETH', address: '0x123abc' }).then((obj) => {
+        done.fail('This should not have saved');
+      }).catch((error) => {
+        expect(Object.keys(error.errors).length).toEqual(1);
+        expect(error.errors['name'].message).toEqual('No currency name supplied');
         done();
       });
     });
