@@ -8,7 +8,8 @@ exports.Wallet = {
     _id: new ObjectId(),
     currency: 'ETH',
     address: '0x123abc',
-    name: 'Ethereum'
+    name: 'Ethereum',
+    createdAt: new Date((new Date)*1 - 1000*3600*2)
   },
   btc: {
     _id: new ObjectId(),
