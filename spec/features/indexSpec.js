@@ -18,6 +18,8 @@ describe('index', () => {
     });
   });
 
+  // Note to self: this test fails if the file is run standalone
+  // (toArray not defined)
   it('adds a session containing an empty cart on first visit', (done) => {
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
@@ -41,9 +43,30 @@ describe('index', () => {
           expect(results[0].session.cart).not.toBe(undefined);
           expect(results[0].session.cart.items).toEqual([]);
           expect(results[0].session.cart.totals).toEqual(0);
+          expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
           expect(results[0].expires).not.toBe(undefined);
           done();
         });
+      });
+    });
+  });
+
+  // A tad redundant, but important enough for a separate test
+  it('sets the preferred currency in session cart on first visit', (done) => {
+    browser = new Browser({ waitDuration: '30s', loadCss: false });
+    expect(process.env.PREFERRED_CURRENCY).not.toBe(undefined);
+
+    browser.visit('/', (err) => {
+      if (err) {
+        done.fail(err);
+      }
+      models.collection('sessions').find({}).toArray((err, results) => {
+        if (err) {
+          done.fail(err);
+        }
+        expect(results.length).toEqual(1);
+        expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+        done();
       });
     });
   });
@@ -64,16 +87,164 @@ describe('index', () => {
     });
   });
 
-  describe('when database contains products', () => {
-    beforeEach((done) => {
-      browser = new Browser({ waitDuration: '30s', loadCss: false });
+  describe('currency dropdown', () => {
 
-      fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
-        if (err) done.fail(err);
+    describe('no products in database', () => {
+      beforeEach((done) => {
+        browser = new Browser({ waitDuration: '30s', loadCss: false });
+  
         browser.visit('/', (err) => {
           if (err) done.fail(err);
           browser.assert.success();
           done();
+        });
+      });
+
+      it('does not display a currency dropdown', () => {
+        browser.assert.elements('form[action="/cart/set-currency"]', 0);
+      });
+    });
+
+    describe('products in database', () => {
+
+      describe('one currency accepted', () => {
+        beforeEach((done) => {
+          models.Wallet.create({ currency: 'ETH', address: '0x123abc', name: 'Ethereum'}).then((wallet) => {
+            models.Product.create({
+              name: 'shirt',
+              prices: [{ price: 51990000, wallet: wallet._id }],
+              images: ['man-shirt.jpg'],
+            }).then((results) => {
+              browser.visit('/', (err) => {
+                if (err) done.fail(err);
+                browser.assert.success();
+                done();
+              });
+            }).catch((error) => {
+              done.fail();
+            });
+          }).catch((error) => {
+            done.fail();
+          });
+        });
+
+        it('does not display if there is only one accepted currency', () => {
+          browser.assert.elements('form[action="/cart/set-currency"]', 0);
+        });
+      });
+  
+      describe('multiple currencies accepted', () => {
+
+        let _wallets, _products;
+        beforeEach((done) => {
+          fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
+            if (err) done.fail(err);
+
+            models.Wallet.find({}).sort('createdAt').then((wallets) => {
+              _wallets = wallets;
+
+              fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+                if (err) done.fail(err);
+
+                models.Product.find({}).then((products) => {
+                  _products = products;
+
+                  browser.visit('/', (err) => {
+                    if (err) done.fail(err);
+                    browser.assert.success();
+                    done();
+                  });
+                }).catch((error) => {
+                  done.fail(error);
+                });
+              });
+            }).catch((error) => {
+              done.fail(error);
+            });
+          });
+        });
+
+        it('displays the accepted currencies in the dropdown', () => {
+          browser.assert.element('form[action="/cart/set-currency"]');
+          browser.assert.text(`form[action="/cart/set-currency"] select option[value=${_wallets[0].currency}]`,
+                              `${_wallets[0].name} (${_wallets[0].currency})`);
+          browser.assert.text(`form[action="/cart/set-currency"] select option[value=${_wallets[1].currency}]`,
+                              `${_wallets[1].name} (${_wallets[1].currency})`);
+        });
+
+        it('updates product details if a new preferred currency is set', (done) => {
+          // First product
+          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+                              `${_products[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
+          // Second product
+          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+                              `${_products[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
+ 
+          browser
+          .select('form[action="/cart/set-currency"] select', `${_wallets[1].name} (${_wallets[1].currency})`)
+          .pressButton('form[action="/cart/set-currency"] button[type=submit]', () => {
+            browser.assert.redirected();
+            browser.assert.url('/');
+            browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
+
+            // First product
+            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+                                `${_products[0].prices[1].formattedPrice} ${_wallets[1].currency}`);
+            // Second product
+            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+                                `${_products[1].prices[1].formattedPrice} ${_wallets[1].currency}`);
+            done();
+          });
+        });
+
+        it('sets the preferred currency in the cart session', (done) => {
+          models.collection('sessions').find({}).toArray((err, results) => {
+            if (err) {
+              done.fail(err);
+            }
+            expect(results.length).toEqual(1);
+            expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[0].currency);
+
+            browser
+            .select('form[action="/cart/set-currency"] select', `${_wallets[1].name} (${_wallets[1].currency})`)
+            .pressButton('form[action="/cart/set-currency"] button[type=submit]', () => {
+   
+              models.collection('sessions').find({}).toArray((err, results) => {
+                if (err) {
+                  done.fail(err);
+                }
+                expect(results.length).toEqual(1);
+                expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[1].currency);
+                done();
+              });
+            });
+          });
+        });
+      });
+    });
+  });
+
+  describe('when database contains products', () => {
+
+    let _wallets;
+    beforeEach((done) => {
+      browser = new Browser({ waitDuration: '30s', loadCss: false });
+
+      fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
+        if (err) done.fail(err);
+        models.Wallet.find({}).sort('createdAt').then((wallets) => {
+          _wallets = wallets;
+
+          fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+            if (err) done.fail(err);
+            browser.visit('/', (err) => {
+              if (err) done.fail(err);
+              browser.assert.success();
+              done();
+            });
+          });
+        }).catch((error) => {
+          done.fail(error);
         });
       });
     });
@@ -98,16 +269,22 @@ describe('index', () => {
         browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[0].images[0]}"]`);
         browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[0].friendlyLink}`);
         browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
+//        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+//                            `${results[0].formattedPrice} ${process.env.CURRENCY}`);
         browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                            `${results[0].formattedPrice} ${process.env.CURRENCY}`);
+                            `${results[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
+ 
         browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${results[0].id}"]`);
 
         // Second product
         browser.assert.text('ul#products li.product:nth-child(2) .product-description', results[1].description);
         browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[1].images[0]}"]`);
         browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[1].friendlyLink}`);
-        browser.assert.text('ul#products li.product:nth-child(2) .cart-data .product-info span.price',
-                            `${results[1].formattedPrice} ${process.env.CURRENCY}`);
+//        browser.assert.text('ul#products li.product:nth-child(2) .cart-data .product-info span.price',
+//                            `${results[1].formattedPrice} ${process.env.CURRENCY}`);
+        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+                            `${results[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
+ 
         browser.assert.text(`ul#products li.product:nth-child(2) .cart-data form input[type=hidden][name=id][value="${results[1].id}"]`);
  
         done();
@@ -165,7 +342,8 @@ describe('index', () => {
             }
             expect(results.length).toEqual(1);
             expect(results[0].session.cart.items.length).toEqual(1);
-            expect(results[0].session.cart.totals).toEqual(product.price);
+            expect(results[0].session.cart.totals.currencies['ETH'].total).toEqual(product.prices[0].price);
+            expect(results[0].session.cart.totals.currencies['BTC'].total).toEqual(product.prices[1].price);
             done();
           });
         });
