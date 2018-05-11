@@ -1,6 +1,8 @@
 <% include header %>
   <% include messages %>
 
+  <% include currency-selector %>
+
   <% if(products && products.length > 0) { %>
     <ul id="products" class="row equal">
       <% var i = 0; products.forEach(function(product) { i++; %>
@@ -17,7 +19,7 @@
           <div class="cart-data">
             <div class="product-info">
               <span class="price">
-                <%= product.formattedPrice %> <%= process.env.CURRENCY %>
+                <%= product.prices[0].formattedPrice %> <%= cart.preferredCurrency %>
               </span>
               <form action="/cart" method="post">
                 <% if (product.options.length) { %>
