@@ -1,24 +1,37 @@
 {
+  "wallets": {
+    "_model": "Wallet",
+    "eth": {
+      "currency": "ETH",
+      "address": "0x123abc",
+      "name": "Ethereum"
+    },
+    "btc": {
+      "currency": "BTC",
+      "address": "0x123abc",
+      "name": "Bitcoin"
+    }
+  },
   "products": {
     "_model": "Product",
     "man-shirt": {
       "name": "Men's Mining T",
       "description": "Get fired from your job for looking too cool in this sick Mining King T",
-      "price": 91990000,
+      "prices": [{ "price": 91990000, "wallet": "->wallets.eth" }, { "price": 619900, "wallet": "->wallets.btc" }],
       "images": ["man-shirt.jpg", "man-shirt-back.jpg", "man-shirt-back-cu.jpg"],
       "options": ["Small", "Medium", "Large"]
     },
     "woman-shirt": {
       "name": "Women's Mining T",
       "description": "Mining Ts are like sexy ladies... they come in all sizes!",
-      "price": 91990000,
+      "prices": [{ "price": 91990000, "wallet": "->wallets.eth" }, { "price": 619900, "wallet": "->wallets.btc" }],
       "images": ["woman-shirt.jpg"],
       "options": ["Small", "Medium", "Large"]
     },
     "kid-shirt": {
       "name": "Children's Mining T",
       "description": "Kids aren't allowed in the mines, but they can still rock cool Mining schwag",
-      "price": 81990000,
+      "prices": [{ "price": 91990000, "wallet": "->wallets.eth" }, { "price": 619900, "wallet": "->wallets.btc" }],
       "images": ["kid-shirt.jpg"],
       "options": ["Small", "Medium", "Large"]
     }
