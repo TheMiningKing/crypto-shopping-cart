@@ -36,7 +36,7 @@ router.get('/', (req, res) => {
  * POST /
  */
 router.post('/', (req, res) => {
-  models.Product.findOne({_id: req.body.id}).then(prod => {
+  models.Product.findOne({_id: req.body.id}).populate('prices.wallet').then(prod => {
     Cart.addToCart(prod, req.body.option, req.session.cart);
     res.redirect('/cart');
   }).catch(err => {
@@ -257,6 +257,15 @@ router.get('/receipt', (req, res) => {
       qr: url
     });
   });
+});
+
+/**
+ * POST /set-currency
+ */
+router.post('/set-currency', (req, res) => {
+  req.session.cart.preferredCurrency = req.body.currency;
+  req.flash('info', `Currency switched to ${req.session.cart.preferredCurrency}`);
+  res.redirect(req.get('Referrer'));
 });
 
 module.exports = router;
