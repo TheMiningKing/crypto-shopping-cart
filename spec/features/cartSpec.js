@@ -57,12 +57,20 @@ describe('cart', () => {
     beforeEach((done) => {
       browser = new Browser({ waitDuration: '30s', loadCss: false });
 
-      browser.visit('/', (err) => {
+      fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
         if (err) done.fail(err);
-        browser.clickLink('Checkout', (err) => {
+
+        fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
           if (err) done.fail(err);
-          browser.assert.success();
-          done();
+
+          browser.visit('/', (err) => {
+            if (err) done.fail(err);
+            browser.clickLink('Checkout', (err) => {
+              if (err) done.fail(err);
+              browser.assert.success();
+              done();
+            });
+          });
         });
       });
     });
@@ -78,6 +86,10 @@ describe('cart', () => {
 
     it('does not display an order form', () => {
       browser.assert.elements('form', 0);
+    });
+
+    it('does not display if there is only one accepted currency', () => {
+      browser.assert.elements('form[action="/cart/set-currency"]', 0);
     });
   });
 
@@ -98,13 +110,16 @@ describe('cart', () => {
   
             browser.visit('/', (err) => {
               if (err) done.fail(err);
+              browser.assert.success();
   
-              browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+              browser.pressButton('li.product:nth-child(1) form button[type=submit]', (err) => {
+                if (err) done.fail(err);
   
                 browser.visit('/', (err) => {
                   if (err) done.fail(err);
-  
-                  browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
+
+                  browser.pressButton('li.product:nth-child(2) form button[type=submit]', (err) => {
+                    if (err) done.fail(err);
                     browser.assert.redirected();
                     browser.assert.url('/cart');
                     done();
@@ -123,12 +138,12 @@ describe('cart', () => {
       browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${products[0].id}/${products[0].options[0]}"]`);
       browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].images[0]}"]`);
       browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
-      browser.assert.text('tr:nth-child(1) td:nth-child(4)', products[0].formattedPrice);
+      browser.assert.text('tr:nth-child(1) td:nth-child(4)', products[0].prices[0].formattedPrice);
 
       browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`);
       browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].images[0]}"]`);
       browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
-      browser.assert.text('tr:nth-child(2) td:nth-child(4)', products[1].formattedPrice);
+      browser.assert.text('tr:nth-child(2) td:nth-child(4)', products[1].prices[0].formattedPrice);
 
       browser.assert.text('tr.info',
           `${Number(Units.convert(products[0].prices[0].price * 2, 'gwei', 'eth'))} ${process.env.PREFERRED_CURRENCY}`);
@@ -288,7 +303,11 @@ describe('cart', () => {
               browser.visit('/', (err) => {
                 if (err) done.fail(err);
                 browser.assert.success();
-                done();
+                browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+                  browser.assert.redirected();
+                  browser.assert.url('/cart');
+                  done();
+                });
               });
             }).catch((error) => {
               done.fail();
@@ -299,10 +318,11 @@ describe('cart', () => {
         });
 
         it('does not display if there is only one accepted currency', () => {
+          browser.assert.element('.cart-table tr .product-thumb');
           browser.assert.elements('form[action="/cart/set-currency"]', 0);
         });
       });
-  
+
       describe('multiple currencies accepted', () => {
 
         let _wallets, _products;
@@ -316,13 +336,25 @@ describe('cart', () => {
               fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
                 if (err) done.fail(err);
 
-                models.Product.find({}).then((products) => {
+                models.Product.find({}).sort('createdAt').then((products) => {
                   _products = products;
 
                   browser.visit('/', (err) => {
                     if (err) done.fail(err);
                     browser.assert.success();
-                    done();
+
+                    browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+
+                      browser.visit('/', (err) => {
+                        if (err) done.fail(err);
+
+                        browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
+                          browser.assert.redirected();
+                          browser.assert.url('/cart');
+                          done();
+                        });
+                      });
+                    });
                   });
                 }).catch((error) => {
                   done.fail(error);
@@ -343,26 +375,46 @@ describe('cart', () => {
         });
 
         it('updates product details if a new preferred currency is set', (done) => {
+          browser.assert.elements('.cart-table tr .product-thumb', 2);
+
           // First product
-          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                              `${_products[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
+          browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${_products[0].id}/${_products[0].options[0]}"]`);
+          browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${_products[0].images[0]}"]`);
+          browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${_products[0].name} - ${_products[0].options[0]}`);
+          browser.assert.text('tr:nth-child(1) td:nth-child(4)', _products[0].prices[0].formattedPrice);
+    
           // Second product
-          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                              `${_products[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
- 
+          browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${_products[1].id}"]`);
+          browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${_products[1].images[0]}"]`);
+          browser.assert.text('tr:nth-child(2) td:nth-child(3)', _products[1].name);
+          browser.assert.text('tr:nth-child(2) td:nth-child(4)', _products[1].prices[0].formattedPrice);
+    
+          browser.assert.text('tr.info', `${Number(Units.convert(_products[0].prices[0].price * 2, 'gwei', 'eth'))} ${_wallets[0].currency}`);
+
           browser
           .select('form[action="/cart/set-currency"] select', `${_wallets[1].name} (${_wallets[1].currency})`)
           .pressButton('form[action="/cart/set-currency"] button[type=submit]', () => {
             browser.assert.redirected();
-            browser.assert.url('/');
+            browser.assert.url('/cart');
             browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
 
             // First product
-            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                                `${_products[0].prices[1].formattedPrice} ${_wallets[1].currency}`);
+            browser.assert.elements('.cart-table tr .product-thumb', 2);
+
+            // First product
+            browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${_products[0].id}/${_products[0].options[0]}"]`);
+            browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${_products[0].images[0]}"]`);
+            browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${_products[0].name} - ${_products[0].options[0]}`);
+            browser.assert.text('tr:nth-child(1) td:nth-child(4)', _products[0].prices[1].formattedPrice);
+
             // Second product
-            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                                `${_products[1].prices[1].formattedPrice} ${_wallets[1].currency}`);
+            browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${_products[1].id}"]`);
+            browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${_products[1].images[0]}"]`);
+            browser.assert.text('tr:nth-child(2) td:nth-child(3)', _products[1].name);
+            browser.assert.text('tr:nth-child(2) td:nth-child(4)', _products[1].prices[1].formattedPrice);
+
+            browser.assert.text('tr.info', `${Number(Units.convert(_products[0].prices[1].price * 2, 'gwei', 'eth'))} ${_wallets[1].currency}`);
+
             done();
           });
         });
@@ -393,6 +445,4 @@ describe('cart', () => {
       });
     });
   });
-
-
 });
