@@ -269,8 +269,6 @@ describe('index', () => {
         browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[0].images[0]}"]`);
         browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[0].friendlyLink}`);
         browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
-//        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-//                            `${results[0].formattedPrice} ${process.env.CURRENCY}`);
         browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                             `${results[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
  
@@ -280,8 +278,6 @@ describe('index', () => {
         browser.assert.text('ul#products li.product:nth-child(2) .product-description', results[1].description);
         browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[1].images[0]}"]`);
         browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[1].friendlyLink}`);
-//        browser.assert.text('ul#products li.product:nth-child(2) .cart-data .product-info span.price',
-//                            `${results[1].formattedPrice} ${process.env.CURRENCY}`);
         browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                             `${results[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
  
@@ -342,8 +338,8 @@ describe('index', () => {
             }
             expect(results.length).toEqual(1);
             expect(results[0].session.cart.items.length).toEqual(1);
-            expect(results[0].session.cart.totals.currencies['ETH'].total).toEqual(product.prices[0].price);
-            expect(results[0].session.cart.totals.currencies['BTC'].total).toEqual(product.prices[1].price);
+            expect(results[0].session.cart.totals['ETH'].total).toEqual(product.prices[0].price);
+            expect(results[0].session.cart.totals['BTC'].total).toEqual(product.prices[1].price);
             done();
           });
         });
