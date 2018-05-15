@@ -17,12 +17,12 @@
     <div class="payment-info">
       <div>
         <span>Send:</span>
-        <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
+        <span><%- cart.totals[cart.preferredCurrency].formattedTotal %> <%- cart.preferredCurrency %></span>
       </div>
       <div>
         <span>To:</span>
         <span><img src="cid:qr.png"></span>
-        <span id="wallet"><%- process.env.WALLET %></span>
+        <span id="wallet"><%- wallet.address %></span>
       </div>
     </div>
     <h2>
@@ -46,13 +46,13 @@
               <% } %>
             </td>
             <td>
-              <%= product.formattedPrice %>
+              <%= product.prices[cart.preferredCurrency].formattedPrice %>
             </td>
           </tr>
         <% }); %>
         <tr class="info">
           <td colspan="5" class="text-right">
-            Total: <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+            Total: <%= cart.totals[cart.preferredCurrency].formattedTotal %> <%= cart.preferredCurrency %>
           </td>
         </tr>
       </tbody>

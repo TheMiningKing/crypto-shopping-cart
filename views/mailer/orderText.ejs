@@ -1,17 +1,17 @@
 Thank you!
 
-You sent <%- cart.formattedTotal %> <%- process.env.CURRENCY %> to <%- process.env.WALLET %>
+You sent <%- cart.totals[cart.preferredCurrency].formattedTotal %> <%- cart.preferredCurrency %> to <%- wallet.address %>
 
 Your transaction ID: <%- cart.order.transaction %>
 
 --------------------------------
 
 <% cart.items.forEach((item, i) => { %> 
-  <%- i + 1 %>. <%- item.name %><%= item.option ? ` - ${item.option}` : '' %>, <%- item.formattedPrice %>
+  <%- i + 1 %>. <%- item.name %><%= item.option ? ` - ${item.option}` : '' %>, <%- item.prices[cart.preferredCurrency].formattedPrice %>
 <% }); %>
 
 ------
-TOTAL: <%- cart.formattedTotal %> <%- process.env.CURRENCY %>
+TOTAL: <%- cart.totals[cart.preferredCurrency].formattedTotal %> <%- cart.preferredCurrency %>
 --------------------------------
 
 You will receive confirmation and a tracking number once your order is processed.

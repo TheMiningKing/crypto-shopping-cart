@@ -15,13 +15,13 @@
             <% } %>
           </td>
           <td>
-            <%= product.formattedPrice %>
+            <%= product.prices[cart.preferredCurrency].formattedPrice %>
           </td>
         </tr>
       <% }); %>
       <tr class="info">
         <td colspan="5" class="text-right">
-          <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+          <%= cart.totals[cart.preferredCurrency].formattedTotal %> <%= cart.preferredCurrency %>
         </td>
       </tr>
     </tbody>

@@ -11,7 +11,7 @@
     <header>
       <h3>Thank you!</h3>
       <p>
-        You sent <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> to <em><%- process.env.WALLET %></em>.
+        You sent <em><%- cart.totals[cart.preferredCurrency].formattedTotal %> <%- cart.preferredCurrency %></em> to <em><%- wallet.address %></em>.
       </p>
     </header>
     <div class="payment-info">
@@ -45,13 +45,13 @@
               <% } %>
             </td>
             <td>
-              <%= product.formattedPrice %>
+              <%= product.prices[cart.preferredCurrency].formattedPrice %>
             </td>
           </tr>
         <% }); %>
         <tr class="info">
           <td colspan="5" class="text-right">
-            Total: <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+            Total: <%= cart.totals[cart.preferredCurrency].formattedTotal %> <%= cart.preferredCurrency %>
           </td>
         </tr>
       </tbody>
