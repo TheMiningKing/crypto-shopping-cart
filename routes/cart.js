@@ -15,20 +15,33 @@ const QRCode = require('qrcode')
  * GET /
  */
 router.get('/', (req, res) => {
-  let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
-  QRCode.toString(process.env.WALLET, { type: 'svg' }, (err, url) => {
-    if (err) {
-      console.log(err);
-    }
 
-    res.render('cart', {
-      path: req.originalUrl,
-      cart: cart,
-      messages: req.flash(),
-      details: {},
-      referrer: req.get('Referrer'),
-      qr: url
+  if(!req.session.cart) {
+    req.session.cart = {
+      items: [],
+      totals: 0,
+      preferredCurrency: process.env.PREFERRED_CURRENCY
+    };
+  }  
+
+  models.Wallet.findOne({ currency: req.session.cart.preferredCurrency }).then((wallet) => {
+    QRCode.toString(wallet ? wallet.address : 'dummy', { type: 'svg' }, (err, url) => {
+      if (err) {
+        console.log(err);
+      }
+  
+      res.render('cart', {
+        path: req.originalUrl,
+        cart: req.session.cart,
+        messages: req.flash(),
+        details: {},
+        referrer: req.get('Referrer') || '/',
+        qr: url
+      });
     });
+  }).catch((error) => {
+    req.flash('error', [ { message: 'Something went wrong' } ]);
+    return res.redirect('/cart');
   });
 });
 
