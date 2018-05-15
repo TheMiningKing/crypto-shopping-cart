@@ -1,6 +1,7 @@
 <% include header %>
 <% include messages %>
 <% if (cart && cart.items.length) { %>
+  <% include currency-selector %>
   <table class="cart-table table table-bordered table-striped">
     <tbody>
       <% cart.items.forEach(function(product) { %>
@@ -20,7 +21,7 @@
             <% } %>
           </td>
           <td>
-            <%= product.formattedPrice %>
+            <%= product.prices[cart.preferredCurrency].formattedPrice %>
           </td>
         </tr>
       <% }); %>
