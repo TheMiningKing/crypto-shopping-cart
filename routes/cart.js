@@ -24,8 +24,23 @@ router.get('/', (req, res) => {
     };
   }  
 
-  models.Wallet.findOne({ currency: req.session.cart.preferredCurrency }).then((wallet) => {
-    QRCode.toString(wallet ? wallet.address : 'dummy', { type: 'svg' }, (err, url) => {
+  models.Wallet.find().then((wallets) => {
+//  models.Wallet.findOne({ currency: req.session.cart.preferredCurrency }).then((wallet) => {
+
+    let index = -1;
+    wallets.forEach((wallet, i) => {
+      if (!index && wallet.currency === req.session.cart.preferredCurrency) {
+        index = i;
+      }
+    }); // It's left to the developer to ensure only one wallet for each currency
+    let preferredWallet;
+    if (index >= 0) {
+        preferredWallet = wallets[index];
+    }
+    
+    QRCode.toString(preferredWallet ? preferredWallet.address : 'This is not a valid address!!!',
+      { type: 'svg' }, (err, url) => {
+
       if (err) {
         console.log(err);
       }
@@ -36,7 +51,8 @@ router.get('/', (req, res) => {
         messages: req.flash(),
         details: {},
         referrer: req.get('Referrer') || '/',
-        qr: url
+        qr: url,
+        wallets: wallets
       });
     });
   }).catch((error) => {
