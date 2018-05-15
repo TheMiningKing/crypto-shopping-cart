@@ -97,13 +97,19 @@ router.post('/checkout', (req, res) => {
           console.log(err);
         }
   
-        res.render('cart', {
-          path: req.originalUrl,
-          cart: cart,
-          messages: { error: errors },
-          qr: url,
-          referrer: req.get('Referrer'),
-          details: req.body
+        models.Wallet.find().then((wallets) => {
+          res.render('cart', {
+            path: req.originalUrl,
+            cart: cart,
+            messages: { error: errors },
+            qr: url,
+            referrer: req.get('Referrer'),
+            details: req.body,
+            wallets: wallets
+          });
+        }).catch((error) => {
+          req.flash('error', [ { message: 'Something went wrong' } ]);
+          return res.redirect('/cart');
         });
       });
     }

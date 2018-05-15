@@ -15,12 +15,16 @@ describe('checkout', () => {
   beforeEach((done) => {
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
-    fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+    fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
       if (err) done.fail(err);
 
-      models.Product.find({}).sort('createdAt').then((results) => {
-        products = results;
-        done();
+      fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+        if (err) done.fail(err);
+  
+        models.Product.find({}).sort('createdAt').then((results) => {
+          products = results;
+          done();
+        });
       });
     });
   });
