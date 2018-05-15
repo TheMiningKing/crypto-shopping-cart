@@ -78,9 +78,7 @@ app.get('/', (req, res) => {
     wallets.some((wallet) => {
       if (wallet.currency === req.session.cart.preferredCurrency) {
         preferredWallet = wallet;
-        return true;
       }
-      return false;
     });
 
     // 2018-5-11 https://stackoverflow.com/questions/25586901/how-to-find-document-and-single-subdocument-matching-given-criterias-in-mongodb
