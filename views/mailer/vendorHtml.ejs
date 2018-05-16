@@ -9,7 +9,7 @@
 <body>
   <section id="content" class="container">
     <p>
-      <em><%- cart.formattedTotal %> <%- process.env.CURRENCY %></em> was sent to <em><%- process.env.WALLET %></em>.
+      <em><%- cart.totals[cart.preferredCurrency].formattedTotal %> <%- cart.preferredCurrency %></em> was sent to <em><%- wallet.address %></em>.
     </p>
     <div class="payment-info">
       <p>
@@ -42,13 +42,13 @@
               <% } %>
             </td>
             <td>
-              <%= product.formattedPrice %>
+              <%= product.prices[cart.preferredCurrency].formattedPrice %>
             </td>
           </tr>
         <% }); %>
         <tr class="info">
           <td colspan="5" class="text-right">
-            Total: <%= cart.formattedTotal %> <%= process.env.CURRENCY %>
+            Total: <%= cart.totals[cart.preferredCurrency].formattedTotal %> <%= cart.preferredCurrency %>
           </td>
         </tr>
       </tbody>
