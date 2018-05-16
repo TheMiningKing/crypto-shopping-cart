@@ -16,17 +16,7 @@ const QRCode = require('qrcode')
  */
 router.get('/', (req, res) => {
 
-  if(!req.session.cart) {
-    req.session.cart = {
-      items: [],
-      totals: 0,
-      preferredCurrency: process.env.PREFERRED_CURRENCY
-    };
-  }  
-
   models.Wallet.find().then((wallets) => {
-//  models.Wallet.findOne({ currency: req.session.cart.preferredCurrency }).then((wallet) => {
-
     let index = -1;
     wallets.forEach((wallet, i) => {
       if (!index && wallet.currency === req.session.cart.preferredCurrency) {
@@ -35,7 +25,7 @@ router.get('/', (req, res) => {
     }); // It's left to the developer to ensure only one wallet for each currency
     let preferredWallet;
     if (index >= 0) {
-        preferredWallet = wallets[index];
+      preferredWallet = wallets[index];
     }
     
     QRCode.toString(preferredWallet ? preferredWallet.address : 'This is not a valid address!!!',
@@ -85,8 +75,6 @@ router.get('/remove/:id/:option?', (req, res) => {
  * POST /checkout
  */
 router.post('/checkout', (req, res) => {
-  let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
-
   models.Wallet.findOne({ currency: req.session.cart.preferredCurrency }).then((wallet) => {
 
     // Validate order form
@@ -100,7 +88,7 @@ router.post('/checkout', (req, res) => {
         models.Wallet.find().then((wallets) => {
           res.render('cart', {
             path: req.originalUrl,
-            cart: cart,
+            cart: req.session.cart,
             messages: { error: errors },
             qr: url,
             referrer: req.get('Referrer'),
@@ -115,7 +103,7 @@ router.post('/checkout', (req, res) => {
     }
     else {
   
-      Cart.purchase(req.body, cart);
+      Cart.purchase(req.body, req.session.cart);
   
       // Determine appropriate mailer templates
       const orderPaid = req.body.transaction && req.body.transaction.trim();
@@ -147,7 +135,7 @@ router.post('/checkout', (req, res) => {
           }
   
           // Get vendor HTML content 
-          ejs.renderFile(`${__dirname}/../views/mailer/${vendorHtmlTemplate}`, { cart: req.session.cart, qr: qr }, (err, htmlVendor) => {
+          ejs.renderFile(`${__dirname}/../views/mailer/${vendorHtmlTemplate}`, { cart: req.session.cart, qr: qr, wallet: wallet }, (err, htmlVendor) => {
             if (err) {
               console.log(err);
               req.flash('error', [ { message: 'Something went wrong' } ]);
@@ -234,7 +222,7 @@ router.post('/checkout', (req, res) => {
                             req.flash('success', `Your order has been received. An email copy of this receipt will be sent to ${req.body.email}`);
                             return res.redirect('/cart/receipt');
                           }
-                          Cart.emptyCart(cart);
+                          Cart.emptyCart(req.session.cart);
                           req.flash('success', `Your order has been received. Transaction instructions will be sent to ${req.body.email}`);
                           res.redirect('/');
                         });
@@ -270,11 +258,10 @@ router.post('/checkout', (req, res) => {
  * GET /receipt
  */
 router.get('/receipt', (req, res) => {
-  let cart = (typeof req.session.cart !== 'undefined') ? req.session.cart : false;
 
-  if (!cart || !cart.order) {
+  if (!req.session.cart.order) {
     res.render('receipt', {
-      cart: cart,
+      cart: req.session.cart,
       path: req.originalUrl,
       referrer: req.get('Referrer') || '/',
       messages: req.flash()
@@ -282,12 +269,12 @@ router.get('/receipt', (req, res) => {
     return;
   }
 
-  QRCode.toString(cart.order.transaction, { type: 'svg' }, (err, url) => {
+  QRCode.toString(req.session.cart.order.transaction, { type: 'svg' }, (err, url) => {
     if (err) {
       console.log(err);
     }
 
-    cart = Object.assign({}, cart);
+    let cart = Object.assign({}, req.session.cart);
     Cart.emptyCart(req.session.cart);
 
     res.render('receipt', {
