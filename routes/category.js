@@ -8,14 +8,6 @@ const models = require('../models');
  * GET /
  */
 router.get('/:category', (req, res) => {
-  if(!req.session.cart) {
-    req.session.cart = {
-      items: [],
-      totals: 0,
-      preferredCurrency: process.env.PREFERRED_CURRENCY
-    };
-  }
-
   models.Wallet.find({}).then((wallets) => {
     let preferredWallet;
     wallets.some((wallet) => {
