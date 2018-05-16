@@ -25,11 +25,11 @@ describe('cart', () => {
   it('adds a session containing an empty cart on first visit', (done) => {
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
-    models.collection('sessions').find({}).toArray((err, results) => {
+    models.collection('sessions').count({}, (err, results) => {
       if (err) {
         done.fail(err);
       }
-      expect(results.length).toEqual(0);
+      expect(results).toEqual(0);
       browser.visit('/cart', (err) => {
         if (err) {
           done.fail(err);
@@ -44,7 +44,7 @@ describe('cart', () => {
           expect(results[0].session.cookie).not.toBe(undefined);
           expect(results[0].session.cart).not.toBe(undefined);
           expect(results[0].session.cart.items).toEqual([]);
-          expect(results[0].session.cart.totals).toEqual(0);
+          expect(results[0].session.cart.totals).toEqual({});
           expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
           expect(results[0].expires).not.toBe(undefined);
           done();

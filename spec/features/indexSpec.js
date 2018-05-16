@@ -18,16 +18,14 @@ describe('index', () => {
     });
   });
 
-  // Note to self: this test fails if the file is run standalone
-  // (toArray not defined)
   it('adds a session containing an empty cart on first visit', (done) => {
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
-    models.collection('sessions').find({}).toArray((err, results) => {
+    models.collection('sessions').count({}, (err, results) => {
       if (err) {
         done.fail(err);
       }
-      expect(results.length).toEqual(0);
+      expect(results).toEqual(0);
       browser.visit('/', (err) => {
         if (err) {
           done.fail(err);
