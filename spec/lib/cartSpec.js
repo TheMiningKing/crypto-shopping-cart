@@ -250,4 +250,13 @@ describe('Cart', () => {
       expect(cartSession.order.email).toEqual(order.email);
     });
   });
+
+  describe('.getEmptyCart', () => {
+    it('returns an empty cart object', () => {
+      const cart = Cart.getEmptyCart();
+      expect(cart.items).toEqual([]);
+      expect(cart.totals).toEqual({});
+      expect(cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+    });
+  });
 });
