@@ -5,6 +5,7 @@ const app = express();
 const bodyParser = require('body-parser');
 const models = require('./models');
 const path = require('path');
+const Cart = require('./lib/cart');
 
 /**
  * Set static directory
@@ -55,6 +56,16 @@ const flash = require('connect-flash');
 app.use(flash());
 
 /**
+ * Session shopping cart
+ */
+app.use((req, res, next) => {
+  if (!req.session.cart) {
+    req.session.cart = Cart.getEmptyCart();
+  }
+  next();
+});
+
+/**
  * Routes
  */
 app.use('/cart', require('./routes/cart'));
@@ -65,14 +76,6 @@ app.use('/product', require('./routes/product'));
  * Landing page
  */
 app.get('/', (req, res) => {
-  if(!req.session.cart) {
-    req.session.cart = {
-      items: [],
-      totals: 0,
-      preferredCurrency: process.env.PREFERRED_CURRENCY
-    };
-  }  
-
   models.Wallet.find({}).then((wallets) => {
     let preferredWallet;
     wallets.some((wallet) => {
