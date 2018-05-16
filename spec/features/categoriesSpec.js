@@ -59,7 +59,7 @@ describe('categories', () => {
             expect(results[0].session.cookie).not.toBe(undefined);
             expect(results[0].session.cart).not.toBe(undefined);
             expect(results[0].session.cart.items).toEqual([]);
-            expect(results[0].session.cart.totals).toEqual(0);
+            expect(results[0].session.cart.totals).toEqual({});
             expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
             expect(results[0].expires).not.toBe(undefined);
             done();
