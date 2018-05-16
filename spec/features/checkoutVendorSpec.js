@@ -14,16 +14,28 @@ Browser.localhost('example.com', PORT);
 
 describe('checkout', () => {
 
-  let browser, products;
+  let browser, products, _wallets;
   beforeEach((done) => {
     browser = new Browser({ waitDuration: '30s', loadCss: false });
 
-    fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+    fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
       if (err) done.fail(err);
 
-      models.Product.find({}).sort('createdAt').then((results) => {
-        products = results;
-        done();
+      models.Wallet.find({}).sort('createdAt').then((results) => {
+        _wallets = results;
+
+        fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
+          if (err) done.fail(err);
+    
+          models.Product.find({}).sort('createdAt').then((results) => {
+            products = results;
+            done();
+          }).catch((error) => {
+            done.fail(error); 
+          });
+        });
+      }).catch((error) => {
+        done.fail(error); 
       });
     });
   });
@@ -114,11 +126,11 @@ describe('checkout', () => {
           it('sends an email with text content to the vendor', () => {
             const text = mailer.transport.sentMail[0].data.text;
             expect(text).toContain(
-              `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
-            expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-            expect(text).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+              `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
+            expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
+            expect(text).toContain(`TOTAL: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
     
-            expect(text).toContain(`${cart.formattedTotal} ${process.env.CURRENCY} was sent to ${process.env.WALLET}`);
+            expect(text).toContain(`${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY} was sent to ${_wallets[0].address}`);
             expect(text).toContain(`Transaction ID: ${_order.transaction}`);
 
             expect(text).toContain('Shipping details:');
@@ -136,17 +148,17 @@ describe('checkout', () => {
             expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
             expect(html).toContain(cart.items[0].name);
             expect(html).toContain(`- ${cart.items[0].option}`);
-            expect(html).toContain(cart.items[0].formattedPrice);
+            expect(html).toContain(cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
     
             expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
             expect(html).toContain(cart.items[1].name);
-            expect(html).toContain(cart.items[1].formattedPrice);
+            expect(html).toContain(cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
      
-            expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+            expect(html).toContain(`Total: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
     
             // ___ ETH was sent to ___ 
-            expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
-            expect(html).toContain(`${process.env.WALLET}`);
+            expect(html).toContain(`${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
+            expect(html).toContain(`${_wallets[0].address}`);
 
             // TransactionID
             expect(html).toContain(_order.transaction);
@@ -212,11 +224,11 @@ describe('checkout', () => {
           it('sends an email with text content to the vendor', () => {
             const text = mailer.transport.sentMail[0].data.text;
             expect(text).toContain(
-              `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
-            expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-            expect(text).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+              `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
+            expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
+            expect(text).toContain(`TOTAL: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
     
-            expect(text).toContain(`The customer was instructed to send ${cart.formattedTotal} ${process.env.CURRENCY} to ${process.env.WALLET}`);
+            expect(text).toContain(`The customer was instructed to send ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY} to ${_wallets[0].address}`);
 
             expect(text).toContain('Shipping details:');
             expect(text).toContain(_order.recipient);
@@ -233,17 +245,17 @@ describe('checkout', () => {
             expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
             expect(html).toContain(cart.items[0].name);
             expect(html).toContain(`- ${cart.items[0].option}`);
-            expect(html).toContain(cart.items[0].formattedPrice);
+            expect(html).toContain(cart.items[0].prices[cart.preferredCurrency].formattedPrice);
     
             expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
             expect(html).toContain(cart.items[1].name);
-            expect(html).toContain(cart.items[1].formattedPrice);
+            expect(html).toContain(cart.items[1].prices[cart.preferredCurrency].formattedPrice);
      
-            expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+            expect(html).toContain(`Total: ${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
     
             // The customer was instructed to send ___ ETH to ___ 
-            expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
-            expect(html).toContain(`${process.env.WALLET}`);
+            expect(html).toContain(`${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
+            expect(html).toContain(`${_wallets[0].address}`);
 
             // TransactionID
             expect(html).not.toContain(_order.transaction);
@@ -299,11 +311,11 @@ describe('checkout', () => {
           it('sends an email with text content to the vendor', () => {
             const text = mailer.transport.sentMail[0].data.text;
             expect(text).toContain(
-              `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].formattedPrice}`);
-            expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].formattedPrice}`);
-            expect(text).toContain(`TOTAL: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+              `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].prices[cart.preferredCurrency].formattedPrice}`);
+            expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].prices[cart.preferredCurrency].formattedPrice}`);
+            expect(text).toContain(`TOTAL: ${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
     
-            expect(text).toContain(`${cart.formattedTotal} ${process.env.CURRENCY} was sent to ${process.env.WALLET}`);
+            expect(text).toContain(`${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency} was sent to ${_wallets[0].address}`);
             expect(text).toContain(`Transaction ID: ${_order.transaction}`);
 
             expect(text).toContain('Shipping details:');
@@ -321,17 +333,17 @@ describe('checkout', () => {
             expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
             expect(html).toContain(cart.items[0].name);
             expect(html).toContain(`- ${cart.items[0].option}`);
-            expect(html).toContain(cart.items[0].formattedPrice);
+            expect(html).toContain(cart.items[0].prices[cart.preferredCurrency].formattedPrice);
     
             expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
             expect(html).toContain(cart.items[1].name);
-            expect(html).toContain(cart.items[1].formattedPrice);
+            expect(html).toContain(cart.items[1].prices[cart.preferredCurrency].formattedPrice);
      
-            expect(html).toContain(`Total: ${cart.formattedTotal} ${process.env.CURRENCY}`);
+            expect(html).toContain(`Total: ${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
     
             // ___ ETH was sent to ___ 
-            expect(html).toContain(`${cart.formattedTotal} ${process.env.CURRENCY}`);
-            expect(html).toContain(`${process.env.WALLET}`);
+            expect(html).toContain(`${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
+            expect(html).toContain(`${_wallets[0].address}`);
 
             // TransactionID
             expect(html).toContain(_order.transaction);
