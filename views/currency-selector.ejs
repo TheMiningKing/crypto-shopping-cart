@@ -1,12 +1,17 @@
 <% if (wallets.length > 1) { %>
-  <form action="/cart/set-currency" method="post">
-    <select class="form-control" name="currency">
-      <% wallets.forEach((option) => { %>
-        <option value="<%= option.currency %>"><%= option.name %> (<%= option.currency %>)</option>
+  <nav class="navbar currency-nav">
+    <div class="navbar-header navbar-left">
+      <% wallets.forEach((wallet) => { %>
+        <% if  (wallet.currency === cart.preferredCurrency) { %>
+        <span class="active">
+          <%= wallet.name %>
+        </span>
+        <% } else { %>
+          <a class="nav-link" href="/cart/set-currency/<%= wallet.currency %>">
+            <%= wallet.name %>
+          </a>
+        <% } %>
       <% }); %>
-    </select>
-    <button type="submit" class="btn btn-primary">
-      Set preferred currency 
-    </button>
-  </form>
+    </div>
+  </nav>
 <% } %>
