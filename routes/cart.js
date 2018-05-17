@@ -288,12 +288,22 @@ router.get('/receipt', (req, res) => {
 });
 
 /**
- * POST /set-currency
+ * GET /set-currency/:currency
  */
-router.post('/set-currency', (req, res) => {
-  req.session.cart.preferredCurrency = req.body.currency;
-  req.flash('info', `Currency switched to ${req.session.cart.preferredCurrency}`);
-  res.redirect(req.get('Referrer'));
+router.get('/set-currency/:currency', (req, res) => {
+  models.Wallet.count({ currency: req.params.currency }).then((count) => {
+    if (count) {
+      req.session.cart.preferredCurrency = req.params.currency;
+      req.flash('info', `Currency switched to ${req.session.cart.preferredCurrency}`);
+      res.redirect(req.get('Referrer'));
+      return;
+    }
+    req.flash('error', [ { message: `${req.params.currency} is not currently accepted` } ]);
+    res.redirect('/');
+  }).catch((err) => {
+    req.flash('error', [ { message: 'Something went wrong' } ]);
+    return res.redirect('/cart');
+  });
 });
 
 module.exports = router;
