@@ -99,7 +99,6 @@ describe('index', () => {
       });
 
       it('does not display a currency menu', () => {
-        //browser.assert.elements('form[action="/cart/set-currency"]', 0);
         browser.assert.elements('.currency-nav a', 0);
         browser.assert.elements('.currency-nav span', 0);
       });
