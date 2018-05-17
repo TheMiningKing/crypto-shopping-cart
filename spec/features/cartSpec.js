@@ -371,45 +371,50 @@ describe('cart', () => {
         });
 
         it('updates product details if a new preferred currency is set', (done) => {
-          browser.assert.elements('.cart-table tr .product-thumb', 2);
-
-          // First product
-          browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${_products[0].id}/${_products[0].options[0]}"]`);
-          browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${_products[0].images[0]}"]`);
-          browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${_products[0].name} - ${_products[0].options[0]}`);
-          browser.assert.text('tr:nth-child(1) td:nth-child(4)', _products[0].prices[0].formattedPrice);
-    
-          // Second product
-          browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${_products[1].id}"]`);
-          browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${_products[1].images[0]}"]`);
-          browser.assert.text('tr:nth-child(2) td:nth-child(3)', _products[1].name);
-          browser.assert.text('tr:nth-child(2) td:nth-child(4)', _products[1].prices[0].formattedPrice);
-    
-          browser.assert.text('tr.info', `${Number(Units.convert(_products[0].prices[0].price * 2, 'gwei', 'eth'))} ${_wallets[0].currency}`);
-
-          browser.clickLink(_wallets[1].name, () => {
-            browser.assert.redirected();
-            browser.assert.url('/cart');
-            browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
-
-            // First product
+          browser.assert.url('/cart');
+          // The browser is on the checkout page, but the referrer isn't getting set for some reason.
+          // The visit call below ensures the referrer is set correctly in the request headers
+          browser.visit('/cart', (err) => {
             browser.assert.elements('.cart-table tr .product-thumb', 2);
 
             // First product
             browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${_products[0].id}/${_products[0].options[0]}"]`);
             browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${_products[0].images[0]}"]`);
             browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${_products[0].name} - ${_products[0].options[0]}`);
-            browser.assert.text('tr:nth-child(1) td:nth-child(4)', _products[0].prices[1].formattedPrice);
+            browser.assert.text('tr:nth-child(1) td:nth-child(4)', _products[0].prices[0].formattedPrice);
 
             // Second product
             browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${_products[1].id}"]`);
             browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${_products[1].images[0]}"]`);
             browser.assert.text('tr:nth-child(2) td:nth-child(3)', _products[1].name);
-            browser.assert.text('tr:nth-child(2) td:nth-child(4)', _products[1].prices[1].formattedPrice);
+            browser.assert.text('tr:nth-child(2) td:nth-child(4)', _products[1].prices[0].formattedPrice);
 
-            browser.assert.text('tr.info', `${Number(Units.convert(_products[0].prices[1].price * 2, 'gwei', 'eth'))} ${_wallets[1].currency}`);
+            browser.assert.text('tr.info', `${Number(Units.convert(_products[0].prices[0].price * 2, 'gwei', 'eth'))} ${_wallets[0].currency}`);
 
-            done();
+            browser.clickLink(_wallets[1].name, () => {
+              browser.assert.redirected();
+              browser.assert.url('/cart');
+              browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
+
+              // First product
+              browser.assert.elements('.cart-table tr .product-thumb', 2);
+
+              // First product
+              browser.assert.element(`tr:nth-child(1) td a[href="/cart/remove/${_products[0].id}/${_products[0].options[0]}"]`);
+              browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${_products[0].images[0]}"]`);
+              browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${_products[0].name} - ${_products[0].options[0]}`);
+              browser.assert.text('tr:nth-child(1) td:nth-child(4)', _products[0].prices[1].formattedPrice);
+
+              // Second product
+              browser.assert.element(`tr:nth-child(2) td a[href="/cart/remove/${_products[1].id}"]`);
+              browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${_products[1].images[0]}"]`);
+              browser.assert.text('tr:nth-child(2) td:nth-child(3)', _products[1].name);
+              browser.assert.text('tr:nth-child(2) td:nth-child(4)', _products[1].prices[1].formattedPrice);
+ 
+              browser.assert.text('tr.info', `${Number(Units.convert(_products[0].prices[1].price * 2, 'gwei', 'eth'))} ${_wallets[1].currency}`);
+
+              done();
+            });
           });
         });
 
