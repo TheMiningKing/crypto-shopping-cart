@@ -76,7 +76,7 @@ app.use('/product', require('./routes/product'));
  * Landing page
  */
 app.get('/', (req, res) => {
-  models.Wallet.find({}).then((wallets) => {
+  models.Wallet.find({}).sort('createdAt').then((wallets) => {
     let preferredWallet;
     wallets.some((wallet) => {
       if (wallet.currency === req.session.cart.preferredCurrency) {
