@@ -8,7 +8,7 @@ const models = require('../models');
  * GET /
  */
 router.get('/:category', (req, res) => {
-  models.Wallet.find({}).then((wallets) => {
+  models.Wallet.find({}).sort('createdAt').then((wallets) => {
     let preferredWallet;
     wallets.some((wallet) => {
       if (wallet.currency === req.session.cart.preferredCurrency) {
