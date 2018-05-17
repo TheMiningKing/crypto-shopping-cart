@@ -15,8 +15,7 @@ const QRCode = require('qrcode')
  * GET /
  */
 router.get('/', (req, res) => {
-
-  models.Wallet.find().then((wallets) => {
+  models.Wallet.find().sort('createdAt').then((wallets) => {
     let index = -1;
     wallets.forEach((wallet, i) => {
       if (!index && wallet.currency === req.session.cart.preferredCurrency) {
