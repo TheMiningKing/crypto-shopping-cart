@@ -86,6 +86,11 @@ describe('categories', () => {
         browser.assert.elements('i.fa.fa-backward.go-to-shop-lnk', 1);
         browser.assert.link('.navbar-brand', 'See all products', '/');
       });
+
+      it('does not display a currency menu', () => {
+        browser.assert.elements('.currency-nav a', 0);
+        browser.assert.elements('.currency-nav span', 0);
+      });
     });
   
     describe('when category exists', () => {
@@ -152,7 +157,7 @@ describe('categories', () => {
     });
   });
 
-  describe('currency dropdown', () => {
+  describe('currency menu', () => {
 
     describe('no products in database', () => {
       beforeEach((done) => {
@@ -165,8 +170,9 @@ describe('categories', () => {
         });
       });
 
-      it('does not display a currency dropdown', () => {
-        browser.assert.elements('form[action="/cart/set-currency"]', 0);
+      it('does not display a currency menu', () => {
+        browser.assert.elements('.currency-nav a', 0);
+        browser.assert.elements('.currency-nav span', 0);
       });
     });
 
@@ -195,7 +201,8 @@ describe('categories', () => {
         });
 
         it('does not display if there is only one accepted currency', () => {
-          browser.assert.elements('form[action="/cart/set-currency"]', 0);
+          browser.assert.elements('.currency-nav a', 0);
+          browser.assert.elements('.currency-nav span', 0);
         });
       });
   
@@ -230,12 +237,11 @@ describe('categories', () => {
           });
         });
 
-        it('displays the accepted currencies in the dropdown', () => {
-          browser.assert.element('form[action="/cart/set-currency"]');
-          browser.assert.text(`form[action="/cart/set-currency"] select option[value=${_wallets[0].currency}]`,
-                              `${_wallets[0].name} (${_wallets[0].currency})`);
-          browser.assert.text(`form[action="/cart/set-currency"] select option[value=${_wallets[1].currency}]`,
-                              `${_wallets[1].name} (${_wallets[1].currency})`);
+        it('displays the accepted currencies as links', () => {
+          browser.assert.elements('.currency-nav span', 1);
+          browser.assert.elements('.currency-nav a', 1);
+          browser.assert.element('.currency-nav span.active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
+          browser.assert.link('.currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
         });
 
         it('updates product details if a new preferred currency is set', (done) => {
@@ -244,9 +250,7 @@ describe('categories', () => {
           browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
                               `${_products[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
  
-          browser
-          .select('form[action="/cart/set-currency"] select', `${_wallets[1].name} (${_wallets[1].currency})`)
-          .pressButton('form[action="/cart/set-currency"] button[type=submit]', () => {
+          browser.clickLink(_wallets[1].name, () => {
             browser.assert.redirected();
             browser.assert.url('/category/mens');
             browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
@@ -268,9 +272,7 @@ describe('categories', () => {
             expect(results.length).toEqual(1);
             expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[0].currency);
 
-            browser
-            .select('form[action="/cart/set-currency"] select', `${_wallets[1].name} (${_wallets[1].currency})`)
-            .pressButton('form[action="/cart/set-currency"] button[type=submit]', () => {
+            browser.clickLink(_wallets[1].name, () => {
    
               models.collection('sessions').find({}).toArray((err, results) => {
                 if (err) {
