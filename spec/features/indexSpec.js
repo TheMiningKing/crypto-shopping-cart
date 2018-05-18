@@ -152,7 +152,7 @@ describe('index', () => {
               fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
                 if (err) done.fail(err);
 
-                models.Product.find({}).then((products) => {
+                models.Product.find({}).sort('createdAt').then((products) => {
                   _products = products;
 
                   browser.visit('/', (err) => {
