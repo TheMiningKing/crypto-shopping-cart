@@ -97,12 +97,12 @@
             </p>
             <div>
               <span>Send:</span>
-              <span><%- cart.formattedTotal %> <%- process.env.CURRENCY %></span>
+              <span><%- cart.totals[cart.preferredCurrency].formattedTotal %> <%- cart.preferredCurrency %></span>
             </div>
             <div>
               <span>To:</span>
               <span><%- qr %></span>
-              <span><%- process.env.WALLET %></span>
+              <span><%- preferredWallet.address %></span>
             </div>
             <br>
             <label for="transaction" class="control-label">Submit your Transaction ID</label>

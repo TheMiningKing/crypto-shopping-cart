@@ -16,17 +16,13 @@ const QRCode = require('qrcode')
  */
 router.get('/', (req, res) => {
   models.Wallet.find().sort('createdAt').then((wallets) => {
-    let index = -1;
+    let preferredWallet;
     wallets.forEach((wallet, i) => {
-      if (!index && wallet.currency === req.session.cart.preferredCurrency) {
-        index = i;
+      if (wallet.currency === req.session.cart.preferredCurrency) {
+        preferredWallet = wallet;
       }
     }); // It's left to the developer to ensure only one wallet for each currency
-    let preferredWallet;
-    if (index >= 0) {
-      preferredWallet = wallets[index];
-    }
-    
+
     QRCode.toString(preferredWallet ? preferredWallet.address : 'This is not a valid address!!!',
       { type: 'svg' }, (err, url) => {
 
@@ -41,7 +37,8 @@ router.get('/', (req, res) => {
         details: {},
         referrer: req.get('Referrer') || '/',
         qr: url,
-        wallets: wallets
+        wallets: wallets,
+        preferredWallet: preferredWallet
       });
     });
   }).catch((error) => {
@@ -92,7 +89,8 @@ router.post('/checkout', (req, res) => {
             qr: url,
             referrer: req.get('Referrer'),
             details: req.body,
-            wallets: wallets
+            wallets: wallets,
+            preferredWallet: wallet
           });
         }).catch((error) => {
           req.flash('error', [ { message: 'Something went wrong' } ]);

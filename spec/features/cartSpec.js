@@ -184,10 +184,22 @@ describe('cart', () => {
       });
     });
 
-    /* See `checkoutSpec.js` for relevant coverage */
+    it('displays transaction instructions', (done) => {
+      models.Wallet.findOne({ currency: process.env.PREFERRED_CURRENCY }).then((wallet) => {
+        browser.assert.text('.payment-info div:nth-child(2)', `Send: ${Number(Units.convert(products[0].prices[0].price * 2, 'gwei', 'eth'))} ${wallet.currency}`);
+        browser.assert.text('.payment-info div:nth-child(3) span:nth-child(1)', `To:`);
+        browser.assert.text('.payment-info div:nth-child(3) span:nth-child(3)', wallet.address);
+        done();
+      }).catch((error) => {
+        done.fail(error)
+      });
+    });
+
+    /* See `checkout*Spec.js` for relevant coverage */
     it('displays an order submission form', () => {
       browser.assert.element('form.form-horizontal[action="/cart/checkout"]');
     });
+
 
     describe('removing item from cart', () => {
 
