@@ -157,7 +157,7 @@ describe('checkout', () => {
             browser.assert.text('.shipping-info section .province', _order.province);
             browser.assert.text('.shipping-info section .postcode', _order.postcode);
             browser.assert.text('.shipping-info section .email', 'You declined to provide an email');
-            browser.assert.text('.shipping-info footer div:nth-child(1)', `Send questions to ${process.env.FROM}`);
+            browser.assert.text('.shipping-info footer div:nth-child(1)', `Send questions to ${process.env.CONTACT}`);
             browser.assert.text('.shipping-info footer div:nth-child(2)', 'Keep this order for your records.');
           });
 
@@ -230,7 +230,7 @@ describe('checkout', () => {
             browser.assert.text('.shipping-info section .province', _order.province);
             browser.assert.text('.shipping-info section .postcode', _order.postcode);
             browser.assert.text('.shipping-info section .email', _order.email);
-            browser.assert.text('.shipping-info footer div:nth-child(1)', `Send questions to ${process.env.FROM}`);
+            browser.assert.text('.shipping-info footer div:nth-child(1)', `Send questions to ${process.env.CONTACT}`);
             browser.assert.text('.shipping-info footer div:nth-child(2)', 'Keep this order for your records.');
           });
 

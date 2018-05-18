@@ -101,6 +101,12 @@ FROM=your@email.com
 PASSWORD=secret
 
 #
+# Contact email for questions, etc.
+# This will default to `FROM`, if not set
+#
+#CONTACT=questions@email.com
+
+#
 # The needs to be set, even if only one currency is accepted
 #
 PREFERRED_CURRENCY=ETH
@@ -149,6 +155,7 @@ PASSWORD=secret
 TOR=true
 
 # Do change these
+CONTACT=questions@email.com
 PREFERRED_CURRENCY=ETH
 SITE_NAME=The Mining King
 SITE_URL=https://theminingking.com

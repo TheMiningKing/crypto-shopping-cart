@@ -83,6 +83,12 @@ describe('index', () => {
     it('displays a no-products-in-db message', () => {
       browser.assert.text('.alert.alert-info', 'Sorry, no products to show.');
     });
+
+    it('displays footer information', () => {
+      browser.assert.text('footer#info span:nth-child(1)', process.env.SITE_NAME);
+      browser.assert.element('footer#info span:nth-child(2) a[href="https://github.com/TheMiningKing/crypto-shopping-cart"]');
+      browser.assert.link('footer#info span:nth-child(3) a', 'Questions?', `mailto:${process.env.CONTACT}`);
+    });
   });
 
   describe('currency menu', () => {
