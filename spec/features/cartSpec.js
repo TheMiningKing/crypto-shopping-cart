@@ -294,8 +294,8 @@ describe('cart', () => {
       });
 
       it('does not display a currency menu', () => {
-        browser.assert.elements('.currency-nav a', 0);
-        browser.assert.elements('.currency-nav span', 0);
+        browser.assert.elements('#currency-nav a', 0);
+        browser.assert.elements('#currency-nav span', 0);
       });
     });
 
@@ -327,8 +327,8 @@ describe('cart', () => {
         });
 
         it('does not display if there is only one accepted currency', () => {
-          browser.assert.elements('.currency-nav a', 0);
-          browser.assert.elements('.currency-nav span', 0);
+          browser.assert.elements('#currency-nav a', 0);
+          browser.assert.elements('#currency-nav span', 0);
         });
       });
 
@@ -376,10 +376,10 @@ describe('cart', () => {
         });
 
         it('displays the accepted currencies as links', () => {
-          browser.assert.elements('.currency-nav span', 2);
-          browser.assert.elements('.currency-nav a', 1);
-          browser.assert.element('.currency-nav span:nth-child(2).active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
-          browser.assert.link('.currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
+          browser.assert.elements('#currency-nav span', 2);
+          browser.assert.elements('#currency-nav a', 1);
+          browser.assert.element('#currency-nav span:nth-child(2).active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
+          browser.assert.link('#currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
         });
 
         it('updates product details if a new preferred currency is set', (done) => {

@@ -105,8 +105,8 @@ describe('index', () => {
       });
 
       it('does not display a currency menu', () => {
-        browser.assert.elements('.currency-nav a', 0);
-        browser.assert.elements('.currency-nav span', 0);
+        browser.assert.elements('#currency-nav a', 0);
+        browser.assert.elements('#currency-nav span', 0);
       });
     });
 
@@ -134,8 +134,8 @@ describe('index', () => {
         });
 
         it('does not display if there is only one accepted currency', () => {
-          browser.assert.elements('.currency-nav a', 0);
-          browser.assert.elements('.currency-nav span', 0);
+          browser.assert.elements('#currency-nav a', 0);
+          browser.assert.elements('#currency-nav span', 0);
         });
       });
   
@@ -171,10 +171,10 @@ describe('index', () => {
         });
 
         it('displays the accepted currencies as links', () => {
-          browser.assert.elements('.currency-nav span', 2);
-          browser.assert.elements('.currency-nav a', 1);
-          browser.assert.element('.currency-nav span:nth-child(2).active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
-          browser.assert.link('.currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
+          browser.assert.elements('#currency-nav span', 2);
+          browser.assert.elements('#currency-nav a', 1);
+          browser.assert.element('#currency-nav span:nth-child(2).active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
+          browser.assert.link('#currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
         });
 
         it('updates product details if a new preferred currency is set', (done) => {
@@ -222,12 +222,12 @@ describe('index', () => {
         });
 
         it('disables the active currency link', (done) => {
-          browser.assert.text('.currency-nav span:nth-child(2).active', _wallets[0].name);
-          browser.assert.link('.currency-nav a:nth-child(3)', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
+          browser.assert.text('#currency-nav span:nth-child(2).active', _wallets[0].name);
+          browser.assert.link('#currency-nav a:nth-child(3)', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
 
           browser.clickLink(_wallets[1].name, () => {
-            browser.assert.link('.currency-nav a', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
-            browser.assert.text('.currency-nav span.active', _wallets[1].name);
+            browser.assert.link('#currency-nav a', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
+            browser.assert.text('#currency-nav span.active', _wallets[1].name);
             done();
           });
         });
