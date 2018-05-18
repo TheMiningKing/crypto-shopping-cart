@@ -67,6 +67,24 @@
   border-radius: 4px;
 }
 
+#info a {
+  color: #fff;
+}
+
+#currency-nav {
+  margin-bottom: 0;
+  min-height: 0;
+}
+
+#currency-nav div span:nth-child(1) {
+  font-weight: bold;
+}
+
+#currency-nav .active {
+  color: #909090;
+  font-style: italic;
+}
+
 /**
  * My adjustments
  */
@@ -190,6 +208,10 @@ select.form-control {
 
 .incentives {
   text-align: center;
+}
+
+.currency-nav {
+  margin-bottom: 0;
 }
 
 /**
