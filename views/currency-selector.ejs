@@ -1,6 +1,7 @@
 <% if (wallets.length > 1) { %>
   <nav class="navbar currency-nav">
     <div class="navbar-header navbar-left">
+      <span>Accepted here:</span>
       <% wallets.forEach((wallet) => { %>
         <% if (wallet.currency === cart.preferredCurrency) { %>
           <span class="active">

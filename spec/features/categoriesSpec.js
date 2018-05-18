@@ -238,9 +238,9 @@ describe('categories', () => {
         });
 
         it('displays the accepted currencies as links', () => {
-          browser.assert.elements('.currency-nav span', 1);
+          browser.assert.elements('.currency-nav span', 2);
           browser.assert.elements('.currency-nav a', 1);
-          browser.assert.element('.currency-nav span.active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
+          browser.assert.element('.currency-nav span:nth-child(2).active', _wallets[0].name, `/cart/set-currency/${_wallets[0].currency}`);
           browser.assert.link('.currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
         });
 
