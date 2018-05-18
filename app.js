@@ -78,7 +78,7 @@ app.use('/product', require('./routes/product'));
 app.get('/', (req, res) => {
   models.Wallet.find({}).sort('createdAt').then((wallets) => {
     let preferredWallet;
-    wallets.some((wallet) => {
+    wallets.forEach((wallet) => {
       if (wallet.currency === req.session.cart.preferredCurrency) {
         preferredWallet = wallet;
       }
