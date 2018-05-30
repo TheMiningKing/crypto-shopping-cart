@@ -3,8 +3,6 @@ services:
   node:
     build: .
     restart: unless-stopped
-    ports:
-      - 3000
     environment:
       - NODE_ENV=production
       - VIRTUAL_HOST=shop.theminingking.com
