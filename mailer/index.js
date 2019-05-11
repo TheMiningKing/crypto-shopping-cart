@@ -7,11 +7,25 @@ module.exports = function() {
   let transport;
 
   if (env == 'production') {
+//    transport = {
+//      service: 'gmail',
+//      auth: {
+//        user: process.env.FROM,
+//        pass: process.env.PASSWORD
+//      }
+//    };
+
     transport = {
-      service: 'gmail',
+      host: 'mail.example.com',
+      port: 587,
+      secure: false, // true for 465, false for other ports
       auth: {
-        user: process.env.FROM,
-        pass: process.env.PASSWORD
+          user: process.env.FROM, // generated ethereal user
+          pass: process.env.PASSWORD // generated ethereal password
+      },
+      tls: {
+        // do not fail on invalid certs
+        rejectUnauthorized: false
       }
     };
   }
