@@ -1,6 +1,8 @@
 'use strict';
 
 const Units = require('ethereumjs-units');
+const showdown  = require('showdown');
+const converter = new showdown.Converter();
 
 module.exports = function(mongoose) {
   const Schema = mongoose.Schema;
@@ -39,6 +41,10 @@ module.exports = function(mongoose) {
       type: Types.String,
       trim: true
     },
+    quantity: {
+      type: Types.Number,
+      default: 1
+    },
     prices: [PriceSchema],
     images: [Types.String],
     options: [Types.String],
@@ -46,6 +52,10 @@ module.exports = function(mongoose) {
     friendlyLink: Types.String
   }, {
     timestamps: true
+  });
+
+  ProductSchema.virtual('descriptionHtml').get(function() {
+    return converter.makeHtml(this.description);
   });
 
   ProductSchema.pre('save', function(next) {
