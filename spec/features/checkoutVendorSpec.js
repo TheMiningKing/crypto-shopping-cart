@@ -109,7 +109,8 @@ describe('checkout', () => {
           beforeEach((done) => {
             browser.uncheck('contact');
             browser.fill('transaction', _order.transaction);
-            browser.fill('email', '').pressButton('Place Order', () => {
+            browser.fill('email', '');
+            browser.pressButton('Place Order', () => {
               browser.assert.success();
               browser.assert.url('/cart/receipt');
               done();
@@ -199,7 +200,8 @@ describe('checkout', () => {
         describe('customer requests email transaction', () => {
 
           beforeEach((done) => {
-            browser.fill('email', _order.email).pressButton('Place Order', (err) => {
+            browser.fill('email', _order.email);
+            browser.pressButton('Place Order', (err) => {
               if (err) done.fail(err);
               browser.assert.success();
               browser.assert.url('/');
@@ -286,7 +288,10 @@ describe('checkout', () => {
 
         describe('customer requests no email transaction but provides email', () => {
           beforeEach((done) => {
-            browser.uncheck('contact').fill('transaction', _order.transaction).fill('email', _order.email).pressButton('Place Order', (err) => {
+            browser.uncheck('contact');
+            browser.fill('transaction', _order.transaction);
+            browser.fill('email', _order.email);
+            browser.pressButton('Place Order', (err) => {
               if (err) done.fail(err);
               browser.assert.success();
               browser.assert.url('/cart/receipt');

@@ -149,9 +149,8 @@ describe('cart', () => {
       browser.visit('/', (err) => {
         if (err) done.fail(err);
 
-        browser
-        .select('li.product:nth-child(1) form select', products[0].options[2])
-        .pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+        browser.select('li.product:nth-child(1) form select', products[0].options[2]);
+        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
           browser.assert.redirected();
           browser.assert.url('/cart');
  
@@ -246,26 +245,25 @@ describe('cart', () => {
         browser.visit('/', (err) => {
           if (err) done.fail(err);
   
-          browser
-            .select('li.product:nth-child(1) form select', products[0].options[2])
-            .pressButton('li.product:nth-child(1) form button[type=submit]', () => {
-              browser.assert.redirected();
-              browser.assert.url('/cart');
-     
-              browser.assert.elements('tr', 4);
-        
+          browser.select('li.product:nth-child(1) form select', products[0].options[2]);
+          browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
+            browser.assert.redirected();
+            browser.assert.url('/cart');
+   
+            browser.assert.elements('tr', 4);
+      
+            browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
+            browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
+            browser.assert.text('tr:nth-child(3) td:nth-child(3)', `${products[0].name} - ${products[0].options[2]}`);
+  
+            browser.clickLink(`tr:nth-child(3) td a[href="/cart/remove/${products[0].id}/${products[0].options[2]}"]`, () => {
+              browser.assert.elements('tr', 3);
               browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
               browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
-              browser.assert.text('tr:nth-child(3) td:nth-child(3)', `${products[0].name} - ${products[0].options[2]}`);
-    
-              browser.clickLink(`tr:nth-child(3) td a[href="/cart/remove/${products[0].id}/${products[0].options[2]}"]`, () => {
-                browser.assert.elements('tr', 3);
-                browser.assert.text('tr:nth-child(1) td:nth-child(3)', `${products[0].name} - ${products[0].options[0]}`);
-                browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].name);
- 
-                done();
-              });
+
+              done();
             });
+          });
         });
       });
 

@@ -105,7 +105,8 @@ describe('checkout', () => {
       });
 
       it('reports an error if recipient is omitted', (done) => {
-        browser.fill('recipient', '  ').pressButton('Place Order', () => {
+        browser.fill('recipient', '  ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a recipient');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -114,7 +115,8 @@ describe('checkout', () => {
       });
 
       it('reports an error if street is omitted', (done) => {
-        browser.fill('street', '  ').pressButton('Place Order', () => {
+        browser.fill('street', '  ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a street');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -123,7 +125,8 @@ describe('checkout', () => {
       });
 
       it('reports an error if city is omitted', (done) => {
-        browser.fill('city', '  ').pressButton('Place Order', () => {
+        browser.fill('city', '  ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a city');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -132,7 +135,8 @@ describe('checkout', () => {
       });
 
       it('reports an error if province is omitted', (done) => {
-        browser.fill('province', '  ').pressButton('Place Order', () => {
+        browser.fill('province', '  ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a province');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -141,7 +145,8 @@ describe('checkout', () => {
       });
 
       it('reports an error if country is omitted', (done) => {
-        browser.fill('country', '  ').pressButton('Place Order', () => {
+        browser.fill('country', '  ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a country');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -150,7 +155,8 @@ describe('checkout', () => {
       });
 
       it('reports an error if postal code is omitted', (done) => {
-        browser.fill('postcode', '  ').pressButton('Place Order', () => {
+        browser.fill('postcode', '  ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You must provide a postal code');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -159,7 +165,9 @@ describe('checkout', () => {
       });
 
       it('reports an error if email confirmation is requested but omitted', (done) => {
-        browser.check('contact').fill('email', '   ').pressButton('Place Order', () => {
+        browser.check('contact');
+        browser.fill('email', '   ');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.text('.alert-danger', 'You requested email confirmation. You must provide an email.');
           expect(mailer.transport.sentMail.length).toEqual(0);
@@ -168,11 +176,10 @@ describe('checkout', () => {
       });
 
       it('chains omitted fields', (done) => {
-        browser
-          .fill('postcode', '  ')
-          .fill('country', '  ')
-          .fill('email', '')
-          .pressButton('Place Order', () => {
+        browser.fill('postcode', '  ')
+        browser.fill('country', '  ')
+        browser.fill('email', '');
+        browser.pressButton('Place Order', () => {
             browser.assert.url('/cart/checkout');
             browser.assert.text('.messages .alert:nth-child(1).alert-danger',
                                 'You must provide a country, postal code');
@@ -184,7 +191,10 @@ describe('checkout', () => {
       });
 
       it('repopulates correctly-entered fields', (done) => {
-        browser.fill('transaction', '  ').fill('country', '  ').fill('email', '').pressButton('Place Order', () => {
+        browser.fill('transaction', '  ');
+        browser.fill('country', '  ');
+        browser.fill('email', '');
+        browser.pressButton('Place Order', () => {
           browser.assert.url('/cart/checkout');
           browser.assert.input('#transaction', '  ');
           browser.assert.input('#recipient', _order.recipient);
@@ -201,10 +211,10 @@ describe('checkout', () => {
 
       describe('email confirmation declined', () => {
         it('reports an error if transaction ID is not provided', (done) => {
-          browser.uncheck('contact')
-            .fill('email', '  ')
-            .fill('transaction', '  ')
-            .pressButton('Place Order', () => {
+          browser.uncheck('contact');
+          browser.fill('email', '  ')
+          browser.fill('transaction', '  ');
+          browser.pressButton('Place Order', () => {
               browser.assert.url('/cart/checkout');
               browser.assert.text('.alert-danger',
                                   'You must provide a transaction ID if not completing order via email');
@@ -214,10 +224,10 @@ describe('checkout', () => {
         });
 
         it('does not report an error if transaction ID is provided', (done) => {
-          browser.uncheck('contact')
-            .fill('email', '  ')
-            .fill('transaction', _order.transaction)
-            .pressButton('Place Order', () => {
+          browser.uncheck('contact');
+          browser.fill('email', '  ')
+          browser.fill('transaction', _order.transaction);
+          browser.pressButton('Place Order', () => {
               browser.assert.url('/cart/receipt');
               browser.assert.text('.alert-success',
                                   'Your order has been received. Print this receipt for your records.');
@@ -227,10 +237,10 @@ describe('checkout', () => {
         });
 
         it('does not report an error if transaction ID and email are provided', (done) => {
-          browser.uncheck('contact')
-            .fill('email', _order.email)
-            .fill('transaction', _order.transaction)
-            .pressButton('Place Order', () => {
+          browser.uncheck('contact');
+          browser.fill('email', _order.email)
+          browser.fill('transaction', _order.transaction);
+          browser.pressButton('Place Order', () => {
               browser.assert.url('/cart/receipt');
               browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);
               expect(mailer.transport.sentMail.length).toEqual(2);

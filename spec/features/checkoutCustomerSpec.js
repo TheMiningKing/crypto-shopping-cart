@@ -107,7 +107,8 @@ describe('checkout', () => {
           beforeEach((done) => {
             browser.uncheck('contact');
             browser.fill('transaction', _order.transaction);
-            browser.fill('email', '  ').pressButton('Place Order', () => {
+            browser.fill('email', '  ');
+            browser.pressButton('Place Order', () => {
               browser.assert.success();
               browser.assert.url('/cart/receipt');
               done();
@@ -179,7 +180,8 @@ describe('checkout', () => {
           beforeEach((done) => {
             browser.uncheck('contact');
             browser.fill('transaction', _order.transaction);
-            browser.fill('email', _order.email).pressButton('Place Order', () => {
+            browser.fill('email', _order.email);
+            browser.pressButton('Place Order', () => {
               browser.assert.success();
               browser.assert.url('/cart/receipt');
               done();
@@ -500,7 +502,8 @@ describe('checkout', () => {
                           browser.fill('country', _order.country);
                           browser.fill('postcode', _order.postcode);
                           browser.check('contact');
-                          browser.fill('email', _order.email).pressButton('Place Order', () => {
+                          browser.fill('email', _order.email);
+                          browser.pressButton('Place Order', () => {
                             browser.assert.success();  
                             done();
                           });
