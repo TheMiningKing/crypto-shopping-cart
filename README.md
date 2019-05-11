@@ -25,6 +25,12 @@ Clone and install dependencies:
 npm install
 ```
 
+Copy example environment variables:
+
+```
+cp .env.example .env
+```
+
 # Testing
 
 ## For Docker fans
