@@ -1,7 +1,7 @@
 The world's first open-source crypto-shopping cart!
 ===================================================
 
-Working beta demo: [shop.theminingking.com](https://shop.theminingking.com). Now accepting real orders!
+Working beta demo: [shop.theminingking.com](https://shop.theminingking.com).
 
 This is an experimental project in progress. The styling and basic functionality was straight-up jacked from [this fine fellow](https://github.com/gabrieleromanato/Node.js-Shopping-Cart).
 
@@ -17,21 +17,16 @@ This is a very different conclusion to contemporary shopping cart expectations. 
 
 Future work: contracts that fulfil when the post office reports _delivered_... less trust required.
 
-# Setup
+# Testing
+
+## Setup
 
 Clone and install dependencies:
 
 ```
 npm install
-```
-
-Copy example environment variables:
-
-```
 cp .env.example .env
 ```
-
-# Testing
 
 ## For Docker fans
 
@@ -61,6 +56,15 @@ NODE_ENV=test ./node_modules/.bin/jasmine spec/features/checkoutSpec.js
 ```
 
 # Development
+
+## Setup
+
+Clone and install dependencies:
+
+```
+npm install
+cp .env.example .env
+```
 
 To start a Dockerized Mongo container, see above...
 
@@ -113,16 +117,21 @@ PASSWORD=secret
 #CONTACT=questions@email.com
 
 #
-# The needs to be set, even if only one currency is accepted
-#
-PREFERRED_CURRENCY=ETH
-
-#
 # Site name and URL
 #
 SITE_NAME=The Mining King
 # Leave blank if no main page
 SITE_URL=https://theminingking.com
+
+#
+# This needs to be set, even if only one currency is accepted
+#
+PREFERRED_CURRENCY=ETH
+
+#
+# Set value to catch all outgoing emails
+#
+#TOR=true
 ```
 
 The _Dockerized_ production is meant to be deployed behind an `nginx-proxy`/`lets-encrypt` combo:
@@ -136,6 +145,26 @@ docker-compose -f docker-compose.prod.yml up -d
 ```
 docker-compose -f docker-compose.prod.yml run --rm node node db/seed.js NODE_ENV=production
 ```
+
+## iRedMail
+
+Got sick of using GMail so tried to send orders through iRedMail...
+
+iRedMail does not allow you to specify a _sender_ that is different from the authenticated user unless you add the following to `/opt/iredapd/settings.py`:
+
+```
+ALLOWED_LOGIN_MISMATCH_SENDERS = ['your@email.com']
+```
+
+Note that the address matches the `FROM` field set in `.env`.
+
+Restart the iRedMail service:
+
+```
+service iredapd restart
+```
+
+More [info](https://docs.iredmail.org/errors.html#recipient-address-rejected-sender-is-not-same-as-smtp-authenticate-username).
 
 # Tor
 
