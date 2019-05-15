@@ -48,12 +48,12 @@ describe('checkout', () => {
   describe('when cart contains products', () => {
 
     beforeEach((done) => {
-      browser.visit('/', (err) => {
+      browser.visit('/product', (err) => {
         if (err) done.fail(err);
 
         browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
-          browser.visit('/', (err) => {
+          browser.visit('/product', (err) => {
             if (err) done.fail(err);
 
             browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
@@ -176,18 +176,18 @@ describe('checkout', () => {
       });
 
       it('chains omitted fields', (done) => {
-        browser.fill('postcode', '  ')
-        browser.fill('country', '  ')
+        browser.fill('postcode', '  ');
+        browser.fill('country', '  ');
         browser.fill('email', '');
         browser.pressButton('Place Order', () => {
-            browser.assert.url('/cart/checkout');
-            browser.assert.text('.messages .alert:nth-child(1).alert-danger',
-                                'You must provide a country, postal code');
-            browser.assert.text('.messages .alert:nth-child(2).alert-danger',
-                                'You requested email confirmation. You must provide an email.');
-            expect(mailer.transport.sentMail.length).toEqual(0);
-            done();
-          });
+          browser.assert.url('/cart/checkout');
+          browser.assert.text('.messages .alert:nth-child(1).alert-danger',
+                              'You must provide a country, postal code');
+          browser.assert.text('.messages .alert:nth-child(2).alert-danger',
+                              'You requested email confirmation. You must provide an email.');
+          expect(mailer.transport.sentMail.length).toEqual(0);
+          done();
+        });
       });
 
       it('repopulates correctly-entered fields', (done) => {
@@ -212,40 +212,40 @@ describe('checkout', () => {
       describe('email confirmation declined', () => {
         it('reports an error if transaction ID is not provided', (done) => {
           browser.uncheck('contact');
-          browser.fill('email', '  ')
+          browser.fill('email', '  ');
           browser.fill('transaction', '  ');
           browser.pressButton('Place Order', () => {
-              browser.assert.url('/cart/checkout');
-              browser.assert.text('.alert-danger',
-                                  'You must provide a transaction ID if not completing order via email');
-              expect(mailer.transport.sentMail.length).toEqual(0);
-              done();
-            });
+            browser.assert.url('/cart/checkout');
+            browser.assert.text('.alert-danger',
+                                'You must provide a transaction ID if not completing order via email');
+            expect(mailer.transport.sentMail.length).toEqual(0);
+            done();
+          });
         });
 
         it('does not report an error if transaction ID is provided', (done) => {
           browser.uncheck('contact');
-          browser.fill('email', '  ')
+          browser.fill('email', '  ');
           browser.fill('transaction', _order.transaction);
           browser.pressButton('Place Order', () => {
-              browser.assert.url('/cart/receipt');
-              browser.assert.text('.alert-success',
-                                  'Your order has been received. Print this receipt for your records.');
-              expect(mailer.transport.sentMail.length).toEqual(1);
-              done();
-            });
+            browser.assert.url('/cart/receipt');
+            browser.assert.text('.alert-success',
+                                'Your order has been received. Print this receipt for your records.');
+            expect(mailer.transport.sentMail.length).toEqual(1);
+            done();
+          });
         });
 
         it('does not report an error if transaction ID and email are provided', (done) => {
           browser.uncheck('contact');
-          browser.fill('email', _order.email)
+          browser.fill('email', _order.email);
           browser.fill('transaction', _order.transaction);
           browser.pressButton('Place Order', () => {
-              browser.assert.url('/cart/receipt');
-              browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);
-              expect(mailer.transport.sentMail.length).toEqual(2);
-              done();
-            });
+            browser.assert.url('/cart/receipt');
+            browser.assert.text('.alert-success', `Your order has been received. An email copy of this receipt will be sent to ${_order.email}`);
+            expect(mailer.transport.sentMail.length).toEqual(2);
+            done();
+          });
         });
       });
     });
