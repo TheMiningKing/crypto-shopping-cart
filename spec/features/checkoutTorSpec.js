@@ -44,12 +44,12 @@ describe('checkout', () => {
 
   describe('when cart contains products', () => {
     beforeEach((done) => {
-      browser.visit('/', (err) => {
+      browser.visit('/product', (err) => {
         if (err) done.fail(err);
 
         browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
-          browser.visit('/', (err) => {
+          browser.visit('/product', (err) => {
             if (err) done.fail(err);
 
             browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
@@ -150,7 +150,7 @@ describe('checkout', () => {
         describe('customer requests no email transaction but provides email', () => {
           beforeEach((done) => {
             browser.uncheck('contact');
-            browser.fill('transaction', _order.transaction)
+            browser.fill('transaction', _order.transaction);
             browser.fill('email', _order.email);
             browser.pressButton('Place Order', (err) => {
               if (err) done.fail(err);
