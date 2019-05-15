@@ -46,6 +46,7 @@
               <% } %>
             </td>
             <td>
+              <%= product.formattedPrice %>
               <%= product.prices[cart.preferredCurrency].formattedPrice %>
             </td>
           </tr>
@@ -71,6 +72,30 @@
         <div class='postcode'><%- cart.order.postcode %></div>
       </section>
       <footer>
+        <p>
+          We ship Monday to Friday.
+        </p>
+        <p>
+          Orders received along with their accompanying payment before 3pm
+          will be shipped the same day unless circumstances interfere. Orders
+          received after will go out the next day.
+        </p>
+        <p>
+          Orders received on Friday after 3pm orders will be shipped the next
+          business day.
+        </p>
+        <p>
+          We do not ship weekends, holidays, or when the Post is closed.
+        </p>
+
+        <h4>Reply to this email with any questions.</h4>
+        <p>
+          We strive to be the best customer service provider we can be. Please
+          contact us with any request you may have and we will do our best to accommodate.
+        </p>
+        <p>
+          <a href="<%- process.env.SITE_URL %>/policy">Shipping & Returns</a>
+        </p>
         <h4>Reply to this email with your transaction ID and questions.</h4>
         <p>
           Thanks again for your order! You will receive confirmation and a tracking number when it is shipped.

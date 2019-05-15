@@ -1,7 +1,6 @@
-<% include header %>
-<% include messages %>
+<% include _partials/header %>
+<% include _partials/messages %>
 <% if (cart && cart.items.length) { %>
-  <% include currency-selector %>
   <table class="cart-table table table-bordered table-striped">
     <tbody>
       <% cart.items.forEach(function(product) { %>
@@ -32,6 +31,9 @@
       </tr>
     </tbody>
   </table>
+  <div class="currency-selector">
+    <% include _partials/currency-selector %>
+  </div>
   <div class="incentives">
     <h3>
       Shipping is included!
@@ -122,4 +124,4 @@
 <% } else { %>
   <p class="alert alert-info">Your cart is empty</p>
 <% } %>
-<% include footer %>
+<% include _partials/footer %>
