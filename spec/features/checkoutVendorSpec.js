@@ -49,12 +49,12 @@ describe('checkout', () => {
 
   describe('when cart contains products', () => {
     beforeEach((done) => {
-      browser.visit('/', (err) => {
+      browser.visit('/product', (err) => {
         if (err) done.fail(err);
 
         browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
-          browser.visit('/', (err) => {
+          browser.visit('/product', (err) => {
             if (err) done.fail(err);
 
             browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
@@ -248,13 +248,13 @@ describe('checkout', () => {
             expect(html).toContain(cart.items[0].name);
             expect(html).toContain(`- ${cart.items[0].option}`);
             expect(html).toContain(cart.items[0].prices[cart.preferredCurrency].formattedPrice);
-    
+
             expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
             expect(html).toContain(cart.items[1].name);
             expect(html).toContain(cart.items[1].prices[cart.preferredCurrency].formattedPrice);
      
             expect(html).toContain(`Total: ${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
-    
+
             // The customer was instructed to send ___ ETH to ___ 
             expect(html).toContain(`${cart.totals[cart.preferredCurrency].formattedTotal} ${cart.preferredCurrency}`);
             expect(html).toContain(`${_wallets[0].address}`);
