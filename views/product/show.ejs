@@ -1,0 +1,52 @@
+<% include ../_partials/header %>
+  <% include ../_partials/messages %>
+  
+  <% if(product) { %>
+
+    <h3 class="product-title"><%= product.name %></h3>
+    <div class="image-board-container product">
+      <% product.images.forEach((image, i) => { %>
+        <figure class="image-item<%= product.quantity ? '' : ' side-corner-tag' %>">
+          <img src="/images/products/<%= image %>" alt="" class="img-responsive">
+          <% if (!product.quantity) { %>
+            <p><span>SOLD</span></p>
+          <% } %>
+        </figure>
+      <% }); %>
+      <figure class="image-item">
+        <span class="price">
+          <%= product.prices[0].formattedPrice %> <%= cart.preferredCurrency %>
+        </span>
+        <div class="currency-selector">
+          <% include ../_partials/currency-selector %>
+        </div>
+        <div class="product-description">
+          <%- product.descriptionHtml %>
+        </div>
+        <div class="product-info">
+          <% if (product.quantity) { %>
+            <form class="add-to-cart-form" action="/cart" method="post">
+              <% if (product.options.length) { %>
+                <select class="form-control" name="option">
+                  <% product.options.forEach((option) => { %>
+                    <option value="<%= option %>"><%= option %></option>
+                  <% }); %>
+                </select>
+              <% } %>
+              <input type="hidden" name="id" value="<%= product._id %>">
+              <button type="submit" class="add-to-cart">
+                Add to Cart
+              </button>
+            </form>
+          <% } %>
+        </div>
+      </figure>
+    </div>
+    <div id="next-item">
+      <a id="next-item-link" href="<%= nextProduct.length ? '/product/' + nextProduct[0].friendlyLink : '/' %>">
+        Next Item <i class="fa fa-forward"></i>
+      </a>
+    </div>
+  <% } %>
+
+<% include ../_partials/footer %>
