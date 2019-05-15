@@ -1,7 +1,7 @@
 {
   "name": "crypto-shopping-cart",
   "version": "0.0.1",
-  "description": "Cryptocurrency shopping cart",
+  "description": "The world's first open-source cryptocurrency shopping cart",
   "main": "app.js",
   "scripts": {
     "test": "NODE_ENV=test node_modules/.bin/jasmine",
@@ -33,6 +33,7 @@
     "mongoose": "^4.11.13",
     "mongoose-seeder": "^1.2.1",
     "nodemailer": "^4.4.2",
+    "showdown": "^1.8.6",
     "qrcode": "^1.2.0",
     "styliner": "^1.0.3"
   },
