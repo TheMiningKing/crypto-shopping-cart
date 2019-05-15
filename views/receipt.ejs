@@ -1,5 +1,5 @@
-<% include header %>
-<% include messages %>
+<% include _partials/header %>
+<% include _partials/messages %>
 <% if (cart && cart.items.length && cart.order) { %>
   <table class="cart-table table table-bordered table-striped">
     <tbody>
@@ -69,4 +69,4 @@
 <% } else { %>
   <p class="alert alert-info">No receipt here. Why not place an order?</p>
 <% } %>
-<% include footer %>
+<% include _partials/footer %>
