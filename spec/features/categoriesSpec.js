@@ -24,7 +24,6 @@ describe('categories', () => {
   describe('products in database', () => {
     let _products;
     beforeEach((done) => {
-  
       fixtures.load(__dirname + '/../fixtures/wallets.js', models.mongoose, (err) => {
         if (err) done.fail(err);
   
@@ -117,11 +116,13 @@ describe('categories', () => {
           browser.assert.element(`ul#products li.product figure.product-image img[src="/images/products/${results[0].images[0]}"]`);
           browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
           expect(results[0].prices[0].wallet.currency).toEqual(process.env.PREFERRED_CURRENCY);
-          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+          browser.assert.text('ul#products li.product:nth-child(1) span.price',
                               `${results[0].prices[0].formattedPrice} ${process.env.PREFERRED_CURRENCY}`);
-          browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${results[0].id}"]`);
+          browser.assert.text(`ul#products li.product:nth-child(1) form input[type=hidden][name=id][value="${results[0].id}"]`);
   
           done();
+        }).catch((err) => {
+          done.fail(err);
         });
       });
   
@@ -247,7 +248,7 @@ describe('categories', () => {
         it('updates product details if a new preferred currency is set', (done) => {
           // Product
           browser.assert.element('ul#products li', 1);
-          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+          browser.assert.text('ul#products li.product:nth-child(1) span.price',
                               `${_products[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
  
           browser.clickLink(_wallets[1].name, () => {
@@ -257,7 +258,7 @@ describe('categories', () => {
 
             // Product
             browser.assert.element('ul#products li', 1);
-            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+            browser.assert.text('ul#products li.product:nth-child(1) span.price',
                                 `${_products[0].prices[1].formattedPrice} ${_wallets[1].currency}`);
 
             done();
