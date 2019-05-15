@@ -104,14 +104,14 @@ describe('cart', () => {
           models.Product.find({}).sort('createdAt').then((results) => {
             products = results;
   
-            browser.visit('/', (err) => {
+            browser.visit('/product', (err) => {
               if (err) done.fail(err);
               browser.assert.success();
   
               browser.pressButton('li.product:nth-child(1) form button[type=submit]', (err) => {
                 if (err) done.fail(err);
   
-                browser.visit('/', (err) => {
+                browser.visit('/product', (err) => {
                   if (err) done.fail(err);
 
                   browser.pressButton('li.product:nth-child(2) form button[type=submit]', (err) => {
@@ -146,7 +146,7 @@ describe('cart', () => {
     });
 
     it('displays product variants in the cart', (done) => {
-      browser.visit('/', (err) => {
+      browser.visit('/product', (err) => {
         if (err) done.fail(err);
 
         browser.select('li.product:nth-child(1) form select', products[0].options[2]);
@@ -242,7 +242,7 @@ describe('cart', () => {
 
       it('removes correct product variant from the cart', (done) => {
         browser.assert.elements('tr', 3);
-        browser.visit('/', (err) => {
+        browser.visit('/product', (err) => {
           if (err) done.fail(err);
   
           browser.select('li.product:nth-child(1) form select', products[0].options[2]);
@@ -277,7 +277,6 @@ describe('cart', () => {
     });
   });
 
-
   describe('currency menu', () => {
 
     describe('no products in database', () => {
@@ -307,7 +306,7 @@ describe('cart', () => {
               prices: [{ price: 51990000, wallet: wallet._id }],
               images: ['man-shirt.jpg'],
             }).then((results) => {
-              browser.visit('/', (err) => {
+              browser.visit('/product', (err) => {
                 if (err) done.fail(err);
                 browser.assert.success();
                 browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
@@ -346,13 +345,13 @@ describe('cart', () => {
                 models.Product.find({}).sort('createdAt').then((products) => {
                   _products = products;
 
-                  browser.visit('/', (err) => {
+                  browser.visit('/product', (err) => {
                     if (err) done.fail(err);
                     browser.assert.success();
 
                     browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
-                      browser.visit('/', (err) => {
+                      browser.visit('/product', (err) => {
                         if (err) done.fail(err);
 
                         browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
