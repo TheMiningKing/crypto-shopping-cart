@@ -1,0 +1,86 @@
+<% include _partials/header %>
+  <% include _partials/messages %>
+
+  <h1>Shipping and Return Policy</h1>
+  <p>
+    Our Customer Service Department is open Monday through Friday 9am-5pm MST.
+    Any emails or messages left after hours of during the weekend will be
+    returned the next business day. If you have any questions or difficulty
+    placing an order, please email
+    <a href="mailto:<%= process.env.CONTACT || process.env.FROM %>"><%= process.env.CONTACT || process.env.FROM %></a>.
+  </p>
+  <h2>Repair Policy</h2>
+  <p>
+    To request a repair, please use our contact page and be sure to include
+    <ul>
+      <li>Contact name</li>
+      <li>Telephone number</li>
+      <li>Proof of purchase (for example, an order confirmation or receipt)</li>
+      <li>A brief description of the problem</li>
+    </ul>
+  </p>
+  <p>
+    Upon receipt of the above information, we will assess and authorize the
+    repair. For items purchased within the last six months, repairs are free of
+    charge. For purchases over six months old, additional fees based on labor
+    and cost of material may apply.  All repairs are subject to additional
+    shipping charges.
+  </p>
+  <h2>Return + Refund Policies</h2>
+  <p>
+    <span class="name"><%= process.env.SITE_NAME %></span> is dedicated to our customer service and
+    providing the most positive shopping experience for all of our shoppers. If,
+    for any reason, you are unsatisfied with your purchase, please contact
+    <a href="mailto:<%= process.env.CONTACT || process.env.FROM %>"><%= process.env.CONTACT || process.env.FROM %></a>
+    to request a return. Once your return is received and inspected, we will
+    send you an email to notify you that we have received your returned item. We
+    will also notify you of the approval or rejection of your refund.
+  </p>
+  <p>
+    If you are approved, then your refund will be processed, and a credit will
+    automatically be applied to your credit card or original method of payment,
+    within a certain amount of days.
+  </p>
+  <p>
+    Discounted or customized items are final sale and not eligible for return.
+  </p>
+  <p>
+    Full priced items in original condition are returnable for refund or
+    exchange within 7 days of receipt. 
+  </p>
+  <p>
+    You will be responsible for paying for your own shipping costs for returning
+    your item. Shipping costs are non-refundable. If you receive a refund, the
+    cost of return shipping will be deducted from your refund. We recommend
+    using an insured courier. <span class="name"><%= process.env.SITE_NAME %></span>
+    is not responsible for items damaged or lost in transit.
+  </p>
+  <p>
+    If you are dissatisfied with your purchase for any reason, full priced items
+    in original condition are returnable for refund or exchange within 7 days of
+    receipt. Please send any inquiries regarding returns to
+    <a href="mailto:<%= process.env.CONTACT || process.env.FROM %>"><%= process.env.CONTACT || process.env.FROM %></a>.
+  </p>
+  <p>
+    To be eligible for a return, your item must be unused and in the same
+    condition that you received it. It must also be in the original packaging.
+  </p>
+  <p>
+    There are certain situations where only partial refunds are granted (if applicable)
+  </p>
+  <p>
+    Any item not in its original condition, is damaged or missing parts for
+    reasons not due to our error are not eligible for return.
+  </p>
+  <h2>Shipping Policy</h2>
+  <p>
+    Most orders are ready to ship within 2-3 days of ordering.
+    No shipping on weekends or when Canada Post is closed.
+  </p>
+  <h2>Exchange Policy</h2>
+  <p>
+    We don't offer direct exchanges through the site.  If you'd like to exchange
+    a product, we will refund you the cost and you will have to place a new
+    order online through our website.
+  </p>
+<% include _partials/footer %>
