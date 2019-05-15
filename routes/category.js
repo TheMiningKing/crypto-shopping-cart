@@ -19,13 +19,13 @@ router.get('/:category', (req, res) => {
     // Only get prices for the preferred wallet
     models.Product
     .find({ 'prices.wallet': preferredWallet ? preferredWallet._id : null, categories: req.params.category },
-      { name: 1, description: 1, images: 1, options: 1, categories: 1, friendlyLink: 1, 'prices.$': 1 })
+      { name: 1, description: 1, images: 1, options: 1, categories: 1, friendlyLink: 1, 'prices.$': 1, quantity: 1 })
     .populate('prices.wallet').sort('createdAt').then((products) => {
       if (!products.length) {
         req.flash('info', `No such category exists: ${req.params.category}`);
       }
 
-      res.render('index', {
+      res.render('product/index', {
         cart: req.session.cart,
         path: req.originalUrl,
         products: products,

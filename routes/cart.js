@@ -196,7 +196,7 @@ router.post('/checkout', (req, res) => {
                         req.flash('error', [ { message: 'Something went wrong' } ]);
                         return res.redirect('/cart');
                       }
-      
+
                       // Inline CSS processing
                       styliner.processHTML(htmlEmail).then((htmlAndCss) => {
            
