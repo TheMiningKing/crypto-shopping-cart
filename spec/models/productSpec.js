@@ -5,6 +5,8 @@ describe('Product', () => {
   const fixtures = require('pow-mongoose-fixtures');
   const db = require('../../models');
   const Product = db.Product;
+  const showdown  = require('showdown');
+  const converter = new showdown.Converter();
 
   afterEach((done) => {
     db.mongoose.connection.db.dropDatabase().then((err, result) => {
@@ -18,7 +20,6 @@ describe('Product', () => {
     it('sets the createdAt and updatedAt fields', (done) => {
       let product = new Product({ name: "Sweet Mining T",
                                   description: "Get fired from your job for looking too cool" });
- 
       expect(product.createdAt).toBe(undefined);
       expect(product.updatedAt).toBe(undefined);
       product.save().then((obj) => {
@@ -38,6 +39,7 @@ describe('Product', () => {
       const expected = {
         name: "Sweet Mining T",
         description: "Get fired from your job for looking too cool",
+        quantity: 1,
         createdAt: undefined,
         updatedAt: undefined
       };
@@ -117,6 +119,21 @@ describe('Product', () => {
         }).catch((error) => {
           done.fail(error);
         });
+      });
+    });
+  });
+
+  describe('#descriptionHtml', () => {
+    it('converts markdown to HTML', (done) => {
+      let product = new Product({ name: "Sweet Mining T",
+                                  description: "# Too cool for school",
+                                  price: 51990000 });
+ 
+      product.save().then((obj) => {
+        expect(product.descriptionHtml).toEqual(converter.makeHtml(product.description));
+        done();
+      }).catch((error) => {
+        done.fail(error);
       });
     });
   });
