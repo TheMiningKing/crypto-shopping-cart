@@ -85,9 +85,8 @@ describe('index', () => {
     });
 
     it('displays footer information', () => {
-      browser.assert.text('footer#info span:nth-child(1)', process.env.SITE_NAME);
-      browser.assert.element('footer#info span:nth-child(2) a[href="https://github.com/TheMiningKing/crypto-shopping-cart"]');
-      browser.assert.link('footer#info span:nth-child(3) a', 'Questions?', `mailto:${process.env.CONTACT}`);
+      browser.assert.link('footer#info span:nth-child(1) a', 'Shipping & Returns', '/policy');
+      browser.assert.link('footer#info span:nth-child(2) a', 'Questions?', `mailto:${process.env.CONTACT}`);
     });
   });
 
@@ -138,7 +137,7 @@ describe('index', () => {
           browser.assert.elements('#currency-nav span', 0);
         });
       });
-  
+
       describe('multiple currencies accepted', () => {
 
         let _wallets, _products;
@@ -177,29 +176,29 @@ describe('index', () => {
           browser.assert.link('#currency-nav a', _wallets[1].name, `/cart/set-currency/${_wallets[1].currency}`);
         });
 
-        it('updates product details if a new preferred currency is set', (done) => {
-          // First product
-          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                              `${_products[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
-          // Second product
-          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                              `${_products[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
- 
-          browser.clickLink(_wallets[1].name, () => {
-            browser.assert.redirected();
-            browser.assert.url('/');
-            browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
-
-            // First product
-            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                                `${_products[0].prices[1].formattedPrice} ${_wallets[1].currency}`);
-            // Second product
-            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                                `${_products[1].prices[1].formattedPrice} ${_wallets[1].currency}`);
-            done();
-          });
-        });
-
+//        it('updates product details if a new preferred currency is set', (done) => {
+//          // First product
+//          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+//                              `${_products[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
+//          // Second product
+//          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+//                              `${_products[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
+// 
+//          browser.clickLink(_wallets[1].name, () => {
+//            browser.assert.redirected();
+//            browser.assert.url('/');
+//            browser.assert.text('.alert.alert-info', `Currency switched to ${_wallets[1].currency}`);
+//
+//            // First product
+//            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+//                                `${_products[0].prices[1].formattedPrice} ${_wallets[1].currency}`);
+//            // Second product
+//            browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
+//                                `${_products[1].prices[1].formattedPrice} ${_wallets[1].currency}`);
+//            done();
+//          });
+//        });
+//
         it('sets the preferred currency in the cart session', (done) => {
           models.collection('sessions').find({}).toArray((err, results) => {
             if (err) {
@@ -278,101 +277,54 @@ describe('index', () => {
       browser.assert.elements('i.fa.fa-shopping-cart.go-to-cart-lnk', 1);
     });
 
-    it('structures the product list with what\'s in the database', (done) => {
+    it('structures the image board with what\'s in the database', (done) => {
       models.Product.find({}).sort('createdAt').then((results) => {
         expect(results.length).toEqual(2);
 
-        browser.assert.elements('ul#products li.product', results.length);
+        browser.assert.elements('.image-board-container .image-item', results.length);
 
         // First product
-        browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
-        browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[0].images[0]}"]`);
-        browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[0].friendlyLink}`);
-        browser.assert.text('ul#products li.product:nth-child(1) .product-description', results[0].description);
-        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                            `${results[0].prices[0].formattedPrice} ${_wallets[0].currency}`);
- 
-        browser.assert.text(`ul#products li.product:nth-child(1) .cart-data form input[type=hidden][name=id][value="${results[0].id}"]`);
+        browser.assert.element(`.image-board-container figure.image-item a img[src="/images/products/${results[0].images[0]}"]`);
+        browser.assert.link(`.image-board-container figure.image-item a`, '', `/product/${results[0].friendlyLink}`);
 
         // Second product
-        browser.assert.text('ul#products li.product:nth-child(2) .product-description', results[1].description);
-        browser.assert.element(`ul#products li.product figure.product-image a img[src="/images/products/${results[1].images[0]}"]`);
-        browser.assert.link(`ul#products li.product figure.product-image a`, '', `/product/${results[1].friendlyLink}`);
-        browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
-                            `${results[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
- 
-        browser.assert.text(`ul#products li.product:nth-child(2) .cart-data form input[type=hidden][name=id][value="${results[1].id}"]`);
- 
+        browser.assert.element(`.image-board-container figure.image-item img[src="/images/products/${results[1].images[0]}"]`);
+        browser.assert.link(`.image-board-container figure.image-item a`, '', `/product/${results[1].friendlyLink}`);
         done();
       }).catch((error) => {
         done.fail(error);
       });
     });
 
-    it('displays a select dropdown if a product has options', (done) => {
-      models.Product.find({}).sort('createdAt').then((results) => {
-        expect(results.length).toEqual(2);
-
-        expect(results[0].options.length).toEqual(3);
-        expect(results[1].options.length).toEqual(0);
-
-        // First product
-        browser.assert.text('ul#products li.product:nth-child(1) h3.product-title', results[0].name);
-        browser.assert.element('ul#products li.product:nth-child(1) .cart-data form select');
-        browser.assert.elements('ul#products li.product:nth-child(1) .cart-data form select option',
-                                results[0].options.length);
-
-        browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[0]}]`,
-                            results[0].options[0]);
-        browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[1]}]`,
-                            results[0].options[1]);
-        browser.assert.text(`ul#products li.product:nth-child(1) select option[value=${results[0].options[2]}]`,
-                            results[0].options[2]);
- 
-        // Second product (no dropdown)
-        browser.assert.text('ul#products li.product:nth-child(2) h3.product-title', results[1].name);
-        browser.assert.elements('ul#products li.product:nth-child(2) .cart-data form select', 0);
-
-        done();
-      }).catch((error) => {
-        done.fail(error);
-      });
-    });
-
-    describe('adding item to cart', () => {
-      let product;
-
+    describe('sold out item', () => {
+      let _products;
       beforeEach((done) => {
-        models.Product.findOne({}).then((results) => {
-          product = results;
-          done();
-        });
-      });
-
-      it('adds an item to the cart session', (done) => {
-        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
-
-          models.collection('sessions').find({}).toArray((err, results) => {
-            if (err) {
-              done.fail(err);
-            }
-            expect(results.length).toEqual(1);
-            expect(results[0].session.cart.items.length).toEqual(1);
-            expect(results[0].session.cart.totals['ETH'].total).toEqual(product.prices[0].price);
-            expect(results[0].session.cart.totals['BTC'].total).toEqual(product.prices[1].price);
-            done();
+        models.Product.findOneAndUpdate({ name: 'Men\'s Mining T' }, { quantity: 0 }).then((results) => {
+          models.Product.find({}).sort('createdAt').then((results) => {
+            _products = results;
+            browser.visit('/', (err) => {
+              if (err) {
+                done.fail(err);
+              }
+              done();
+            });
+          }).catch((error) => {
+            done.fail(error);
           });
+        }).catch((error) => {
+          done.fail(error);
         });
       });
 
-      it('redirects to cart', (done) => {
-        browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
-          browser.assert.redirected();
-          browser.assert.url('/cart');
-          done();
-        });
+      it('shows a sold-out ribbon', () =>{
+        browser.assert.elements('.image-board-container .image-item img.img-thumbnail.img-responsive', _products.length);
+
+        // Pic 1
+        browser.assert.text(`.image-board-container .image-item.side-corner-tag img[src="/images/products/${_products[0].images[0]}"] + p span`, 'SOLD');
+
+        // Pic 2
+        browser.assert.elements(`.image-board-container .image-item.side-corner-tag img[src="/images/products/${_products[1].images[0]}"] + p span`, 0);
       });
     });
   });
 });
-
