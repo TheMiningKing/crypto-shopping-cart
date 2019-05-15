@@ -48,12 +48,12 @@ describe('checkout', () => {
 
   describe('when cart contains products', () => {
     beforeEach((done) => {
-      browser.visit('/', (err) => {
+      browser.visit('/product', (err) => {
         if (err) done.fail(err);
 
         browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
 
-          browser.visit('/', (err) => {
+          browser.visit('/product', (err) => {
             if (err) done.fail(err);
 
             browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
@@ -396,7 +396,11 @@ describe('checkout', () => {
               expect(text).toContain(_order.province);
               expect(text).toContain(_order.postcode);
               expect(text).toContain(_order.country);
+
               expect(text).toContain('Reply to this email with your transaction ID and any questions');
+
+              // Shipping and returns link
+              expect(text).toContain(`Shipping & Returns: ${process.env.SITE_URL}/policy`);
             });
       
             it('sends an email with html content to the buyer', (done) => {
@@ -443,6 +447,9 @@ describe('checkout', () => {
               expect(attachments[1].filename).toEqual(cart.items[1].image);
               expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
               expect(attachments[1].cid).toEqual(cart.items[1].image);
+
+              // Shipping and returns link
+              expect(html).toContain(`<a href="${process.env.SITE_URL}/policy">Shipping & Returns</a>`);
       
               // Wallet ID
               QRCode.toDataURL(_wallets[0].address, (err, url) => {
@@ -469,18 +476,18 @@ describe('checkout', () => {
               });
             });
           });
-    
+
           describe('contains duplicate products', () => {
             beforeEach((done) => {
               models.Product.find({}).sort('createdAt').then((results) => {
                 products = results;
       
-                browser.visit('/', (err) => {
+                browser.visit('/product', (err) => {
                   if (err) done.fail(err);
       
                   browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
       
-                    browser.visit('/', (err) => {
+                    browser.visit('/product', (err) => {
                       if (err) done.fail(err);
       
                       browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
@@ -522,6 +529,7 @@ describe('checkout', () => {
               expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
               expect(html).toContain(cart.items[0].name);
               expect(html).toContain(`- ${cart.items[0].option}`);
+
               expect(html).toContain(cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
 
               expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
