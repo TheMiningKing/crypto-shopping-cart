@@ -1,0 +1,16 @@
+<% if (wallets.length > 1) { %>
+  <nav id="currency-nav" class="navbar">
+    <div >
+      <span>Switch currency:</span>
+      <% wallets.forEach((wallet) => { %>
+        <% if (wallet.currency === cart.preferredCurrency) { %>
+          <span class="active">
+            <%= wallet.name %>
+          </span>
+        <% } else { %>
+          <a class="nav-link" href="/cart/set-currency/<%= wallet.currency %>"><%= wallet.name %></a>
+        <% } %>
+      <% }); %>
+    </div>
+  </nav>
+<% } %>

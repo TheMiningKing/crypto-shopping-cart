@@ -1,0 +1,23 @@
+<% if (messages) { %>
+  <div class="messages">
+    <% if (messages.success) { %>
+      <% messages.success.forEach((message) => { %>
+        <div class="alert alert-success">
+          <%= message %>
+        </div>
+      <% }); %>
+    <% } %>
+    <% if (messages.error) { %>
+      <% messages.error.forEach((error) => { %>
+        <div class="alert alert-danger">
+          <%= error.message %>
+        </div>
+      <% }); %>
+    <% } %>
+    <% if (messages.info) { %>
+      <div class="alert alert-info">
+        <%= messages.info %>
+      </div>
+    <% } %>
+  </div>
+<% } %>
