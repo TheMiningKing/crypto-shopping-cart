@@ -87,7 +87,7 @@ app.get('/', (req, res) => {
     // 2018-5-11 https://stackoverflow.com/questions/25586901/how-to-find-document-and-single-subdocument-matching-given-criterias-in-mongodb
     models.Product.find({ 'prices.wallet': preferredWallet ? preferredWallet._id : null },
       { name: 1, description: 1, images: 1, options: 1, categories: 1, friendlyLink: 1, 'prices.$': 1, quantity: 1 })
-    .populate('prices.wallet').sort('createdAt').then((products) => {
+    .sort('createdAt').then((products) => {
 
       if (!products.length) {
         req.flash('info', 'Sorry, no products to show.');

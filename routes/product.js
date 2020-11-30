@@ -46,7 +46,7 @@ router.get('/:friendlyLink', (req, res) => {
     models.Product.findOne(
       { friendlyLink: req.params.friendlyLink, 'prices.wallet': preferredWallet ? preferredWallet._id : null },
       { name: 1, description: 1, images: 1, options: 1, categories: 1, friendlyLink: 1, 'prices.$': 1, quantity: 1, createdAt: 1 })
-    .populate('prices.wallet').then((product) => {
+    .then((product) => {
   
       if (!product) {
         req.flash('info', 'That product doesn\'t exist');
