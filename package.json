@@ -33,8 +33,8 @@
     "mongoose": "^4.11.13",
     "mongoose-seeder": "^1.2.1",
     "nodemailer": "^4.4.2",
+    "qrcode": "^1.4.4",
     "showdown": "^1.8.6",
-    "qrcode": "^1.2.0",
     "styliner": "^1.0.3"
   },
   "devDependencies": {
