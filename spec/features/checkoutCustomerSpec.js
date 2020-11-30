@@ -1,6 +1,6 @@
-'use strict';                  
+'use strict';
 
-const app = require('../../app'); 
+const app = require('../../app');
 const models = require('../../models');
 const mailer = require('../../mailer');
 const fixtures = require('pow-mongoose-fixtures');
@@ -9,7 +9,7 @@ const path = require('path');
 const QRCode = require('qrcode')
 
 const Browser = require('zombie');
-const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
+const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 Browser.localhost('example.com', PORT);
 
 describe('checkout', () => {
@@ -23,7 +23,7 @@ describe('checkout', () => {
 
       fixtures.load(__dirname + '/../fixtures/products.js', models.mongoose, (err) => {
         if (err) done.fail(err);
-  
+
         models.Wallet.find({}).sort('createdAt').then((results) => {
           _wallets = results;
           models.Product.find({}).sort('createdAt').then((results) => {
@@ -96,7 +96,7 @@ describe('checkout', () => {
           browser.fill('province', _order.province);
           browser.fill('country', _order.country);
           browser.fill('postcode', _order.postcode);
- 
+
           done();
         });
       });
@@ -129,11 +129,11 @@ describe('checkout', () => {
             browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].images[0]}"]`);
             browser.assert.text('tr:nth-child(1) td:nth-child(2)', `${products[0].name} - ${products[0].options[0]}`);
             browser.assert.text('tr:nth-child(1) td:nth-child(3)', products[0].prices[0].formattedPrice);
-      
+
             browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].images[0]}"]`);
             browser.assert.text('tr:nth-child(2) td:nth-child(2)', products[1].name);
             browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].prices[0].formattedPrice);
-      
+
             browser.assert.text('tr.info',
                 `${Number(Units.convert(products[0].prices[0].price * 2, 'gwei', 'eth'))} ${process.env.PREFERRED_CURRENCY}`);
           });
@@ -170,12 +170,12 @@ describe('checkout', () => {
               expect(results.length).toEqual(1);
               expect(results[0].session.cart.items.length).toEqual(0);
               expect(results[0].session.cart.totals).toEqual({});
-    
+
               done();
             });
           });
         });
-  
+
         describe('customer requests no email confirmation but provides email anyway', () => {
           beforeEach((done) => {
             browser.uncheck('contact');
@@ -203,11 +203,11 @@ describe('checkout', () => {
             browser.assert.element(`tr:nth-child(1) td.product-thumb img[src="/images/products/${products[0].images[0]}"]`);
             browser.assert.text('tr:nth-child(1) td:nth-child(2)', `${products[0].name} - ${products[0].options[0]}`);
             browser.assert.text('tr:nth-child(1) td:nth-child(3)', products[0].prices[0].formattedPrice);
-      
+
             browser.assert.element(`tr:nth-child(2) td.product-thumb img[src="/images/products/${products[1].images[0]}"]`);
             browser.assert.text('tr:nth-child(2) td:nth-child(2)', products[1].name);
             browser.assert.text('tr:nth-child(2) td:nth-child(3)', products[1].prices[0].formattedPrice);
-      
+
             browser.assert.text('tr.info',
                 `${Number(Units.convert(products[0].prices[0].price * 2, 'gwei', 'eth'))} ${process.env.PREFERRED_CURRENCY}`);
           });
@@ -244,7 +244,7 @@ describe('checkout', () => {
               expect(results.length).toEqual(1);
               expect(results[0].session.cart.items.length).toEqual(0);
               expect(results[0].session.cart.totals).toEqual({});
-    
+
               done();
             });
           });
@@ -262,7 +262,7 @@ describe('checkout', () => {
             expect(mailer.transport.sentMail[0].data.from).toEqual(_order.email);
             expect(mailer.transport.sentMail[0].data.subject).toEqual('New order received');
           });
-    
+
           it('sends an email with text content to the buyer', () => {
             const text = mailer.transport.sentMail[1].data.text;
             expect(text).toContain('Thank you!');
@@ -270,7 +270,7 @@ describe('checkout', () => {
               `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
             expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
             expect(text).toContain(`TOTAL: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
-    
+
             expect(text).toContain(`You sent ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY} to ${_wallets[0].address}`);
             expect(text).toContain(`Your transaction ID: ${_order.transaction}`);
             expect(text).toContain('You will receive confirmation and a tracking number once your order is processed.');
@@ -283,23 +283,23 @@ describe('checkout', () => {
             expect(text).toContain(_order.postcode);
             expect(text).toContain('Reply to this email with questions');
           });
-    
+
           it('sends an email with html content to the buyer', (done) => {
             const html = mailer.transport.sentMail[1].data.html;
             expect(html).toContain('<h3>Thank you!</h3>');
-    
+
             expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
             expect(html).toContain(cart.items[0].name);
             expect(html).toContain(`- ${cart.items[0].option}`);
             expect(html).toContain(cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
-    
+
             expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
             expect(html).toContain(cart.items[1].name);
             expect(html).toContain(cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
-     
+
             expect(html).toContain(`Total: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
-    
-            // You sent ___ ETH to ___ 
+
+            // You sent ___ ETH to ___
             expect(html).toContain(`${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
             expect(html).toContain(`${_wallets[0].address}`);
 
@@ -315,7 +315,7 @@ describe('checkout', () => {
             expect(html).toContain(_order.postcode);
             expect(html).toContain('Reply to this email with questions');
 
-            // File attachments 
+            // File attachments
             const attachments = mailer.transport.sentMail[0].data.attachments;
             expect(attachments.length).toEqual(3);
             expect(attachments[0].filename).toEqual(cart.items[0].image);
@@ -327,14 +327,14 @@ describe('checkout', () => {
             expect(attachments[1].filename).toEqual(cart.items[1].image);
             expect(attachments[1].path).toEqual(path.resolve(__dirname, '../../public/images/products', cart.items[1].image));
             expect(attachments[1].cid).toEqual(cart.items[1].image);
-    
+
             // Transaction ID
             QRCode.toDataURL(_order.transaction, (err, url) => {
               if (err) done.fail(err);
               expect(attachments[2].path).toBe(false);
               expect(attachments[2].cid).toEqual('qr.png');
               expect(attachments[2].contentType).toEqual('image/png');
-              expect(Buffer.compare(attachments[2].content, new Buffer(url.split("base64,")[1], "base64"))).toEqual(0);
+              expect(Buffer.compare(attachments[2].content, Buffer.from(url.split("base64,")[1], "base64"))).toEqual(0);
               expect(html).toContain('<img src="cid:qr.png">');
               done();
             });
@@ -342,22 +342,22 @@ describe('checkout', () => {
         });
 
         describe('customer requests email transaction', () => {
-  
+
           beforeEach(() => {
             browser.check('contact');
             browser.fill('transaction', '   ');
             browser.fill('email', _order.email);
           });
- 
+
           describe('all products are distinct', () => {
-  
+
             beforeEach((done) => {
               browser.pressButton('Place Order', () => {
-                browser.assert.success();  
+                browser.assert.success();
                 done();
               });
             });
-      
+
             it('redirects and displays a flash message on the homepage', () => {
               browser.assert.redirected();
               browser.assert.url('/');
@@ -377,7 +377,7 @@ describe('checkout', () => {
               expect(mailer.transport.sentMail[1].data.from).toEqual(process.env.FROM);
               expect(mailer.transport.sentMail[1].data.subject).toEqual('Order received - payment instructions');
             });
-      
+
             it('sends an email with text content to the buyer', () => {
               const text = mailer.transport.sentMail[1].data.text;
               expect(text).toContain('Thank you!');
@@ -385,7 +385,7 @@ describe('checkout', () => {
                 `1. ${cart.items[0].name} - ${cart.items[0].option}, ${cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
               expect(text).toContain(`2. ${cart.items[1].name}, ${cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice}`);
               expect(text).toContain(`TOTAL: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
-      
+
               expect(text).toContain(`Send ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY} to ${_wallets[0].address}`);
               expect(text).toContain('When your transaction is verified, you will receive confirmation and a tracking number once your order is processed');
 
@@ -402,27 +402,27 @@ describe('checkout', () => {
               // Shipping and returns link
               expect(text).toContain(`Shipping & Returns: ${process.env.SITE_URL}/policy`);
             });
-      
+
             it('sends an email with html content to the buyer', (done) => {
               const html = mailer.transport.sentMail[1].data.html;
               expect(html).toContain('<h3>Thank you!</h3>');
-      
+
               expect(html).toContain(`<img src="cid:${cart.items[0].image}"`);
               expect(html).toContain(cart.items[0].name);
               expect(html).toContain(`- ${cart.items[0].option}`);
               expect(html).toContain(cart.items[0].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
-      
+
               expect(html).toContain(`<img src="cid:${cart.items[1].image}"`);
               expect(html).toContain(cart.items[1].name);
               expect(html).toContain(cart.items[1].prices[process.env.PREFERRED_CURRENCY].formattedPrice);
-       
+
               expect(html).toContain(`Total: ${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
-      
-              // Send ___ ETH to ___ 
+
+              // Send ___ ETH to ___
               expect(html).toContain(`${cart.totals[process.env.PREFERRED_CURRENCY].formattedTotal} ${process.env.PREFERRED_CURRENCY}`);
               expect(html).toContain(`${_wallets[0].address}`);
 
-              // Wallet Address 
+              // Wallet Address
               expect(html).toContain(_wallets[0].address);
 
               // Shipping details
@@ -435,7 +435,7 @@ describe('checkout', () => {
               expect(html).toContain(_order.country);
               expect(html).toContain('Reply to this email with your transaction ID.');
 
-              // File attachments 
+              // File attachments
               const attachments = mailer.transport.sentMail[0].data.attachments;
               expect(attachments.length).toEqual(3);
               expect(attachments[0].filename).toEqual(cart.items[0].image);
@@ -450,19 +450,19 @@ describe('checkout', () => {
 
               // Shipping and returns link
               expect(html).toContain(`<a href="${process.env.SITE_URL}/policy">Shipping & Returns</a>`);
-      
+
               // Wallet ID
               QRCode.toDataURL(_wallets[0].address, (err, url) => {
                 if (err) done.fail(err);
                 expect(attachments[2].path).toBe(false);
                 expect(attachments[2].cid).toEqual('qr.png');
                 expect(attachments[2].contentType).toEqual('image/png');
-                expect(Buffer.compare(attachments[2].content, new Buffer(url.split("base64,")[1], "base64"))).toEqual(0);
+                expect(Buffer.compare(attachments[2].content, Buffer.from(url.split("base64,")[1], "base64"))).toEqual(0);
                 expect(html).toContain('<img src="cid:qr.png">');
                 done();
               });
             });
-      
+
             it('empties the buyer\'s cart', (done) => {
               models.collection('sessions').find({}).toArray((err, results) => {
                 if (err) {
@@ -471,7 +471,7 @@ describe('checkout', () => {
                 expect(results.length).toEqual(1);
                 expect(results[0].session.cart.items.length).toEqual(0);
                 expect(results[0].session.cart.totals).toEqual({});
-      
+
                 done();
               });
             });
@@ -481,26 +481,26 @@ describe('checkout', () => {
             beforeEach((done) => {
               models.Product.find({}).sort('createdAt').then((results) => {
                 products = results;
-      
+
                 browser.visit('/product', (err) => {
                   if (err) done.fail(err);
-      
+
                   browser.pressButton('li.product:nth-child(1) form button[type=submit]', () => {
-      
+
                     browser.visit('/product', (err) => {
                       if (err) done.fail(err);
-      
+
                       browser.pressButton('li.product:nth-child(2) form button[type=submit]', () => {
                         browser.assert.redirected();
                         browser.assert.url('/cart');
-    
+
                         models.collection('sessions').findOne({}, (err, result) => {
                           if (err) {
                             done.fail(err);
                           }
                           cart = result.session.cart;
                           expect(cart.items.length).toEqual(4);
-                  
+
                           //browser.fill('transaction', _order.transaction);
                           browser.fill('recipient', _order.recipient);
                           browser.fill('street', _order.street);
@@ -511,7 +511,7 @@ describe('checkout', () => {
                           browser.check('contact');
                           browser.fill('email', _order.email);
                           browser.pressButton('Place Order', () => {
-                            browser.assert.success();  
+                            browser.assert.success();
                             done();
                           });
                         });
@@ -521,7 +521,7 @@ describe('checkout', () => {
                 });
               });
             });
-  
+
             it('does not attach duplicate product images to the HTML email', (done) => {
               const html = mailer.transport.sentMail[1].data.html;
               expect(html).toContain('<h3>Thank you!</h3>');
@@ -571,7 +571,7 @@ describe('checkout', () => {
                 expect(attachments[2].path).toBe(false);
                 expect(attachments[2].cid).toEqual('qr.png');
                 expect(attachments[2].contentType).toEqual('image/png');
-                expect(Buffer.compare(attachments[2].content, new Buffer(url.split("base64,")[1], "base64"))).toEqual(0);
+                expect(Buffer.compare(attachments[2].content, Buffer.from(url.split("base64,")[1], "base64"))).toEqual(0);
                 expect(html).toContain('<img src="cid:qr.png">');
                 done();
               });
