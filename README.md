@@ -1,8 +1,6 @@
 The world's first open-source crypto-shopping cart!
 ===================================================
 
-Working beta demo: [shop.theminingking.com](https://shop.theminingking.com).
-
 This is an experimental project in progress. The styling and basic functionality was straight-up jacked from [this fine fellow](https://github.com/gabrieleromanato/Node.js-Shopping-Cart).
 
 I am exchanging t-shirts and stickers for Ethereum. Apart from some commercial providers, there doesn't seem to be much in the way of open-source cryptocurrency shopping carts. 
