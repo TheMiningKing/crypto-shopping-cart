@@ -1,11 +1,11 @@
-'use strict';                  
+'use strict';
 
-const app = require('../../app'); 
+const app = require('../../app');
 const models = require('../../models');
 const fixtures = require('pow-mongoose-fixtures');
 
 const Browser = require('zombie');
-const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001; 
+const PORT = process.env.NODE_ENV === 'production' ? 3000 : 3001;
 Browser.localhost('example.com', PORT);
 
 describe('index', () => {
@@ -95,7 +95,7 @@ describe('index', () => {
     describe('no products in database', () => {
       beforeEach((done) => {
         browser = new Browser({ waitDuration: '30s', loadCss: false });
-  
+
         browser.visit('/', (err) => {
           if (err) done.fail(err);
           browser.assert.success();
@@ -183,7 +183,7 @@ describe('index', () => {
 //          // Second product
 //          browser.assert.text('ul#products li.product:nth-child(1) .cart-data .product-info span.price',
 //                              `${_products[1].prices[0].formattedPrice} ${_wallets[0].currency}`);
-// 
+//
 //          browser.clickLink(_wallets[1].name, () => {
 //            browser.assert.redirected();
 //            browser.assert.url('/');
@@ -268,12 +268,16 @@ describe('index', () => {
       });
     });
 
-    it('does not display empty DB messge', () => {
+    it('does not display empty DB message', () => {
       browser.assert.elements('p.alert.alert-info', 0);
     });
 
+
+    it('displays a link to the homepage', () => {
+      browser.assert.elements('.navbar-header a.navbar-brand[href="/"]', 1);
+    });
+
     it('displays a checkout button', () => {
-      browser.assert.elements('.navbar-header a.navbar-brand[href="/"]', 0);
       browser.assert.elements('i.fa.fa-shopping-cart.go-to-cart-lnk', 1);
     });
 
