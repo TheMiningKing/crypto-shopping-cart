@@ -9,7 +9,7 @@ This project raises some interesting interface issues. The modest initial goal i
 
 1. Place order
 2. Send currency from external wallet interface
-3. Submit transaction ID on shopping car interface for order verification
+3. Submit transaction ID on shopping cart interface for order verification
 
 This is a very different conclusion to contemporary shopping cart expectations. And arguably, it necessitates trust in what should be a _trustless_ situation. That is, the customer has no recourse through banks or credit cards if the vendor is a scammer (though perhaps there's no recourse anyway).
 
@@ -50,7 +50,7 @@ npm test
 To execute a single test file, be sure to set the `NODE_ENV` variable:
 
 ```
-NODE_ENV=test ./node_modules/.bin/jasmine spec/features/checkoutSpec.js
+NODE_ENV=test npx jasmine spec/features/checkoutSpec.js
 ```
 
 # Development
