@@ -25,29 +25,70 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 /**
+ * For PUT/PATCH/DELETE
+ */
+//const methodOverride = require('method-override');
+//app.use(methodOverride('_method'));
+
+/**
  * Sessions
  */
 const session = require('express-session');
-const MongoDBStore = require('connect-mongodb-session')(session);
-const env = process.env.NODE_ENV || 'development';
-const config = require(__dirname + '/db/config.json')[env];
+const MongoStore = require('connect-mongo')(session);
 
-const store = new MongoDBStore({
-  uri: `mongodb://${config.host}:27017/${config.database}`,
-  collection: 'sessions'
-});
-
-store.on('error', (error) => {
-  console.error('Could not set up sessions');
-  console.error(error);
-});
-
-app.use(session({
-  secret: 's3cr3tk3y',
+const sessionConfig = {
+  name: process.env.SITE_NAME,
+  secret: process.env.SECRET,
   resave: false,
-  saveUninitialized: true,
-  store: store,
-}));
+  saveUninitialized: false,
+  unset: 'destroy',
+  cookie: {
+    maxAge: 1000 * 60 * 60,
+  },
+  store: new MongoStore({ mongooseConnection: models }),
+};
+
+app.use(session(sessionConfig));
+
+/**
+ * Passport authentication
+ */
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy({
+    usernameField: 'email'
+  },
+  function(email, password, done) {
+    models.Agent.findOne({ email: email }).then(agent => {
+      if (!agent) {
+        return done(null, false);
+      }
+      models.Agent.validPassword(password, agent.password, (err, res) => {
+        if (err) {
+          console.log(err);
+        }
+        return done(err, res);
+      }, agent);
+    }).catch(err => {
+      return done(err);
+    });
+
+  }));
+
+passport.serializeUser((agent, done) => {
+  done(null, agent._id);
+});
+
+passport.deserializeUser((id, done) => {
+  models.Agent.findById(id).then(agent => {
+    return done(null, agent);
+  }).catch(error => {
+    return done(error);
+  });
+});
 
 /**
  * Flash
@@ -68,6 +109,7 @@ app.use((req, res, next) => {
 /**
  * Routes
  */
+app.use('/', require('./routes/auth'));
 app.use('/cart', require('./routes/cart'));
 app.use('/category', require('./routes/category'));
 app.use('/product', require('./routes/product'));
@@ -109,7 +151,7 @@ app.get('/', (req, res) => {
 });
 
 /**
- * Shipping and return policy 
+ * Shipping and return policy
  */
 app.get('/policy', (req, res) => {
   res.render('policy', {
