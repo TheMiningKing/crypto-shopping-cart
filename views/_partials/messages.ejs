@@ -10,7 +10,7 @@
     <% if (messages.error) { %>
       <% messages.error.forEach((error) => { %>
         <div class="alert alert-danger">
-          <%= error.message %>
+          <%= error.message || error %>
         </div>
       <% }); %>
     <% } %>
