@@ -22,6 +22,7 @@
   },
   "homepage": "https://github.com/TheMiningKing/crypto-shopping-cart#readme",
   "dependencies": {
+    "bcrypt": "^5.0.0",
     "body-parser": "^1.18.2",
     "connect-flash": "^0.1.1",
     "connect-mongodb-session": "^1.4.0",
