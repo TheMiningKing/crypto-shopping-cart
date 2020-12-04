@@ -83,7 +83,7 @@ describe('checkout', () => {
           if (err) {
             done.fail(err);
           }
-          cart = result.session.cart;
+          cart = JSON.parse(result.session).cart;
           expect(cart.items.length).toEqual(2);
 
           browser.fill('recipient', _order.recipient);

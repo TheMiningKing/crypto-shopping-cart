@@ -35,14 +35,18 @@ describe('index', () => {
             done.fail(err);
           }
           expect(results.length).toEqual(1);
+
           expect(results[0]._id).not.toBe(undefined);
           expect(results[0].session).not.toBe(undefined);
-          expect(results[0].session.cookie).not.toBe(undefined);
-          expect(results[0].session.cart).not.toBe(undefined);
-          expect(results[0].session.cart.items).toEqual([]);
-          expect(results[0].session.cart.totals).toEqual({});
-          expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
           expect(results[0].expires).not.toBe(undefined);
+
+          const session = JSON.parse(results[0].session);
+          expect(session.cookie).not.toBe(undefined);
+          expect(session.cart).not.toBe(undefined);
+          expect(session.cart.items).toEqual([]);
+          expect(session.cart.totals).toEqual({});
+          expect(session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+
           done();
         });
       });
@@ -63,7 +67,9 @@ describe('index', () => {
           done.fail(err);
         }
         expect(results.length).toEqual(1);
-        expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+
+        const session = JSON.parse(results[0].session);
+        expect(session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
         done();
       });
     });
@@ -205,7 +211,9 @@ describe('index', () => {
               done.fail(err);
             }
             expect(results.length).toEqual(1);
-            expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[0].currency);
+
+            let session = JSON.parse(results[0].session);
+            expect(session.cart.preferredCurrency).toEqual(_wallets[0].currency);
 
             browser.clickLink(_wallets[1].name, () => {
               models.collection('sessions').find({}).toArray((err, results) => {
@@ -213,7 +221,9 @@ describe('index', () => {
                   done.fail(err);
                 }
                 expect(results.length).toEqual(1);
-                expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[1].currency);
+
+                session = JSON.parse(results[0].session);
+                expect(session.cart.preferredCurrency).toEqual(_wallets[1].currency);
                 done();
               });
             });

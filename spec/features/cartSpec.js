@@ -40,13 +40,16 @@ describe('cart', () => {
           }
           expect(results.length).toEqual(1);
           expect(results[0]._id).not.toBe(undefined);
-          expect(results[0].session).not.toBe(undefined);
-          expect(results[0].session.cookie).not.toBe(undefined);
-          expect(results[0].session.cart).not.toBe(undefined);
-          expect(results[0].session.cart.items).toEqual([]);
-          expect(results[0].session.cart.totals).toEqual({});
-          expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
           expect(results[0].expires).not.toBe(undefined);
+
+          const session = JSON.parse(results[0].session);
+          expect(session).not.toBe(undefined);
+          expect(session.cookie).not.toBe(undefined);
+          expect(session.cart).not.toBe(undefined);
+          expect(session.cart.items).toEqual([]);
+          expect(session.cart.totals).toEqual({});
+          expect(session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+
           done();
         });
       });
@@ -208,9 +211,10 @@ describe('cart', () => {
             done.fail(err);
           }
           expect(results.length).toEqual(1);
-          expect(results[0].session.cart.items.length).toEqual(2);
-          expect(results[0].session.cart.totals[process.env.PREFERRED_CURRENCY].total).
-            toEqual(products[0].prices[0].price * 2);
+
+          let session = JSON.parse(results[0].session);
+          expect(session.cart.items.length).toEqual(2);
+          expect(session.cart.totals[process.env.PREFERRED_CURRENCY].total).toEqual(products[0].prices[0].price * 2);
 
           browser.clickLink(`tr:nth-child(2) td a[href="/cart/remove/${products[1].id}"]`, () => {
             models.collection('sessions').find({}).toArray((err, results) => {
@@ -218,10 +222,11 @@ describe('cart', () => {
                 done.fail(err);
               }
               expect(results.length).toEqual(1);
-              expect(results[0].session.cart.items.length).toEqual(1);
-              expect(results[0].session.cart.totals[process.env.PREFERRED_CURRENCY].total).
-                toEqual(products[0].prices[0].price);
-              expect(results[0].session.cart.items[0].name).toEqual(products[0].name);
+
+              session = JSON.parse(results[0].session);
+              expect(session.cart.items.length).toEqual(1);
+              expect(session.cart.totals[process.env.PREFERRED_CURRENCY].total).toEqual(products[0].prices[0].price);
+              expect(session.cart.items[0].name).toEqual(products[0].name);
 
               done();
             });
@@ -433,7 +438,9 @@ describe('cart', () => {
               done.fail(err);
             }
             expect(results.length).toEqual(1);
-            expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[0].currency);
+
+            let session = JSON.parse(results[0].session);
+            expect(session.cart.preferredCurrency).toEqual(_wallets[0].currency);
 
             browser.clickLink(_wallets[1].name, () => {
               models.collection('sessions').find({}).toArray((err, results) => {
@@ -441,7 +448,9 @@ describe('cart', () => {
                   done.fail(err);
                 }
                 expect(results.length).toEqual(1);
-                expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[1].currency);
+
+                session = JSON.parse(results[0].session);
+                expect(session.cart.preferredCurrency).toEqual(_wallets[1].currency);
                 done();
               });
             });

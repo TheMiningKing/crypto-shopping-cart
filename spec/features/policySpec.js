@@ -35,14 +35,17 @@ describe('index', () => {
             done.fail(err);
           }
           expect(results.length).toEqual(1);
-          expect(results[0]._id).not.toBe(undefined);
-          expect(results[0].session).not.toBe(undefined);
-          expect(results[0].session.cookie).not.toBe(undefined);
-          expect(results[0].session.cart).not.toBe(undefined);
-          expect(results[0].session.cart.items).toEqual([]);
-          expect(results[0].session.cart.totals).toEqual({});
-          expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
           expect(results[0].expires).not.toBe(undefined);
+          expect(results[0]._id).not.toBe(undefined);
+
+          const session = JSON.parse(results[0].session);
+          expect(session).not.toBe(undefined);
+          expect(session.cookie).not.toBe(undefined);
+          expect(session.cart).not.toBe(undefined);
+          expect(session.cart.items).toEqual([]);
+          expect(session.cart.totals).toEqual({});
+          expect(session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+
           done();
         });
       });

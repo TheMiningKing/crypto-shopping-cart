@@ -42,13 +42,15 @@ describe('products', () => {
             }
             expect(results.length).toEqual(1);
             expect(results[0]._id).not.toBe(undefined);
-            expect(results[0].session).not.toBe(undefined);
-            expect(results[0].session.cookie).not.toBe(undefined);
-            expect(results[0].session.cart).not.toBe(undefined);
-            expect(results[0].session.cart.items).toEqual([]);
-            expect(results[0].session.cart.totals).toEqual({});
-            expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
             expect(results[0].expires).not.toBe(undefined);
+            expect(results[0].session).not.toBe(undefined);
+
+            const session = JSON.parse(results[0].session);
+            expect(session.cookie).not.toBe(undefined);
+            expect(session.cart).not.toBe(undefined);
+            expect(session.cart.items).toEqual([]);
+            expect(session.cart.totals).toEqual({});
+            expect(session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
             done();
           });
         });
@@ -259,9 +261,12 @@ describe('products', () => {
                 done.fail(err);
               }
               expect(results.length).toEqual(1);
-              expect(results[0].session.cart.items.length).toEqual(1);
-              expect(results[0].session.cart.totals['ETH'].total).toEqual(product.prices[0].price);
-              expect(results[0].session.cart.totals['BTC'].total).toEqual(product.prices[1].price);
+
+              const session = JSON.parse(results[0].session);
+              expect(session.cart.items.length).toEqual(1);
+              expect(session.cart.totals['ETH'].total).toEqual(product.prices[0].price);
+              expect(session.cart.totals['BTC'].total).toEqual(product.prices[1].price);
+
               done();
             });
           });
@@ -311,13 +316,16 @@ describe('products', () => {
             }
             expect(results.length).toEqual(1);
             expect(results[0]._id).not.toBe(undefined);
-            expect(results[0].session).not.toBe(undefined);
-            expect(results[0].session.cookie).not.toBe(undefined);
-            expect(results[0].session.cart).not.toBe(undefined);
-            expect(results[0].session.cart.items).toEqual([]);
-            expect(results[0].session.cart.totals).toEqual({});
-            expect(results[0].session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
             expect(results[0].expires).not.toBe(undefined);
+            expect(results[0].session).not.toBe(undefined);
+
+            const session = JSON.parse(results[0].session);
+            expect(session.cookie).not.toBe(undefined);
+            expect(session.cart).not.toBe(undefined);
+            expect(session.cart.items).toEqual([]);
+            expect(session.cart.totals).toEqual({});
+            expect(session.cart.preferredCurrency).toEqual(process.env.PREFERRED_CURRENCY);
+
             done();
           });
         });
@@ -488,18 +496,21 @@ describe('products', () => {
 
         it('adds an item to the cart session', (done) => {
           browser.pressButton('form.add-to-cart-form button.add-to-cart[type=submit]', () => {
-          models.collection('sessions').find({}).toArray((err, results) => {
-            if (err) {
-              done.fail(err);
-            }
-            expect(results.length).toEqual(1);
+            models.collection('sessions').find({}).toArray((err, results) => {
+              if (err) {
+                done.fail(err);
+              }
+              expect(results.length).toEqual(1);
               expect(results[0]._id).not.toBe(undefined);
-              expect(results[0].session).not.toBe(undefined);
-              expect(results[0].session.cookie).not.toBe(undefined);
-              expect(results[0].session.cart).not.toBe(undefined);
-              expect(results[0].session.cart.items.length).toEqual(1);
-              expect(results[0].session.cart.totals[process.env.PREFERRED_CURRENCY].total).toEqual(product.prices[0].price);
               expect(results[0].expires).not.toBe(undefined);
+              expect(results[0].session).not.toBe(undefined);
+
+              const session = JSON.parse(results[0].session);
+              expect(session.cookie).not.toBe(undefined);
+              expect(session.cart).not.toBe(undefined);
+              expect(session.cart.items.length).toEqual(1);
+              expect(session.cart.totals[process.env.PREFERRED_CURRENCY].total).toEqual(product.prices[0].price);
+
               done();
             });
           });
@@ -596,7 +607,8 @@ describe('products', () => {
                 done.fail(err);
               }
               expect(results.length).toEqual(1);
-              expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[0].currency);
+              let session = JSON.parse(results[0].session);
+              expect(session.cart.preferredCurrency).toEqual(_wallets[0].currency);
 
               browser.clickLink(_wallets[1].name, () => {
 
@@ -605,7 +617,9 @@ describe('products', () => {
                     done.fail(err);
                   }
                   expect(results.length).toEqual(1);
-                  expect(results[0].session.cart.preferredCurrency).toEqual(_wallets[1].currency);
+
+                  session = JSON.parse(results[0].session);
+                  expect(session.cart.preferredCurrency).toEqual(_wallets[1].currency);
                   done();
                 });
               });

@@ -87,7 +87,8 @@ describe('checkout', () => {
           if (err) {
             done.fail(err);
           }
-          cart = result.session.cart;
+
+          cart = JSON.parse(result.session).cart;
           expect(cart.items.length).toEqual(2);
 
           browser.fill('recipient', _order.recipient);
@@ -168,8 +169,10 @@ describe('checkout', () => {
                 done.fail(err);
               }
               expect(results.length).toEqual(1);
-              expect(results[0].session.cart.items.length).toEqual(0);
-              expect(results[0].session.cart.totals).toEqual({});
+
+              const session = JSON.parse(results[0].session);
+              expect(session.cart.items.length).toEqual(0);
+              expect(session.cart.totals).toEqual({});
 
               done();
             });
@@ -242,8 +245,10 @@ describe('checkout', () => {
                 done.fail(err);
               }
               expect(results.length).toEqual(1);
-              expect(results[0].session.cart.items.length).toEqual(0);
-              expect(results[0].session.cart.totals).toEqual({});
+
+              const session = JSON.parse(results[0].session);
+              expect(session.cart.items.length).toEqual(0);
+              expect(session.cart.totals).toEqual({});
 
               done();
             });
@@ -469,8 +474,10 @@ describe('checkout', () => {
                   done.fail(err);
                 }
                 expect(results.length).toEqual(1);
-                expect(results[0].session.cart.items.length).toEqual(0);
-                expect(results[0].session.cart.totals).toEqual({});
+
+                const session = JSON.parse(results[0].session);
+                expect(session.cart.items.length).toEqual(0);
+                expect(session.cart.totals).toEqual({});
 
                 done();
               });
@@ -498,7 +505,9 @@ describe('checkout', () => {
                           if (err) {
                             done.fail(err);
                           }
-                          cart = result.session.cart;
+
+                          cart = JSON.parse(result.session).cart;
+
                           expect(cart.items.length).toEqual(4);
 
                           //browser.fill('transaction', _order.transaction);
