@@ -689,3 +689,23 @@ input#email-checkbox:checked ~ #transaction-field {
   height: 2em;
   width: 2em;
 }
+
+/**
+ * Login
+ */
+main .login {
+  margin: auto;
+  width: 70%;
+}
+
+main .login button {
+  margin-left: auto;
+}
+
+@media (min-width: 45em) {
+  main .login {
+    margin: auto;
+    width: 30%;
+  }
+}
+
