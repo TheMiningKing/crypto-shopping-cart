@@ -171,7 +171,7 @@ body {
 }
 
 #menu a:hover {
-  color: var(--button-hover);
+  color: var(--text-inverse-color);
 }
 
 #content {
@@ -266,8 +266,8 @@ select.form-control {
 }
 
 .alert-danger {
-  background-color: #190a12;
-  color: #ff78bb;
+  background-color: var(--alert-color);
+  color: var(--background-color);
 }
 
 .main-page-link {
@@ -698,8 +698,8 @@ main .login {
   width: 70%;
 }
 
-main .login button {
-  margin-left: auto;
+main .login .form-group:last-child {
+  text-align: right;
 }
 
 @media (min-width: 45em) {
