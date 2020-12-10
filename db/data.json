@@ -1,4 +1,11 @@
 {
+  "agents": {
+    "_model": "Agent",
+    "admin": {
+      "email": "someguy@example.com",
+      "password": "secret"
+    }
+  },
   "wallets": {
     "_model": "Wallet",
     "eth": {
