@@ -36,7 +36,7 @@
     "is-valid-path": "^0.1.1",
     "mongoose": "^4.11.13",
     "mongoose-seeder": "^1.2.1",
-    "nodemailer": "^4.4.2",
+    "nodemailer": "^6.4.16",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0",
     "qrcode": "^1.4.4",
